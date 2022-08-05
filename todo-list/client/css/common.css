@@ -1,0 +1,142 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.wrapper-todo {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    height: inherit;
+    background-color: #f9f9f9;
+}
+
+.wrapper-todo-inner {    
+    min-height: 750px;
+    min-width: 600px;
+    background-color: #fff;
+    border: 1px solid #c9c9c9;
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    color: #333;
+}
+
+/* HEADER */
+.todo-header .todo-title {
+    text-align: center;
+}
+
+.todo-header .todo-title h2 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+.todo-header .todo-date {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.todo-header .todo-date span {
+    margin: 0 5px;
+    font-size: 1.2rem;
+}
+
+/* CONTENTS */
+.todo-contents {
+    margin-top: 30px;
+}
+
+.todo-contents .todo-add-contents {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    position: relative;
+}
+
+.todo-contents .todo-add-contents .form-control {
+    box-sizing: border-box;
+    padding: 7px;
+    height: 40px;
+    border: 1px solid #c9c9c9;
+    border-radius: 3px 0 0 3px;
+    flex: 1;
+    margin-right: 69px;
+}
+
+.todo-contents .todo-add-contents button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 70px;
+    border: 1px solid #c9c9c9;
+    border-radius: 0 3px 3px 0;
+    font-size: 1.5rem;
+    color: #666;
+    cursor: pointer;
+}
+
+.todo-contents ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.todo-contents ul li {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #ebebeb;
+}
+
+.todo-contents ul li:hover {
+    cursor: pointer;
+}
+
+.todo-contents ul li input[type="radio"] {
+    margin: 0;
+}
+
+.todo-contents ul li div {
+    flex: 1 1 0;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 1.1rem;
+}
+
+.todo-contents ul li div input[type="text"] {
+    width: 100%;
+    font-size: 1rem;
+    border: 1px solid #c9c9c9;
+    padding: 6px;
+}
+
+.todo-contents ul li span {
+    font-size: 1.5rem;
+    color: #999;
+    padding: 0px 10px;
+    cursor: default;
+}
+
+.todo-contents ul li.disabled div {
+    text-decoration: line-through;
+}
+
+.disabled {
+    background-color: #e1e1e1;
+}
+
+.disabled:hover {
+    cursor: no-drop !important;
+}
