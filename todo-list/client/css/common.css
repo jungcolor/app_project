@@ -10,25 +10,17 @@ body {
 }
 
 .wrapper-todo {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: center;
-    height: inherit;
-    background-color: #f9f9f9;
-}
-
-.wrapper-todo-inner {    
-    min-height: 750px;
-    min-width: 600px;
+    min-height: 300px;
+    max-width: 600px;
     background-color: #fff;
     border: 1px solid #c9c9c9;
     border-radius: 5px;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     color: #333;
+    margin: 50px auto 0;
 }
 
 /* HEADER */
