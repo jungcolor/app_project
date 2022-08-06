@@ -1,8 +1,8 @@
 window.addEventListener("load", function () {
     // TODOLIST 관련
-    const inputBox = document.querySelector("#input-box");
-    const addBtn = document.querySelector("#btn-add");
-    const todoList = document.querySelector(".todo-contents ul");
+    const inputBox = document.querySelector(".add-input");
+    const addBtn = document.querySelector(".add-button");
+    const todoList = document.querySelector(".todos");
 
     // EVENT
     const eventHandler = {
@@ -116,9 +116,6 @@ window.addEventListener("load", function () {
         liElement.appendChild(divElement);
         liElement.appendChild(spanElement);
 
-        // TODO DB연결하면 고유 아이디 값으로 변경
-        liElement.setAttribute("id", itemCount);
-
         // TODO - disabled로 변경..
         const completeList = todoList.querySelector(".disabled");
 
@@ -129,7 +126,6 @@ window.addEventListener("load", function () {
             todoList.appendChild(liElement);
         }
 
-        itemCount += 1;
         inputBox.value = "";
     }
 
@@ -144,9 +140,9 @@ window.addEventListener("load", function () {
     });
 
     // TODODATE 관련
-    const todoYear = document.querySelector("#todo-year");
-    const todoMonth = document.querySelector("#todo-month");
-    const todoDay = document.querySelector("#todo-day");
+    const todoYear = document.querySelector(".todo-year");
+    const todoMonth = document.querySelector(".todo-month");
+    const todoDay = document.querySelector(".todo-day");
     const getTodayDate = () => {
         const date = new Date();
         let yaer = date.getFullYear().toString();

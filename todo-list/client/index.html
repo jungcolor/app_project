@@ -5,7 +5,6 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/common.css">
-        <script src="./js/Todo_.js"></script>
         <title>TODO</title>
     </head>
     <body>
@@ -24,26 +23,14 @@
 
                 <div class="todo-contents">
                     <div class="todo-add-contents">
-                        <input type="text" class="form-control" id="input-box" />
-                        <button type="button" class="btn" id="btn-add">+</button>
+                        <input type="text" class="add-input" />
+                        <button type="button" class="add-button">+</button>
                     </div>
-                    <ul>
-                        <!-- <li>
-                            <input type="radio" />
-                            <div>할일 할일 할일</div>
-                            <span class="todo-remove">X</span>
-                        </li>
-                        <li>
-                            <input type="radio" />
-                            <div>
-                                <input type="text" value="수정 모드 일때" />
-                                수정 모드 일때
-                            </div>
-                            <span class="todo-remove">X</span>
-                        </li> -->
-                    </ul>
+                    <ul class="todos"></ul>
                 </div>
             </div>
         </div>
+
+        <script src="./js/todo.js"></script>
     </body>
 </html>

@@ -64,7 +64,7 @@ body {
     position: relative;
 }
 
-.todo-contents .todo-add-contents .form-control {
+.todo-contents .todo-add-contents .add-input {
     box-sizing: border-box;
     padding: 7px;
     height: 40px;
@@ -74,7 +74,7 @@ body {
     margin-right: 69px;
 }
 
-.todo-contents .todo-add-contents button {
+.todo-contents .todo-add-contents .add-button {
     position: absolute;
     right: 0;
     top: 0;
