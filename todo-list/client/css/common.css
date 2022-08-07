@@ -96,7 +96,7 @@ body {
     cursor: pointer;
 }
 
-.todo-contents ul li input[type="radio"] {
+.todo-contents ul li input[type="checkbox"] {
     margin: 0;
 }
 

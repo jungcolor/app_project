@@ -1,4 +1,4 @@
-window.addEventListener("load", function () {
+const todo = () => {
     // TODOLIST 관련
     const inputBox = document.querySelector(".add-input");
     const addBtn = document.querySelector(".add-button");
@@ -42,7 +42,7 @@ window.addEventListener("load", function () {
             }
 
             const textNode = document.createTextNode(value);
-    
+
             target.style.display = "none";
             parent.appendChild(textNode);
         },
@@ -159,4 +159,6 @@ window.addEventListener("load", function () {
     todoYear.innerText = currentDate.yaer + "년";
     todoMonth.innerText = currentDate.month + "월";
     todoDay.innerText = currentDate.day + "일";
-});
+}
+
+window.addEventListener("load", todo);
