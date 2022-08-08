@@ -1,65 +1,184 @@
-const todos = () => {
-    let todoItems = [];
-    const todoElements = document.querySelector(".todos");
+// TODO Element 관련 로직 아래 객체에 정리
+const element = {
+    // TODO...
+}
 
-    // TODO 초기화 관련 //////////////////////////////////////////////////////////////////////////////////////////////////////
-    function init() {
+const todos = () => {
+    // TODO 전역 변수
+    let topWrapper = document.body;
+    let todoListElements = null;
+    let todoItems = [];
+
+    // TODO 초기화
+    const init = () => {
         initElement();
-        initDate();
         fetchTodos(); // TODO API로 변경해야함
         render();
     }
 
-    function initElement() {
+    // TODO 초기 ELEMENT 생성 및 설정
+    const initElement = () => {
+        initElementCreate();
+        initElementSettings();
+        initDateSettings();
+    }
+
+    // TODO 초기 ELEMENT 생성
+    const initElementCreate = () => {
+        const wrapperTodo = initWrapperTodoCreate();
+        const todoHeader = initTodoHeaderCreate();
+        const todoContents = initTodoContentsCreate();
+
+        wrapperTodo.appendChild(todoHeader);
+        wrapperTodo.appendChild(todoContents);
+
+        topWrapper.appendChild(wrapperTodo);
+    }
+
+    const initWrapperTodoCreate = () => {
+        const wrapperTodo = document.createElement("div");
+        wrapperTodo.classList.add("wrapper-todo");
+
+        return wrapperTodo;
+    }
+
+    const initTodoHeaderCreate = () => {
+        const todoHeader = document.createElement("div");
+        todoHeader.classList.add("todo-header");
+
+        const todoTitle = initTodoHeaderTitleCreate();
+        const todoDate = initTodoHeaderDateCreate();
+
+        todoHeader.appendChild(todoTitle);
+        todoHeader.appendChild(todoDate);
+
+        return todoHeader;
+    }
+
+    const initTodoHeaderTitleCreate = () => {
+        const todoTitle = document.createElement("div");
+        todoTitle.classList.add("todo-title");
+        const title = document.createElement("h2");
+        title.innerText = "TODO TITLE";
+
+        todoTitle.appendChild(title);
+        return todoTitle;
+    }
+
+    const initTodoHeaderDateCreate = () => {
+        const todoDateContents = document.createElement("div");
+        todoDateContents.classList.add("todo-date-contents");
+        const todoYear = document.createElement("span");
+        todoYear.classList.add("todo-year");
+        const todoMonth = document.createElement("span");
+        todoMonth.classList.add("todo-month");
+        const todoDate = document.createElement("span");
+        todoDate.classList.add("todo-date");
+        const todoDay = document.createElement("span");
+        todoDay.classList.add("todo-day");
+
+        todoDateContents.appendChild(todoYear);
+        todoDateContents.appendChild(todoMonth);
+        todoDateContents.appendChild(todoDate);
+        todoDateContents.appendChild(todoDay);
+
+        return todoDateContents;
+    }
+
+    const initTodoContentsCreate = () => {
+        const todoContents = document.createElement("div");
+        todoContents.classList.add("todo-contents");
+        
+        const todoAddContents = initTodoAddContentsCreate();
+        const todoList = initTodoListCreate();
+        
+        todoContents.appendChild(todoAddContents);
+        todoContents.appendChild(todoList);
+
+        return todoContents;
+    }
+
+    const initTodoAddContentsCreate = () => {
+        const todoAddContents = document.createElement("div");
+        todoAddContents.classList.add("todo-add-contents");
+        const addInput = document.createElement("input");
+        addInput.classList.add("add-input");
+        addInput.setAttribute("type", "text");
+        const addButton = document.createElement("button");
+        addButton.classList.add("add-button");
+        addButton.setAttribute("type", "button");
+        addButton.innerText = "+";
+
+        todoAddContents.appendChild(addInput);
+        todoAddContents.appendChild(addButton);
+
+        return todoAddContents;
+    }
+
+    const initTodoListCreate = () => {
+        const todoList = document.createElement("ul");
+        todoList.classList.add("todo-list");
+
+        return todoList;
+    }
+    
+    // TODO 초기 ELEMENT 설정
+    const initElementSettings = () => {
+        todoListElements = document.querySelector(".todo-list");
         const addInput = document.querySelector(".add-input");
         const addButton = document.querySelector(".add-button");
-
+    
         addInput.addEventListener("keyup", handleInputAddKeyup);
         addButton.addEventListener("click", handleButtonAddClick);
     }
 
-    function initDate() {
+    const initDateSettings = () => {
         // TODO - 접속 국가별로 나올 수 있도록 수정 ( day.js 날짜 포맷팅 방법 참고 )
         const todoYear = document.querySelector(".todo-year");
         const todoMonth = document.querySelector(".todo-month");
-        const todoDay = document.querySelector(".todo-day");
+        const todoDate = document.querySelector(".todo-date");
         const getTodayDate = () => {
-            const date = new Date();
-            let yaer = date.getFullYear().toString();
-            let month = date.getMonth() + 1;
-            let day = date.getDate();
+            const dateInstance = new Date();
+            let yaer = dateInstance.getFullYear().toString();
+            let month = dateInstance.getMonth() + 1;
+            let date = dateInstance.getDate();
 
             return {
                 yaer: yaer,
                 month: (month >= 10) ? month : "0" + month,
-                day: (day >= 10) ? day : "0" + day
+                date: (date >= 10) ? date : "0" + date,
+                // day: day(dateInstance)
             };
         };
+
         const currentDate = getTodayDate();
         todoYear.innerText = currentDate.yaer + "년";
         todoMonth.innerText = currentDate.month + "월";
-        todoDay.innerText = currentDate.day + "일";        
+        todoDate.innerText = currentDate.date + "일";
+        // todoDay.innerText = currentDate.day
     }
 
-    function fetchTodoItems() {
+    // TODO DATA 초기화
+    const fetchTodoItems = () => {
         const items = [];
 
         return items;
     }
 
-    function fetchTodos() {
+    const fetchTodos = () => {
         todoItems = fetchTodoItems();
     }
 
-    function render() {
+    // TODO RENADER
+    const render = () => {
         todoItems?.forEach(todo => {
             const element = createTodoElement(todo);
-            todoElements.appendChild(element);
+            todoListElements.appendChild(element);
         });
     }
 
-    // TODO DOM생성 관련 - element생성 공통화 할 수 있는 지 고민 ///////////////////////////////////////////////////////////////////
-    function createTodoElement(todo) {
+    // TODO ITEM ELEMENT 생성
+    const createTodoElement = (todo) => {
         const id = todo.id;
         const content = todo.todo;
         const todoListElement = createTodoListElement(id);
@@ -79,14 +198,14 @@ const todos = () => {
         return todoListElement;
     }
 
-    function createTodoListElement(id) {
+    const createTodoListElement = (id) => {
         const listElement = document.createElement("li");
         listElement.setAttribute("id", id);
 
         return listElement;
     }
 
-    function createTodoCompleteElement() {
+    const createTodoCompleteElement = () => {
         const completeElement = document.createElement("input");
         completeElement.setAttribute("type", "checkbox");
         completeElement.addEventListener("click", handleCompleteClick);
@@ -94,7 +213,7 @@ const todos = () => {
         return completeElement;
     }
 
-    function createTodoContentElement(content) {
+    const createTodoContentElement = (content) => {
         const contentElement = document.createElement("div");
         contentElement.classList.add("todo-content");
         contentElement.innerText = content;
@@ -111,7 +230,7 @@ const todos = () => {
         return contentElement;
     }
 
-    function createTodoRemoveElement() {
+    const createTodoRemoveElement = () => {
         const removeELement = document.createElement("span");
         removeELement.classList.add("todo-remove");
         removeELement.innerText = "X";
@@ -120,13 +239,14 @@ const todos = () => {
         return removeELement;
     }
 
-    // TODO DATA 관련 //////////////////////////////////////////////////////////////////////////////////////////////////////
-    function addTodo(value) {
+    // TODO DATA
+    const addTodo = (value) => {
         const todo = { id: uniqueID(), todo: value, complete: false };
         const completeItemIdx = todoItems.findIndex(item => item.complete);
 
         if (completeItemIdx > -1) {
-            todoItems.splice(completeItemIdx, 0, todo); // 목록 중 완료된 목록이 존재하면 해당 목록 앞에 새로 추가한다
+            // 목록 중 완료된 목록이 존재하면 해당 목록 앞에 새로 추가한다
+            todoItems.splice(completeItemIdx, 0, todo);
         }
         else {
             todoItems.push(todo);
@@ -135,12 +255,12 @@ const todos = () => {
         return todo;
     }
 
-    function removeTodo(id) {
+    const removeTodo = (id) => {
         const removeTodoIndex = todoItems.findIndex(item => item.id === id);
         todoItems.splice(removeTodoIndex, 1);
     }
 
-    function updateTodo(id, value) {
+    const updateTodo = (id, value) => {
         // 해당 데이터를 찾아서 value를 업데이트 해준다
         for (let i = 0, len = todoItems.length; i < len; i++) {
             const item = todoItems[i];
@@ -152,7 +272,7 @@ const todos = () => {
         }
     }
 
-    function completeTodo(id, isComplete) {
+    const completeTodo = (id, isComplete) => {
         const updateTodoIndex = todoItems.findIndex(item => item.id === id);
         const updateTodo = todoItems.splice(updateTodoIndex, 1);
         const todoItemLenth = todoItems.length;
@@ -167,33 +287,33 @@ const todos = () => {
         }
     }
 
-    // TODO DOM조작 관련 //////////////////////////////////////////////////////////////////////////////////////////////////////
-    function addTodoView(viewData) {
+    // TODO DOM조작
+    const addTodoView = (viewData) => {
         const todoElement = createTodoElement(viewData);
-        const completeElement = todoElements.querySelector(".disabled");
+        const completeElement = todoListElements.querySelector(".disabled");
 
         if (completeElement) {
-            todoElements.insertBefore(todoElement, completeElement);
+            todoListElements.insertBefore(todoElement, completeElement);
         }
         else {
-            todoElements.appendChild(todoElement);
+            todoListElements.appendChild(todoElement);
         }
     }
 
-    function completeTodoView(id, isComplete) {
+    const completeTodoView = (id, isComplete) => {
         const completeTarget = getElement(id);
 
         if (isComplete) {
             completeTarget.classList.add("disabled");
-            todoElements.appendChild(completeTarget);
+            todoListElements.appendChild(completeTarget);
         }
         else {
             completeTarget.classList.remove("disabled");
-            todoElements.prepend(completeTarget);
+            todoListElements.prepend(completeTarget);
         }
     }
 
-    function modifyTodoView(id) {
+    const modifyTodoView = (id) => {
         const parentTarget = getElement(id);
         const modifyTarget = Array.prototype.slice.apply(parentTarget.childNodes).filter(node => node.classList.value === "todo-content")[0];
 
@@ -209,7 +329,7 @@ const todos = () => {
         }
     }
 
-    function updateTodoView(target, value) {
+    const updateTodoView = (target, value) => {
         const parentElement = target.parentElement;
         const textNode = document.createTextNode(value);
 
@@ -217,13 +337,13 @@ const todos = () => {
         parentElement.appendChild(textNode);
     }
 
-    function removeTodoView(id) {
+    const removeTodoView = (id) => {
         const removeTarget = getElement(id);
-        todoElements.removeChild(removeTarget);
+        todoListElements.removeChild(removeTarget);
     }    
 
-    // TODO HANDLER 관련 //////////////////////////////////////////////////////////////////////////////////////////////////////
-    function handleInputAddKeyup(e) {
+    // TODO HANDLER
+    const handleInputAddKeyup = (e) => {
         if (e.key === "Enter") {
             const { target } = e;
             if (emptyValueCheck(target.value, "내용을 입력해 주세요")) return;
@@ -234,7 +354,7 @@ const todos = () => {
         }
     }
 
-    function handleButtonAddClick(e) {
+    const handleButtonAddClick = (e) => {
         const { target } = e;
         const input = target.previousElementSibling;
         if (emptyValueCheck(input.value, "내용을 입력해 주세요")) return;
@@ -244,7 +364,7 @@ const todos = () => {
         input.value = "";
     }
 
-    function handleCompleteClick(e) {
+    const handleCompleteClick = (e) => {
         const { target } = e;
         const id = getId(e.target);
         const checked = target.checked;
@@ -253,12 +373,12 @@ const todos = () => {
         completeTodo(id, checked);
     }
 
-    function handleContentDbclick(e) {
+    const handleContentDbclick = (e) => {
         const id = getId(e.target);
         modifyTodoView(id);
     }
 
-    function handleUpdateContentKeyup(e) {
+    const handleUpdateContentKeyup = (e) => {
         if (e.key === "Enter") {
             const { target } = e;
             const id = getId(e.target);
@@ -271,35 +391,36 @@ const todos = () => {
         }
     }
 
-    function handleRemoveClick(e) {
+    const handleRemoveClick = (e) => {
         const id = getId(e.target);
 
         removeTodoView(id);
         removeTodo(id);
     }
 
-    // TODO UTILL 관련 //////////////////////////////////////////////////////////////////////////////////////////////////////
-    function getId(target, type) {
-        const result = target.closest("li");
+    // TODO UTILL - 프로젝트 종속되어 있는 부분 제거할 수 있는 방법 고민
+    const getId = (target, type) => {
+        const element = target.closest("li");
+        const id = element.getAttribute("id");
 
-        if (result) {
-            return result.getAttribute("id");
+        if (id) {
+            return id;
         }
         
         return null;
     }
 
-    function getElement(id) {
-        const result = document.querySelector("#" + id);
+    const getElement = (id) => {
+        const element = document.querySelector("#" + id);
 
-        if (result) {
-            return result;
+        if (element) {
+            return element;
         }
 
         return null;
     }
 
-    function emptyValueCheck(value, message) {
+    const emptyValueCheck = (value, message) => {
         let result = false;
 
         if (!value) {
@@ -310,8 +431,8 @@ const todos = () => {
         return result;
     }
 
-    function uniqueID() {
-        return 'todo-yxxx'.replace(/[xy]/g, function (c) {
+    const uniqueID = () => {
+        return 'todo-yxxx'.replace(/[xy]/g, (c) => {
             var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
@@ -321,6 +442,8 @@ const todos = () => {
     init();
 }
 
+todos();
+
 // DOMContentLoaded >> DOM element가 로드 됐을 때 
 // load > DOM element뿐만 아니라 css, js, img등 리소스도 전부 로드 됐을 때
-window.addEventListener("DOMContentLoaded", todos);
+// window.addEventListener("DOMContentLoaded", todos);

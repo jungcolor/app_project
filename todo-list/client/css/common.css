@@ -33,13 +33,13 @@ body {
     font-size: 2rem;
 }
 
-.todo-header .todo-date {
+.todo-header .todo-date-contents {
     display: flex;
     justify-content: center;
     margin-top: 20px;
 }
 
-.todo-header .todo-date span {
+.todo-header .todo-date-contents span {
     margin: 0 5px;
     font-size: 1.2rem;
 }
