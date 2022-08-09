@@ -9,6 +9,22 @@ body {
     height: 100%;
 }
 
+.show {
+    display: block;
+}
+
+.hide {
+    display: none;
+}
+
+.disabled {
+    background-color: #e1e1e1;
+}
+
+.disabled:hover {
+    cursor: no-drop !important;
+}
+
 .wrapper-todo {
     min-height: 300px;
     max-width: 600px;
@@ -123,12 +139,4 @@ body {
 
 .todo-contents ul li.disabled div {
     text-decoration: line-through;
-}
-
-.disabled {
-    background-color: #e1e1e1;
-}
-
-.disabled:hover {
-    cursor: no-drop !important;
 }
