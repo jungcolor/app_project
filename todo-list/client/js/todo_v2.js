@@ -49,7 +49,7 @@ const element = {
         return target;
     },
 
-    setElementEventBind: function (target, events) {        
+    setElementEventBind: function (target, events) {
         events?.forEach((event) => {
             const { type, callback } = event;
 
@@ -106,7 +106,7 @@ const todos = () => {
     let todoListElements = null;
     let todoItems = [];
 
-    // TODO Element 생성 Data - data가 동적으로 변경되야 한다면 어떤식으로 바꿔야 하나..?
+    // TODO Element 생성 Data - 동적으로 값을 변경하기 위해서는 레이아웃별로 나눠야 할듯..
     const initTodoElementData = {
         tagName: "div",
         attrs: { className: "wrapper-todo" },
@@ -293,46 +293,46 @@ const todos = () => {
         return todoListElement;
     }
 
-    const createTodoListElement = (id) => {
-        const listElement = document.createElement("li");
-        listElement.setAttribute("id", id);
+    // const createTodoListElement = (id) => {
+    //     const listElement = document.createElement("li");
+    //     listElement.setAttribute("id", id);
 
-        return listElement;
-    }
+    //     return listElement;
+    // }
 
-    const createTodoCompleteElement = () => {
-        const completeElement = document.createElement("input");
-        completeElement.setAttribute("type", "checkbox");
-        completeElement.addEventListener("click", handleCompleteClick);
+    // const createTodoCompleteElement = () => {
+    //     const completeElement = document.createElement("input");
+    //     completeElement.setAttribute("type", "checkbox");
+    //     completeElement.addEventListener("click", handleCompleteClick);
 
-        return completeElement;
-    }
+    //     return completeElement;
+    // }
 
-    const createTodoContentElement = (content) => {
-        const contentElement = document.createElement("div");
-        contentElement.classList.add("todo-content");
-        contentElement.innerText = content;
-        contentElement.addEventListener("dblclick", handleContentDbclick);
+    // const createTodoContentElement = (content) => {
+    //     const contentElement = document.createElement("div");
+    //     contentElement.classList.add("todo-content");
+    //     contentElement.innerText = content;
+    //     contentElement.addEventListener("dblclick", handleContentDbclick);
 
-        const updateInputElement = document.createElement("input");
-        updateInputElement.setAttribute("type", "text");
-        updateInputElement.classList.add("hide");
-        updateInputElement.innerText = "";
-        updateInputElement.addEventListener("keyup", handleUpdateContentKeyup);
+    //     const updateInputElement = document.createElement("input");
+    //     updateInputElement.setAttribute("type", "text");
+    //     updateInputElement.classList.add("hide");
+    //     updateInputElement.innerText = "";
+    //     updateInputElement.addEventListener("keyup", handleUpdateContentKeyup);
 
-        contentElement.appendChild(updateInputElement);
+    //     contentElement.appendChild(updateInputElement);
 
-        return contentElement;
-    }
+    //     return contentElement;
+    // }
 
-    const createTodoRemoveElement = () => {
-        const removeELement = document.createElement("span");
-        removeELement.classList.add("todo-remove");
-        removeELement.innerText = "X";
-        removeELement.addEventListener("click", handleRemoveClick);
+    // const createTodoRemoveElement = () => {
+    //     const removeELement = document.createElement("span");
+    //     removeELement.classList.add("todo-remove");
+    //     removeELement.innerText = "X";
+    //     removeELement.addEventListener("click", handleRemoveClick);
 
-        return removeELement;
-    }
+    //     return removeELement;
+    // }
 
     // TODO DATA
     const addTodo = (value) => {
