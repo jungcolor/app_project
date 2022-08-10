@@ -106,59 +106,6 @@ const todos = () => {
     let todoListElements = null;
     let todoItems = [];
 
-    // TODO Element 생성 Data - 동적으로 값을 변경하기 위해서는 레이아웃별로 나눠야 할듯..
-    const initTodoElementData = {
-        tagName: "div",
-        attrs: { className: "wrapper-todo" },
-        children: [
-            {
-                tagName: "div",
-                attrs: { className: "todo-header" },
-                children: [
-                    {
-                        tagName: "div",
-                        attrs: { className: "todo-title" },
-                        children: [{ tagName: "h2", attrs: { textContent: "TODO TITLE" } }]
-                    },
-                    {
-                        tagName: "div",
-                        attrs: { className: "todo-date-contents" },
-                        children: [
-                            { tagName: "span", attrs: { className: "todo-year", textContent: "====" } },
-                            { tagName: "span", attrs: { className: "todo-month", textContent: "==" } },
-                            { tagName: "span", attrs: { className: "todo-date", textContent: "==" } },
-                            { tagName: "span", attrs: { className: "todo-day" } }
-                        ]
-                    }
-                ]
-            },
-            {
-                tagName: "div",
-                attrs: { className: "todo-contents" },
-                children: [
-                    {
-                        tagName: "div",
-                        attrs: { className: "todo-add-contents" },
-                        children: [
-                            {
-                                tagName: "input",
-                                attrs: { className: "add-input", type: "text" }
-                            },
-                            {
-                                tagName: "button",
-                                attrs: { className: "add-button", type: "button", textContent: "+" }
-                            }
-                        ]
-                    },
-                    {
-                        tagName: "ul",
-                        attrs: { className: "todo-list" }
-                    }
-                ]
-            }
-        ]
-    };
-
     // TODO 초기화
     const init = () => {
         initElement();
@@ -174,9 +121,79 @@ const todos = () => {
 
     // TODO 초기 ELEMENT 생성
     const initElementCreate = () => {
-        const initTodoElement = element.elementCreate(initTodoElementData);
+        const todoWrapper = initElementWrapperCreate();
+        const todoHeader = initElementHeaderCreate();
+        const todoContents = initElementContentsCreate();
 
-        topWrapper.appendChild(initTodoElement);
+        todoWrapper.appendChild(todoHeader);
+        todoWrapper.appendChild(todoContents);
+
+        topWrapper.appendChild(todoWrapper);
+    }
+
+    // TODO 레이아웃 별로 다시 나눈 이유 - 동적으로 데이터를 셋팅하기 위해
+    const initElementWrapperCreate = () => {
+        const initElementWrapperData = {
+            tagName: "div",
+            attrs: { className: "wrapper-todo" }
+        };
+
+        return element.elementCreate(initElementWrapperData);
+    }
+
+    const initElementHeaderCreate = () => {
+        const initElementHeaderData = {
+            tagName: "div",
+            attrs: { className: "todo-header" },
+            children: [
+                {
+                    tagName: "div",
+                    attrs: { className: "todo-title" },
+                    children: [{ tagName: "h2", attrs: { textContent: "TODO TITLE" } }]
+                },
+                {
+                    tagName: "div",
+                    attrs: { className: "todo-date-contents" },
+                    children: [
+                        { tagName: "span", attrs: { className: "todo-year", textContent: "====" } },
+                        { tagName: "span", attrs: { className: "todo-month", textContent: "==" } },
+                        { tagName: "span", attrs: { className: "todo-date", textContent: "==" } },
+                        { tagName: "span", attrs: { className: "todo-day" } }
+                    ]
+                }
+            ]
+        };
+
+        return element.elementCreate(initElementHeaderData);
+    }
+
+    const initElementContentsCreate = () => {
+        const initElementContentsData = {
+            tagName: "div",
+            attrs: { className: "todo-contents" },
+            children: [
+                {
+                    tagName: "div",
+                    attrs: { className: "todo-add-contents" },
+                    children: [
+                        {
+                            tagName: "input",
+                            attrs: { className: "add-input", type: "text" }
+                        },
+                        {
+                            tagName: "button",
+                            attrs: { className: "add-button", type: "button", textContent: "+" }
+                        }
+                    ]
+                },
+                {
+                    tagName: "ul",
+                    attrs: { className: "todo-list" }
+                }
+            ]
+        }
+        
+        return element.elementCreate(initElementContentsData);
     }
 
     // TODO 초기 ELEMENT 설정
@@ -274,65 +291,9 @@ const todos = () => {
                 }
             ]
         }
-        // const todoListElement = createTodoListElement(id);
-        // const completeElement = createTodoCompleteElement();
-        // const todoContentElement = createTodoContentElement(todo);
-        // const removeElement = createTodoRemoveElement();
 
-        // if (complete) {
-        //     todoListElement.classList.add("disabled");
-        //     completeElement.setAttribute("checked", "checked");
-        // }
-
-        // todoListElement.appendChild(completeElement);
-        // todoListElement.appendChild(todoContentElement);
-        // todoListElement.appendChild(removeElement);
-
-        const todoListElement = element.elementCreate(createTodoElementData); // 생성하고
-
-        return todoListElement;
-    }
-
-    // const createTodoListElement = (id) => {
-    //     const listElement = document.createElement("li");
-    //     listElement.setAttribute("id", id);
-
-    //     return listElement;
-    // }
-
-    // const createTodoCompleteElement = () => {
-    //     const completeElement = document.createElement("input");
-    //     completeElement.setAttribute("type", "checkbox");
-    //     completeElement.addEventListener("click", handleCompleteClick);
-
-    //     return completeElement;
-    // }
-
-    // const createTodoContentElement = (content) => {
-    //     const contentElement = document.createElement("div");
-    //     contentElement.classList.add("todo-content");
-    //     contentElement.innerText = content;
-    //     contentElement.addEventListener("dblclick", handleContentDbclick);
-
-    //     const updateInputElement = document.createElement("input");
-    //     updateInputElement.setAttribute("type", "text");
-    //     updateInputElement.classList.add("hide");
-    //     updateInputElement.innerText = "";
-    //     updateInputElement.addEventListener("keyup", handleUpdateContentKeyup);
-
-    //     contentElement.appendChild(updateInputElement);
-
-    //     return contentElement;
-    // }
-
-    // const createTodoRemoveElement = () => {
-    //     const removeELement = document.createElement("span");
-    //     removeELement.classList.add("todo-remove");
-    //     removeELement.innerText = "X";
-    //     removeELement.addEventListener("click", handleRemoveClick);
-
-    //     return removeELement;
-    // }
+        return element.elementCreate(createTodoElementData);
+    }    
 
     // TODO DATA
     const addTodo = (value) => {
