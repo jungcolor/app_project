@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>what_to_eat</title>
+    </head>
+    <body>
+        <h2>음식을 골라보자</h2>
+        <button id="foodSelect">랜덤</button>
+        <h3 id="foodViewer"></h3>
+        <script>
+            window.addEventListener('DOMContentLoaded', function () {
+                const foodSelect = document.querySelector('#foodSelect');
+                const foodViewer = document.querySelector('#foodViewer');
+    
+                foodSelect.addEventListener('click', async () => {
+                    // server에서 데이터를 가져온 후 viewer에 넣어준다
+                    const response = await fetch('/server/randomMenu');
+                    const plainText = await response.text();
+                    foodViewer.textContent = plainText;
+                });
+            });
+        </script>
+    </body>
+</html>
