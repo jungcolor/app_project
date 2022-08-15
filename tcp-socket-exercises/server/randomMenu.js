@@ -1,8 +1,9 @@
 function getmenu() {
-    const menuList = ["음식1", "음식2", "음식3", "음식4", "음식5", "음식6", "음식7", "음식8"];
+    const menuList = ["짜장면", "김치찌개", "볶음밥", "된장찌개", "삼겹살", "돼지갈비", "차돌박이", "해장국"];
     const randomNum = Math.floor(Math.random() * menuList.length);
+    const result = menuList[randomNum];
     
-    return menuList[randomNum];
+    return result;
 }
 
 exports.getmenu = getmenu;
