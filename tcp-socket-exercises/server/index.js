@@ -9,6 +9,7 @@ const port = 3030;
 const server = createServer((clientSocket) => { // 2
     clientSocket.on('data', (data) => { // 4
          // buffer 데이터 > string 데이터로 변경
+        console.log(data.toString().split('\r\n'));
         const requestMessage = data.toString();
         // 요청온 데이터 중 첫번 째 줄(메소드, URI, 버전) 따로 변수에 저장
         const [first] = requestMessage.split('\r\n'); 
@@ -34,7 +35,7 @@ const server = createServer((clientSocket) => { // 2
                 const content = fs.readFileSync(path.join(fullPath, 'index.html')); // 동기
     
                 clientSocket.write(Buffer.from(`HTTP/1.1 200 OK\r\n`));
-                clientSocket.write(Buffer.from(`Content-Type: text/html\r\n`));
+                clientSocket.write(Buffer.from(`Content-Type: text/html; image/svg+xml;\r\n`));
                 clientSocket.write(Buffer.from(`Content-Length: ${content.length}\r\n`));
                 clientSocket.write(Buffer.from(`\r\n`));
                 clientSocket.write(content);
@@ -71,7 +72,7 @@ const server = createServer((clientSocket) => { // 2
                     <html lang="en">
                         <head>
                             <meta charset="UTF-8">
-                            <<meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
                             <meta http-equiv="X-UA-Compatible" content="ie=edge">
                             <title>Document</title>
                         </head>
@@ -97,7 +98,7 @@ const server = createServer((clientSocket) => { // 2
                 <html lang="en">
                     <head>
                         <meta charset="UTF-8">
-                        <<meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
                         <meta http-equiv="X-UA-Compatible" content="ie=edge">
                         <title>Document</title>
                     </head>
