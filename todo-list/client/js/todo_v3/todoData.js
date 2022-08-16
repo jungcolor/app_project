@@ -1,9 +1,10 @@
-import utilitylib from "./lib/utilitylib";
+// TODO lib
+import utilitylib from "./lib/utilitylib.js";
 
 // TODO DATA 객체 - 내부에 element(view)와 관련 된 로직이 존재하면 안됨
 // immutable 적용 해보기
 const todoData = {
-    itemList, // static
+    _itemList: [],
 
     init: function () {
         this.fetchData();
@@ -11,8 +12,7 @@ const todoData = {
 
     fetchData: function () {
         // API로 가져온 데이터 셋팅
-        // this.itemList = this.fetchDataItems();
-        this.itemList = [];
+        // this._itemList = this.fetchDataItems();
     },
 
     // 서버 구현 전 까지 더미 데이터로 대체
@@ -23,19 +23,23 @@ const todoData = {
     // },
 
     getItem: function (id) {
-        return this.itemList.filter(item => item.id === id);
+        return this._itemList.filter(item => item.id === id);
+    },
+
+    getItemList: function () {
+        return this._itemList;
     },
 
     add: function (content) {
         const additem = { id: utilitylib.getId(), complete: false, content };
-        const completeTodoIdx = this.itemList.findIndex(item => item.complete);
+        const completeTodoIdx = this._itemList.findIndex(item => item.complete);
 
         if (completeTodoIdx > -1) {
             // 목록 중 완료된 목록이 존재하면 해당 목록 앞에 새로 추가한다
-            this.itemList.splice(completeTodoIdx, 0, additem);
+            this._itemList.splice(completeTodoIdx, 0, additem);
         }
         else {
-            this.itemList.push(additem);
+            this._itemList.push(additem);
         }
 
         return additem;
@@ -43,11 +47,11 @@ const todoData = {
 
     remove: function (id) {
         const removeitem = this.getItem(id);
-        this.itemList.splice(removeitem, 1);
+        this._itemList.splice(removeitem, 1);
     },
 
     update: function (id, content) {
-        this.itemList.forEach(item => {
+        this._itemList.forEach(item => {
             if (item.id === id) {
                 item.content = content;
                 return false; // forEach break
@@ -56,17 +60,17 @@ const todoData = {
     },
 
     complete: function (id, isComplete) {
-        const updateItemIdex = this.itemList.findIndex(item => item.id === id);
-        const updateItem = this.itemList.splice(updateItemIdex, 1);
-        const itemListLen = this.itemList.length;
+        const updateItemIndex = this._itemList.findIndex(item => item.id === id);
+        const updateItem = this._itemList.splice(updateItemIndex, 1);
+        const itemListLength = this._itemList.length;
 
         updateItem[0].complete = isComplete;
 
         if (isComplete) {
-            this.itemList.splice(itemListLen, 0, updateItem[0]);
+            this._itemList.splice(itemListLength, 0, updateItem[0]);
         }
         else {
-            this.itemList.splice(0, 0, updateItem[0]);
+            this._itemList.splice(0, 0, updateItem[0]);
         }
     },
 }
