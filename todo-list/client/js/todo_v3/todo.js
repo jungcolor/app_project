@@ -77,7 +77,7 @@ const todos = {
         const id = utilitylib.getId(e.target);
 
         removeTodoView(id);
-        removeTodo(id);
+        removeTodo(id);  
     }
 }
 
