@@ -1,9 +1,10 @@
 function getMenu (menuList) {
-    menuList = menuList || [];
-    const randomNum = Math.floor(Math.random() * menuList.length);
-    const result = menuList[randomNum];
+    if (menuList?.length > 0) {
+        const randomNum = Math.floor(Math.random() * menuList.length);
+        return menuList[randomNum];
+    }
 
-    return result;
+    return null;
 }
 
 module.exports.getMenu = getMenu;

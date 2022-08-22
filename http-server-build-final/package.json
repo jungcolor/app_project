@@ -1,0 +1,15 @@
+{
+    "name": "http-server-build-final",
+    "version": "1.0.0",
+    "description": "### 요구사항",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon ./server/staticServer.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "nodemon": "^2.0.19"
+    }
+}

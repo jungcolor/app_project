@@ -5,14 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./staticServer.js"
+    "start": "node ./staticServer.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "mysql": "^2.18.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.19"
   }
 }

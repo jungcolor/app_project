@@ -12,31 +12,23 @@ module.exports = {
     },
 
     connect: function () {
-        this.db.connect((err) => {
-            if (err) throw new Error(`MySQL connection error ${err}`);
+        this.db.connect((error) => {
+            if (error) throw new Error(`MySQL connection error ${error}`);
             console.log('MySQL is connection successfully!');
         });
     },
 
     get: function (queryStr, callback) {
-        this.db.query(queryStr, (err, payload) => {
-            if (err) {
-                callback({ err, payload });
-            }
-            else {
-                callback({ payload });
-            }
+        this.db.query(queryStr, (error, payload) => {
+            if (error) callback({ success: false, error });
+            callback({ success: true });
         });
     },
 
     post: function (queryStr, param, callback) {
-        this.db.query(queryStr, param, (err, payload) => {
-            if (err) {
-                callback({ err, payload });
-            }
-            else {
-                callback({ payload });
-            }
+        this.db.query(queryStr, param, (error, payload) => {
+            if (error) callback({ success: false, error });
+            callback({ success: true });
         });
     },
 }
