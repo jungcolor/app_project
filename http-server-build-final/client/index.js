@@ -16,6 +16,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         }
         return decodeURI(cValue);
     }
+
     email.textContent = getCookie("email");
     nickName.textContent = getCookie("nickname");
 });

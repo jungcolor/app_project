@@ -5,11 +5,14 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "dev": "nodemon ./server/staticServer.js"
+        "static": "nodemon ./server/staticServer.js",
+        "api": "nodemon ./server/apiServer.js",
+        "dev": "concurrently --kill-others-on-fail \"npm run static\" \"npm run api\""
     },
     "author": "",
     "license": "ISC",
     "devDependencies": {
+        "concurrently": "^7.3.0",
         "nodemon": "^2.0.19"
     }
 }

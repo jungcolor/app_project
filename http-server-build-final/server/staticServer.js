@@ -37,6 +37,8 @@ const staticServer = (request, response) => {
         console.log(`[Server] request method ${method}`);
         console.log(`[Server] request url ${url}`);
 
+        console.log(`[Server] port 3030 Cookie ${request.headers.cookie}`);
+
         const cookieObj = parseCookies(request);
 
         if (method === "GET") { // GET
@@ -51,24 +53,24 @@ const staticServer = (request, response) => {
                 if (cookieObj.email) {
                     fileInfo = {
                         path: path.join(process.cwd(), CLINET, "index.html"),
-                        type: 'text/html'
+                        type: 'text/html; text/javascript;'
                     }
                 }
                 else {
                     fileInfo = {
                         path: path.join(process.cwd(), CLINET, "/login/login.html"),
-                        type: 'text/html'
+                        type: 'text/html; text/javascript;'
                     }
                 }
             }
             else {
                 fileInfo = {
                     path: path.join(process.cwd(), CLINET, url),
-                    type: (url === "/favicon.ico") ? 'image/x-icon' : 'text/html'
+                    type: (url === "/favicon.ico") ? 'image/x-icon' : 'text/html; text/javascript;'
                 }
             }
 
-            console.log(`filePath >>>>>>>> ${fileInfo.path}`);
+            // console.log(`filePath >>>>>>>> ${fileInfo.path}`);
 
             if (fs.existsSync(fileInfo.path)) {
                 if (url.indexOf("/login") > -1  && cookieObj.email) {
@@ -78,7 +80,7 @@ const staticServer = (request, response) => {
                 else {
                     const data = fs.readFileSync(fileInfo.path);
         
-                    response.writeHead(200, { "Content-Type": `${fileInfo.type}; charset=utf-8` }); // head
+                    response.writeHead(200, { "Content-Type": `${fileInfo.type}; charset=utf-8;` }); // head
                     response.write(data); // body
                     response.end();
                 }
@@ -91,56 +93,22 @@ const staticServer = (request, response) => {
         }
         else if (method === "POST") {
             if (url == "/api/login") { // login
-                let body = [];
+                const sqlQuery = "INSERT INTO usertbl SET ?";
+                const param = JSON.parse(body);
 
-                request.on("data", chunk => {
-                    body.push(chunk);
-                });
-    
-                request.on("end", () => {
-                    body = body.toString();
-                    const sqlQuery = "INSERT INTO usertbl SET ?";
-                    const param = JSON.parse(body);
-
-                    myDB.post(sqlQuery, param, (payload) => {
-                        const { success, error } = payload;
-
-                        if (success) {
-                            response.writeHead(200, {
-                                "Content-Type" : "application/json; charset=utf-8",
-                                "Set-Cookie": [`email=${param.email}; Path=/;`, `nickname=${param.nickName}; Path=/;`]
-                            });
-                            response.write(body);
-                            response.end();
-                        }
-                        else {
-                            throw new Error(`[Server] Error ${error}`);
-                        }
-                    });
-                });
-            }
-            else if (url === "/api/getMenu") { // POST api (CORS 해결되면 분리)
-                // 쿠키 정보를 가지고 요청하여 DB에서 해당 메뉴를 가져와 랜덤으로 보여준다
-                // const filePath = path.join(process.cwd(), url);
-                // const menu = require(filePath).getMenu();
-                // console.log(menu);
-                const sqlQuery = "SELECT * FROM menutbl";
-
-                url = `/server/${url}`;
-
-                myDB.get(sqlQuery, (payload) => {
+                myDB.post(sqlQuery, param, (payload) => {
                     const { success, error } = payload;
 
                     if (success) {
-                        const filePath = path.join(process.cwd(), url);
-                        const menu = JSON.stringify(require(filePath).getMenu(payload));
-    
-                        response.writeHead(200, { "Content-Type": "text/plain; charset=utf-8" });
-                        response.write(menu);
+                        response.writeHead(200, {
+                            "Content-Type": "text/html; text/javascript; application/json; charset=utf-8",
+                            "Set-Cookie": [`email=${param.email}; Path=/;`, `nickname=${param.nickName}; Path=/;`]
+                        });
+                        response.write(body);
                         response.end();
                     }
                     else {
-                        throw new Error(`[Server] Error ${error}`);
+                        console.log("error");
                     }
                 });
             }

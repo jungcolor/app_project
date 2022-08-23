@@ -4,24 +4,22 @@ window.addEventListener('DOMContentLoaded', e => {
     const submit = document.querySelector(`[type=submit]`);
 
     submit.addEventListener('click', async (e) => {
-        let body = {
-            email: email.value,
-            nickName: nickName.value,
-        };
-
-        body = JSON.stringify(body);
-
-        const options = {
+        const param = {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
             },
             redirect: 'follow',
-            body: body
+            body: JSON.stringify({
+                email: email.value,
+                nickName: nickName.value,
+            })
         };
 
-        const response = await fetch("/api/login", options);
+        const response = await fetch("/api/login", param);
         const data = await response.json();
+
+        console.log(data);
 
         if (data) {
             email.value = "";
