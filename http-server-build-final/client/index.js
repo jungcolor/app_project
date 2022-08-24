@@ -14,8 +14,8 @@ window.addEventListener('DOMContentLoaded', async () => {
             if (end == -1) end = cookieData.length;
             cValue = cookieData.substring(start, end);
         }
-        return decodeURI(cValue);
-    }
+        return decodeURIComponent(cValue);
+    };
 
     email.textContent = getCookie("email");
     nickName.textContent = getCookie("nickname");

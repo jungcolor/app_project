@@ -3,7 +3,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const button = document.querySelector("#showMenu");
 
     button.addEventListener('click', async e => {
-        const response = await fetch('https://localhost:3040/api/getMenu', { method: "GET" });
+        const response = await fetch('https://localhost:3040/api/menu/item', { method: "GET" });
         const data = await response.json();
 
         if (data?.menuName) {

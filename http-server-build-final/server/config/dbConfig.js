@@ -19,16 +19,14 @@ module.exports = {
     },
 
     get: function (queryStr, callback) {
-        this.db.query(queryStr, (error, payload) => {
-            if (error) callback({ success: false, error });
-            callback({ success: true });
+        this.db.query(queryStr, (error, rows) => {
+            callback(error, rows);
         });
     },
 
     post: function (queryStr, param, callback) {
         this.db.query(queryStr, param, (error, payload) => {
-            if (error) callback({ success: false, error });
-            callback({ success: true });
+            callback(error, payload);
         });
     },
 }

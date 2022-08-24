@@ -18,60 +18,57 @@ const apiServer = (request, response) => {
         console.log(`[Server] request url ${url}`);
 
         if (method === "GET") {
-            if (url === "/api/getMenu") {
+            if (url === "/api/menu/item") {
                 const sqlQuery = "SELECT * FROM menutbl";
 
                 url = `/server/${url}`;
 
-                myDB.get(sqlQuery, (payload) => {
-                    const { success, error } = payload;
+                myDB.get(sqlQuery, (error, payload) => {
+                    const filePath = path.join(process.cwd(), url);
+                    const menu = JSON.stringify(require(filePath).getMenu(payload));
 
-                    if (success) {
-                        const filePath = path.join(process.cwd(), url);
-                        const menu = JSON.stringify(require(filePath).getMenu(payload));
-
-                        response.writeHead(200, cors.getCORSConfig());
-                        response.write(menu);
-                        response.end();
-                    }
-                    else {
-                        throw new Error(`[Server] Error ${error}`);
-                    }
+                    response.writeHead(200, cors.getCORSConfig());
+                    response.write(menu);
+                    response.end();
                 });
             }
         }
         else if (method === "POST") {
-            if (url === "/api/menuList") {
-                console.log(`[Server] menuList Call`);
-                let body = [];
+            if (url === "/api/menu/save") {
+                let body = '';
 
                 request.on("data", chunk => {
-                    body.push(chunk);
+                    body += chunk;
                 });
 
                 request.on("end", () => {
-                    body = body.toString();
-
-                    console.log(body);
                     const sqlQuery = "INSERT INTO menulisttbl SET ?";
                     const param = JSON.parse(body);
 
-                    myDB.post(sqlQuery, param, (payload) => {
-                        const { success, error } = payload;
+                    myDB.post(sqlQuery, param, (error, payload) => {
+                        response.writeHead(200, cors.getCORSConfig());
+                        response.write(body);
+                        response.end();
+                    });
+                });                
+            }
+            else if (url === "/api/menu/list") {
+                let body = '';
 
-                        if (success) {
-                            response.writeHead(200, cors.getCORSConfig());
-                            response.write(body);
-                            response.end();
-                        }
-                        else {
-                            response.writeHead(200, cors.getCORSConfig());
-                            response.write(JSON.stringify(param));
-                            response.end();
-                        }
+                request.on('data', chunk => {
+                    body += chunk;
+                });
+
+                request.on('end', () => {
+                    const sqlQuery = "SELECT * FROM menulisttbl WHERE email=?";
+                    const param = JSON.parse(body);
+
+                    myDB.post(sqlQuery, param, (error, payload) => {
+                        response.writeHead(200, cors.getCORSConfig());
+                        response.write(JSON.stringify(payload));
+                        response.end();
                     });
                 });
-                
             }
         }
         else if (method === "OPTIONS") {
