@@ -19,4 +19,11 @@ window.addEventListener('DOMContentLoaded', async () => {
 
     email.textContent = getCookie("email");
     nickName.textContent = getCookie("nickname");
+
+    logout.addEventListener("click", async e => {
+        const email = await cookieStore.delete("email");
+        const ninckname = await cookieStore.delete("nickname");
+
+        location.href = "./login/login.html";
+    });
 });

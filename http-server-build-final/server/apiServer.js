@@ -17,24 +17,31 @@ const apiServer = (request, response) => {
         console.log(`[Server] request method ${method}`);
         console.log(`[Server] request url ${url}`);
 
-        if (method === "GET") {
+        if (method === "POST") {
             if (url === "/api/menu/item") {
-                const sqlQuery = "SELECT * FROM menutbl";
+                let body = '';
 
-                url = `/server/${url}`;
+                request.on('data', chunk => {
+                    body += chunk;
+                });
 
-                myDB.get(sqlQuery, (error, payload) => {
-                    const filePath = path.join(process.cwd(), url);
-                    const menu = JSON.stringify(require(filePath).getMenu(payload));
+                request.on('end', () => {
+                    const sqlQuery = `SELECT * FROM menulisttbl WHERE email=?`;
+                    const param = JSON.parse(body);
 
-                    response.writeHead(200, cors.getCORSConfig());
-                    response.write(menu);
-                    response.end();
+                    url = `/server${url}`;
+
+                    myDB.post(sqlQuery, param, (error, payload) => {
+                        const filePath = path.join(process.cwd(), url);
+                        const menu = JSON.stringify(require(filePath).getMenu(payload));
+
+                        response.writeHead(200, cors.getCORSConfig());
+                        response.write(menu);
+                        response.end();
+                    });
                 });
             }
-        }
-        else if (method === "POST") {
-            if (url === "/api/menu/save") {
+            else if (url === "/api/menu/save") {
                 let body = '';
 
                 request.on("data", chunk => {

@@ -83,25 +83,27 @@ const staticServer = (request, response) => {
                 request.on('data', function (chunk) {
                     body += chunk;
 
-                    const sqlQuery = "SELECT email FROM usertbl WHERE email=?";
                     const param = JSON.parse(body);
+                    const sqlQuery = `SELECT * FROM usertbl WHERE email="${param.email}"`;
 
-                    myDB.post(sqlQuery, [param.email], (error, payload) => {
+                    myDB.get(sqlQuery, (error, payload) => {
                         if (payload.length > 0) {
+                            response.writeHead(200, { 
+                                "Content-Type": "text/html; text/javascript; application/json; charset=utf-8",
+                                "Set-Cookie": [`email=${encodeURIComponent(payload[0].email)}; Path=/;`, `nickname=${encodeURIComponent(payload[0].nickname)}; Path=/;`]
+                            })
                             response.write(JSON.stringify(payload));
                             response.end();
                         }
                         else {
                             const sqlQueryInsert = "INSERT INTO usertbl SET ?";
 
-                            console.log("신규 등록");
-
                             myDB.post(sqlQueryInsert, param, (error, payload) => {
                                 response.writeHead(200, {
                                     "Content-Type": "text/html; text/javascript; application/json; charset=utf-8",
-                                    "Set-Cookie": [`email=${encodeURIComponent(param.email)}; Path=/;`, `nickname=${encodeURIComponent(param.nickName)}; Path=/;`]
+                                    "Set-Cookie": [`email=${encodeURIComponent(param.email)}; Path=/;`, `nickname=${encodeURIComponent(param.nickname)}; Path=/;`]
                                 });
-                                response.write(payload);
+                                response.write(JSON.stringify(payload));
                                 response.end();
                             });
                         }
@@ -111,7 +113,6 @@ const staticServer = (request, response) => {
         }
     }
     catch (error) {
-        console.log(`[Server] Error ${error}`);
         response.write(`<h1>Server Error!!!!</h1>`);
         response.writeHead(500, { "Content-Type": "text/html; charset=utf-8" });
         response.end(error.message);
