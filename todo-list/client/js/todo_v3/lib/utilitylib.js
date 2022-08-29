@@ -1,25 +1,15 @@
-// TODO Utility 객체 - 프로젝트 종속되어 있는 부분 제거할 수 있는 방법 고민
+// TODO Utility 객체
 const utilitylib = {
-    // getId: function (target, type) {
-    //     const element = target.closest("li");
-    //     const id = element.getAttribute("id");
+    getId: function (target) {
+        const element = target.closest("li");
+        const id = element.getAttribute("id");
 
-    //     if (id) {
-    //         return id;
-    //     }
+        if (id) {
+            return id;
+        }
 
-    //     return null;
-    // },
-
-    // getElement: function (id) {
-    //     const element = document.querySelector("#" + id);
-
-    //     if (element) {
-    //         return element;
-    //     }
-
-    //     return null;
-    // },
+        return null;
+    },
 
     getDate: function () {
         const dateInstance = new Date();
@@ -35,14 +25,12 @@ const utilitylib = {
     },
 
     emptyValueCheck: function (value, message) {
-        let result = false;
-
         if (!value) {
             console.log(message);
-            result = true;
+            return true;
         }
 
-        return result;
+        return false;
     },
 
     uuid: function () {

@@ -68,14 +68,9 @@ const elementlib = {
     },
 
     getElement: function (selector) {
-        // if (target) {
-        //     return target.querySelector(selector);
-        // }
-
         return document.querySelector(selector);
     },
 
-    // TODO 여기 아래부분을 여기서 해주는게 맞나????????
     getValue: function (target) {
         return target && target.value;
     },

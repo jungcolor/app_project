@@ -1,7 +1,7 @@
 // TODO lib
 import utilitylib from "./lib/utilitylib.js";
 
-// TODO DATA 객체 - 내부에 element(view)와 관련 된 로직이 존재하면 안됨
+// TODO DATA 객체 - element(view) 관련된 로직 존재하지 못함
 // immutable 적용 해보기
 const todoData = {
     _itemList: [],
@@ -31,11 +31,10 @@ const todoData = {
     },
 
     add: function (content) {
-        const additem = { id: utilitylib.getId(), complete: false, content };
+        const additem = { id: utilitylib.uuid(), complete: false, content };
         const completeTodoIdx = this._itemList.findIndex(item => item.complete);
 
         if (completeTodoIdx > -1) {
-            // 목록 중 완료된 목록이 존재하면 해당 목록 앞에 새로 추가한다
             this._itemList.splice(completeTodoIdx, 0, additem);
         }
         else {

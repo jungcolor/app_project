@@ -2,20 +2,17 @@
 import elementlib from "./lib/elementlib.js";
 import utilitylib from "./lib/utilitylib.js";
 
-// TODOS - 순환참조 오류........
-// import todos from "./todo.js";
-
 // TODO view 객체
 const todoView = {
     _viewWrapper: null,
     _viewHeader: null,
     _viewContents: null,
     _viewElementList: null,
-    events: null,
+    handler: null,
 
     // TODO 초기화
-    init: function (events) {
-        this.events = events;
+    init: function (handler) {
+        this.handler = handler;
         this.initViewCreate();
         this.render();
     },
@@ -29,7 +26,7 @@ const todoView = {
     initViewWrapperCreate: function () {
         const viewWrapperData = {
             tagName: "div",
-            arrts: { className: "wrapper-todo" }
+            attrs: { className: "wrapper-todo" }
         };
 
         return elementlib.elementCreate(viewWrapperData);
@@ -73,18 +70,22 @@ const todoView = {
                         {
                             tagName: "input",
                             attrs: { className: "add-input", type: "text" },
-                            events: [{ type: "keyup", handler: this.events.handleInputAddKeyup }]
+                            events: [{ type: "keyup", handler: this.handler.handleInputAddKeyup }]
                         },
                         {
                             tagName: "button",
                             attrs: { className: "add-button", type: "button", textContent: "+" },
-                            // events: [{ type: "click", handler: todos.handleButtonAddClick }]
+                            events: [{ type: "click", handler: this.handler.handleButtonAddClick }]
                         }
                     ]
                 },
                 {
                     tagName: "ul",
                     attrs: { className: "todo-list" }
+                },
+                {
+                    tagName: "div",
+                    attrs: { className: "todo-update-guide",  }
                 }
             ]
         };
@@ -93,10 +94,10 @@ const todoView = {
     },
 
     // TODO render
-    render: function (elementList) {
+    render: function () {
         this.renderView();
         this.renderViewSetting();
-        this.renderViewElementList(elementList);
+        // this.renderViewElementList();
     },
 
     renderView: function () {
@@ -112,7 +113,7 @@ const todoView = {
     },
 
     renderViewElementListSetting: function () {
-        this._viewElementList = elementlib.getElement(".todos");
+        this._viewElementList = elementlib.getElement(".todo-list");
     },
 
     renderViewDateElementSetting: function () {
@@ -121,44 +122,48 @@ const todoView = {
         const month = elementlib.getElement(".todo-month");
         const date = elementlib.getElement(".todo-date");
 
-        elementlib.setElementAttribute(year, currentDate.year);
-        elementlib.setElementAttribute(month, currentDate.month);
-        elementlib.setElementAttribute(date, currentDate.date);
+        elementlib.setElementAttribute(year, { textContent: currentDate.year + "년" });
+        elementlib.setElementAttribute(month, { textContent: currentDate.month + "월" });
+        elementlib.setElementAttribute(date, { textContent: currentDate.date + "일" });
     },
 
-    renderViewElementList: function (elementList) {
-        elementList?.forEach(element => {
-            const viewElement = this.viewElementCreate(element);
-            this._viewElementList.appendChild(viewElement);
-        });
-    },
+    // renderViewElementList: function () {
+    //     elementList?.forEach(element => {
+    //         const viewElement = this.viewCreate(element);
+    //         this._viewElementList.appendChild(viewElement);
+    //     });
+    // },
 
     // TODO DOM조작
-    viewElementCreate: function ({ id, todo, complete }) {
+    viewCreate: function (viewData) {
+        const { id, content, complete} = viewData;
         const viewElementData = {
             tagName: "li",
             attrs: { id, className: (complete) ? "disabled" : "" },
             children: [
                 {
                     tagName: "input",
-                    // events: [{ type: "click", handler: todos.handleCompleteClick }],
+                    events: [{ type: "click", handler: this.handler.handleCompleteClick }],
                     attrs: { className: "todo-checkbox", type: "checkbox", checked: complete }
                 },
                 {
                     tagName: "div",
-                    // events: [{ type: "dblclick", handler: todos.handleContentDbclick }],
-                    attrs: { className: "todo-content", textContent: todo },
+                    events: [{ type: "dblclick", handler: this.handler.handleContentDbclick }],
+                    attrs: { className: "todo-content", textContent: content },
                     children: [
                         {
                             tagName: "input",
-                            // events: [{ type: "keyup", handler: todos.handleUpdateContentKeyup }],
+                            events: [
+                                { type: "keyup", handler: this.handler.handleUpdateContentKeyup },
+                                { type: "focusout", handler: this.handler.handleUpdateContentFocusout }
+                            ],
                             attrs: { type: "text", className: "hide" }
                         }
                     ]
                 },
                 {
                     tagName: "span",
-                    // events: [{ type: "click", handler: todos.handleRemoveClick }],
+                    events: [{ type: "click", handler: this.handler.handleRemoveClick }],
                     attrs: { className: "todo-remove", textContent: "X" }
                 }
             ]
@@ -168,9 +173,9 @@ const todoView = {
     },
 
 
-    viewElementAdd: function (viewElementData) {
-        const viewElement = this.viewElementCreate(viewElementData);
-        const viewCompleteElement = elementlib.getElement('.complete');
+    viewAdd: function (viewElementData) {
+        const viewElement = this.viewCreate(viewElementData);
+        const viewCompleteElement = elementlib.getElement('.disabled');
 
         if (viewCompleteElement) {
             this._viewElementList.insertBefore(viewElement, viewCompleteElement);
@@ -180,7 +185,7 @@ const todoView = {
         }
     },
 
-    viewElementComplete: function (id, isComplete) {
+    viewComplete: function (id, isComplete) {
         const viewCompleteElement = elementlib.getElement("#" + id);
 
         if (isComplete) {
@@ -193,13 +198,15 @@ const todoView = {
         }
     },
 
-    viewElementModify: function (id) {
+    viewModify: function (id) {
         const viewElementParent = elementlib.getElement("#" + id);
         const viewModeElement = Array.prototype.slice.apply(viewElementParent.childNodes).filter(node => node.classList.value === "todo-content")[0];
 
-        if (viewModeElement.tagName !== "INPUT" && elementlib.hasClass(viewElementParent, "disabled")) {
-            const viewElementValue = elementlib.getText(viewModeElement);
+        if (viewModeElement.tagName !== "INPUT" && elementlib.hasClass(viewElementParent, "disabled") === false) {
             const modifyModeElement = viewModeElement.querySelector("input"); // TODO 변경
+            if (elementlib.hasClass(modifyModeElement, "show")) return;
+
+            const viewElementValue = elementlib.getText(viewModeElement);
             elementlib.setText(viewModeElement, "");
 
             elementlib.setValue(modifyModeElement, viewElementValue);
@@ -211,7 +218,7 @@ const todoView = {
         }
     },
 
-    viewElementUpdate: function (target, value) {
+    viewUpdate: function (target, value) {
         const viewElementParent = target.parentElement; // elementlib로 빼야하나?
         const updateTextNode = elementlib.createText(value);
 
@@ -220,8 +227,8 @@ const todoView = {
         viewElementParent.appendChild(updateTextNode);
     },
 
-    viewElementRemove: function (id) {
-        const viewRemoveElement = elementlib.getElement("#", id);
+    viewRemove: function (id) {
+        const viewRemoveElement = elementlib.getElement("#" + id);
         this._viewElementList.removeChild(viewRemoveElement);
     },
 }

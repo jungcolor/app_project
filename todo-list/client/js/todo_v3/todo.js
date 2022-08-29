@@ -1,5 +1,4 @@
 // TODO lib
-import elementlib from "./lib/elementlib.js";
 import utilitylib from "./lib/utilitylib.js";
 
 // TODO Data
@@ -9,18 +8,24 @@ import todoData from "./todoData.js";
 import todoView from "./todoView.js";
 
 const todos = {
-    events: {},
+    handler: {},
 
     // TODO 초기화
     init: function () {
-        this.initEvents();
+        this.initHandler();
         todoData.init();
-        todoView.init(this.events);
+        todoView.init(this.handler);
     },
 
-    initEvents: function () {
-        this.events = {
-            handleInputAddKeyup: this.handleInputAddKeyup.bind(this)
+    initHandler: function () {
+        this.handler = {
+            handleInputAddKeyup: this.handleInputAddKeyup.bind(this),
+            handleButtonAddClick: this.handleButtonAddClick.bind(this),
+            handleCompleteClick: this.handleCompleteClick.bind(this),
+            handleContentDbclick: this.handleContentDbclick.bind(this),
+            handleUpdateContentKeyup: this.handleUpdateContentKeyup.bind(this),
+            handleUpdateContentFocusout: this.handleUpdateContentFocusout.bind(this),
+            handleRemoveClick: this.handleRemoveClick.bind(this)
         }
     },
 
@@ -29,9 +34,9 @@ const todos = {
         if (e.key === "Enter") {
             const { target } = e;
             if (utilitylib.emptyValueCheck(target.value, "내용을 입력해 주세요")) return;
-            const viewData = addTodo(target.value);
+            const viewData = todoData.add(target.value);
 
-            addTodoView(viewData);
+            todoView.viewAdd(viewData);
             target.value = "";
         }
     },
@@ -40,9 +45,9 @@ const todos = {
         const { target } = e;
         const input = target.previousElementSibling;
         if (utilitylib.emptyValueCheck(input.value, "내용을 입력해 주세요")) return;
-        const viewData = addTodo(input.value);
+        const viewData = todoData.add(input.value);
 
-        addTodoView(viewData);
+        todoView.viewAdd(viewData);
         input.value = "";
     },
 
@@ -51,13 +56,13 @@ const todos = {
         const id = utilitylib.getId(e.target);
         const checked = target.checked;
 
-        completeTodoView(id, checked);
-        completeTodo(id, checked);
+        todoData.complete(id, checked);
+        todoView.viewComplete(id, checked);
     },
 
     handleContentDbclick: function (e) {
         const id = utilitylib.getId(e.target);
-        modifyTodoView(id);
+        todoView.viewModify(id);
     },
 
     handleUpdateContentKeyup: function (e) {
@@ -68,19 +73,28 @@ const todos = {
 
             if (utilitylib.emptyValueCheck(value, "내용을 입력해주세요.")) return;
 
-            updateTodoView(target, value);
-            updateTodo(id, value);
+            todoData.update(id, value);
+            todoView.viewUpdate(target, value);
         }
+    },
+
+    handleUpdateContentFocusout: function (e) {
+        const { target } = e;
+        const id = utilitylib.getId(e.target);
+        const value = target.value;
+
+        if (utilitylib.emptyValueCheck(value, "내용을 입력해주세요.")) return;
+
+        todoData.update(id, value);
+        todoView.viewUpdate(target, value);
     },
 
     handleRemoveClick: function (e) {
         const id = utilitylib.getId(e.target);
 
-        removeTodoView(id);
-        removeTodo(id);  
+        todoData.remove(id);
+        todoView.viewRemove(id);
     }
 }
 
 todos.init();
-
-export default todos;
