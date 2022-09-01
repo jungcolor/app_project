@@ -1,8 +1,7 @@
 const todos = {
-    itemList: [],
-    completeItemList: [],
-    itemListEl: null,
-    completeItemListEl: null,
+    todoList: [],
+    todoListEl: null,
+    completeListEl: null,
 
     init: function () {
         this.initElement();
@@ -16,22 +15,22 @@ const todos = {
         addContent.addEventListener("keyup", this.handleAddContent.bind(this));
         addBtn.addEventListener("click", this.handleAddBtn.bind(this));
 
-        this.itemListEl = document.querySelector(".todo ul");
-        this.completeItemListEl = document.querySelector(".todoComplete ul");
+        this.todoListEl = document.querySelector(".todo ul");
+        this.completeListEl = document.querySelector(".todoComplete ul");
     },
 
     render: function () {
         this.fetchData();
     },
 
-    fetchData: function () {
-        this.itemList = this.fetchDataItems();
-    },
+    fetchData: async function () {
+        const todos = await axios.get("http://localhost:5000/api/todo").then(response => response.data);
 
-    fetchDataItems: function () {
-        const items = [];
+        if (todos.success) {
+            this.setTodoList(todos.datas);
+        }
 
-        return items;
+        this.renderItem();
     },
 
     itemEventBind: function (id) {
@@ -42,35 +41,39 @@ const todos = {
         remove.addEventListener("click", this.handleRemove.bind(this));
     },
 
-    // DATA =============================================================================
-    makeItem: function (value) {
-        const newItem = { id: this.uuid(), content: value, complete: false };
-        this.itemList.push(newItem);
-
-        return newItem;
+    setTodoList: function (todos) {
+        this.todoList = todos;
     },
 
-    removeItem: function (id, listType) {
-        listType = listType || "itemList";
+    getTodoList: function () {
+        return this.todoList;
+    },
 
-        const itemIdx = this[listType].findIndex(item => item.id === id);
-        return this[listType].splice(itemIdx, 1);
+    // DATA =============================================================================
+    renderItem: function () {
+        this.todoList?.forEach(todo => {
+            this.makeItemView(todo);
+        });
+    },
+
+    makeItem: async function (value) {
+        const newItem = { id: this.uuid(), content: value, complete: false };
+        this.todoList.push(newItem);
+        this.makeItemView(newItem);
+
+        const datas = await axios.post("http://localhost:5000/api/todo/add", newItem).then(response => response.data);
+        console.log(datas);
+    },
+
+    removeItem: function (id) {
+        const itemIdx = this.todoList.findIndex(item => item.id === id);
+        return this.todoList.splice(itemIdx, 1);
     },
 
     updateItem: function (id) {
-        const targetAreaClassName = this.getTargetArea(id);
-        let item = [];
+        const item = this.todoList.filter(todo => todo.id === id);
 
-        if (targetAreaClassName === "todo") {
-            item = this.removeItem(id, "itemList");
-            item[0].complete = true;
-            this.completeItemList.push(item[0]);
-        }
-        else {
-            item = this.removeItem(id, "completeItemList");
-            item[0].complete = false;
-            this.itemList.push(item[0]);
-        }
+        item[0].complete = !item[0].complete;
 
         this.updateItemView(item[0]);
     },
@@ -86,12 +89,12 @@ const todos = {
             </li>
         `;
 
-        this.itemListEl.insertAdjacentHTML("beforeend", template); // innerHTML 대체
+        this.todoListEl.insertAdjacentHTML("beforeend", template); // innerHTML 대체
         this.itemEventBind(id);
     },
 
     removeItemView: function (id, listType) {
-        listType = listType || "itemListEl";
+        listType = listType || "todoListEl";
 
         const item = document.querySelector(`#${id}`);
         this[listType].removeChild(item);
@@ -99,8 +102,8 @@ const todos = {
 
     updateItemView: function (item) {
         const itemEl = document.querySelector(`#${item.id}`);
-        const appendListType = item.complete ? "completeItemListEl" : "itemListEl";
-        const removeListType = item.complete ? "itemListEl" : "completeItemListEl";
+        const appendListType = item.complete ? "completeListEl" : "todoListEl";
+        const removeListType = item.complete ? "todoListEl" : "completeListEl";
 
         this[removeListType].removeChild(itemEl);
         this[appendListType].appendChild(itemEl);
@@ -134,9 +137,7 @@ const todos = {
             return;
         }
 
-        const viewitem = this.makeItem(value);
-
-        this.makeItemView(viewitem);
+        this.makeItem(value);
         target.value = "";
     },
 
@@ -148,8 +149,8 @@ const todos = {
     handleRemove: function (e) {
         const id = this.getId(e.target);
         const removeArea = this.getTargetArea(id);
-        const removeItem = this.removeItem(id, removeArea === "todo" ? "itemList" : "completeItemList");
-        this.removeItemView(id, removeItem[0].complete ? "completeItemListEl" : "itemListEl");
+        const removeItem = this.removeItem(id, removeArea === "todo" ? "todoList" : "completeList");
+        this.removeItemView(id, removeItem[0].complete ? "completeListEl" : "todoListEl");
     },
 
     // UTIL =============================================================================

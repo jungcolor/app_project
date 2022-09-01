@@ -1,4 +1,7 @@
-const mysql = require("mysql");
+
+// mysql - 동기 / mysql/promise - 비동기
+// 비동기로 처리하면 순서가 보장됨
+const mysql = require("mysql2/promise");
 const dbInfo = {
     host: "localhost",
     user: "root",
@@ -7,8 +10,8 @@ const dbInfo = {
 };
 
 module.exports = {
-    init: function () {
-        this.db = mysql.createConnection(dbInfo);
+    init: async function () {
+        this.db = await mysql.createConnection(dbInfo);
     },
 
     connect: function () {
@@ -16,5 +19,11 @@ module.exports = {
             if (error) throw new Error(`MySQL connection error ${error}`);
             console.log('MySQL is connection successfully!');
         });
+    },
+
+    query: async function (sql, callback) {
+        const [result] = await this.db.execute(sql);
+        if (result.length < 1) callback({ success: false });
+        callback({ success: true, datas: result });
     },
 }
