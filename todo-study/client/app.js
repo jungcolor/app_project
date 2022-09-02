@@ -12,6 +12,6 @@ server.setMiddleWare(express.static(__dirname + "/src"));
 // 서버 연결
 server.connect();
 
-server.get("/", (req, res) => {
+server.api("get", "/", (req, res) => {
     res.status(200).sendFile(__dirname + "/index.html");
 });

@@ -17,11 +17,7 @@ module.exports = {
         this.server.use(middleWare);
     },
 
-    get: function (url, callback) {
-        this.server.get(url, callback);
-    },
-
-    post: function (url, callback) {
-        this.server.post(url, callback);
+    api: function (method, url, callback) {
+        this.server[method](url, callback);
     },
 }

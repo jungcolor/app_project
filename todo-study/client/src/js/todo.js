@@ -13,10 +13,10 @@ const todos = {
         const addBtn = document.querySelector(".add-btn");
 
         addContent.addEventListener("keyup", this.handleAddContent.bind(this));
-        addBtn.addEventListener("click", this.handleAddBtn.bind(this));
+        addBtn.addEventListener("click", this.handleAddBtn.bind(this, addContent));
 
-        this.todoListEl = document.querySelector(".todo ul");
-        this.completeListEl = document.querySelector(".todoComplete ul");
+        this.todoListEl = document.querySelector(".todo");
+        this.completeListEl = document.querySelector(".todoComplete");
     },
 
     render: function () {
@@ -24,21 +24,22 @@ const todos = {
     },
 
     fetchData: async function () {
-        const todos = await axios.get("http://localhost:5000/api/todo").then(response => response.data);
+        const datas = await this.callAPI("/api/todo");
 
-        if (todos.success) {
-            this.setTodoList(todos.datas);
+        if (datas.success) {
+            this.setTodoList(datas.datas);
         }
 
-        this.renderItem();
+        this.loadItem();
     },
 
-    itemEventBind: function (id) {
+    itemEventBind: function (todo) {
+        const { id } = todo;
         const complete = document.querySelector(`#${id} [type="checkbox"]`);
         const remove = document.querySelector(`#${id} [type="button"]`);
 
-        complete.addEventListener("change", this.handleCompleteChange.bind(this));
-        remove.addEventListener("click", this.handleRemove.bind(this));
+        complete.addEventListener("change", this.handleCompleteChange.bind(this, id));
+        remove.addEventListener("click", this.handleRemove.bind(this, id));
     },
 
     setTodoList: function (todos) {
@@ -50,7 +51,7 @@ const todos = {
     },
 
     // DATA =============================================================================
-    renderItem: function () {
+    loadItem: function () {
         this.todoList?.forEach(todo => {
             this.makeItemView(todo);
         });
@@ -58,24 +59,43 @@ const todos = {
 
     makeItem: async function (value) {
         const newItem = { id: this.uuid(), content: value, complete: false };
-        this.todoList.push(newItem);
-        this.makeItemView(newItem);
+        const options = {
+            method: "post",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newItem)
+        };
+        const datas = await this.callAPI(`/api/todo/add`, options);
 
-        const datas = await axios.post("http://localhost:5000/api/todo/add", newItem).then(response => response.data);
-        console.log(datas);
+        if (datas.success) {
+            this.todoList.push(newItem);
+            this.makeItemView(newItem);
+        }
     },
 
-    removeItem: function (id) {
-        const itemIdx = this.todoList.findIndex(item => item.id === id);
-        return this.todoList.splice(itemIdx, 1);
+    removeItem: async function (id) {
+        const options = { method: "delete", body: JSON.stringify(id) };
+        const datas = await this.callAPI(`/api/todo/delete/${id}`, options);
+
+        if (datas.success) {
+            const itemIdx = this.todoList.findIndex(item => item.id === id);
+            const removeItem = this.todoList.splice(itemIdx, 1);
+            this.removeItemView(id, removeItem[0].complete ? "completeListEl" : "todoListEl");
+        }
     },
 
-    updateItem: function (id) {
+    updateItem: async function (id) {
         const item = this.todoList.filter(todo => todo.id === id);
+        const options = { method: "put" };
+        const datas = await this.callAPI(`/api/todo/update/${item[0].id}`, options);
 
-        item[0].complete = !item[0].complete;
+        if (datas.success) {
+            item[0].complete = !item[0].complete;
+            this.updateItemView(item[0]);
+        }
 
-        this.updateItemView(item[0]);
+        console.log(datas);
     },
 
     // VIEW =============================================================================
@@ -89,8 +109,14 @@ const todos = {
             </li>
         `;
 
-        this.todoListEl.insertAdjacentHTML("beforeend", template); // innerHTML 대체
-        this.itemEventBind(id);
+        if (complete) {
+            this.completeListEl.insertAdjacentHTML("beforeend", template);
+        }
+        else {
+            this.todoListEl.insertAdjacentHTML("beforeend", template); // innerHTML 대체
+        }
+
+        this.itemEventBind(viewData);
     },
 
     removeItemView: function (id, listType) {
@@ -121,15 +147,12 @@ const todos = {
                 return;
             }
 
-            const viewitem = this.makeItem(value);
-
-            this.makeItemView(viewitem);
+            this.makeItem(value);
             target.value = "";
         }
     },
 
-    handleAddBtn: function (e) {
-        const target = Array.prototype.slice.apply(e.target.closest("div").children).filter(node => node.tagName === "INPUT")[0];
+    handleAddBtn: function (target, e) {
         const value = target.value;
 
         if (!value) {
@@ -141,24 +164,20 @@ const todos = {
         target.value = "";
     },
 
-    handleCompleteChange: function (e) {
-        const id = this.getId(e.target);
+    handleCompleteChange: function (id, e) {
         this.updateItem(id);
     },
 
-    handleRemove: function (e) {
-        const id = this.getId(e.target);
-        const removeArea = this.getTargetArea(id);
-        const removeItem = this.removeItem(id, removeArea === "todo" ? "todoList" : "completeList");
-        this.removeItemView(id, removeItem[0].complete ? "completeListEl" : "todoListEl");
+    handleRemove: function (id, e) {
+        this.removeItem(id);
     },
 
     // UTIL =============================================================================
-    getId: function (target) {
-        const parent = target.closest("li");
-        const id = parent.getAttribute("id");
+    callAPI: async function (url, options) {
+        const response = await fetch(`http://localhost:5000${url}`, options);
+        const datas = await response.json();
 
-        return id;
+        return datas;
     },
 
     getTargetArea: function (id) {
