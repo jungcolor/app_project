@@ -94,8 +94,6 @@ const todos = {
             item[0].complete = !item[0].complete;
             this.updateItemView(item[0]);
         }
-
-        console.log(datas);
     },
 
     // VIEW =============================================================================
@@ -174,7 +172,7 @@ const todos = {
 
     // UTIL =============================================================================
     callAPI: async function (url, options) {
-        const response = await fetch(`http://localhost:5000${url}`, options);
+        const response = await fetch(`https://localhost:5000${url}`, options);
         const datas = await response.json();
 
         return datas;
