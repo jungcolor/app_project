@@ -26,8 +26,8 @@ const todoData = {
         return this._itemList.filter(item => item.id === id);
     },
 
-    getItemList: function () {
-        return this._itemList;
+    getItemIndex: function (id) {
+        return this._itemList.findIndex(item => item.id === id);
     },
 
     add: function (content) {
@@ -45,8 +45,8 @@ const todoData = {
     },
 
     remove: function (id) {
-        const removeitem = this.getItem(id);
-        this._itemList.splice(removeitem, 1);
+        const removeitemIdx = this.getItemIndex(id);
+        this._itemList.splice(removeitemIdx, 1);
     },
 
     update: function (id, content) {
@@ -58,19 +58,11 @@ const todoData = {
         });
     },
 
-    complete: function (id, isComplete) {
-        const updateItemIndex = this._itemList.findIndex(item => item.id === id);
-        const updateItem = this._itemList.splice(updateItemIndex, 1);
-        const itemListLength = this._itemList.length;
+    complete: function (id) {
+        const updateItem = this.getItem(id);
 
-        updateItem[0].complete = isComplete;
-
-        if (isComplete) {
-            this._itemList.splice(itemListLength, 0, updateItem[0]);
-        }
-        else {
-            this._itemList.splice(0, 0, updateItem[0]);
-        }
+        updateItem[0].complete = !updateItem[0].complete;
+        return updateItem[0].complete;
     },
 }
 

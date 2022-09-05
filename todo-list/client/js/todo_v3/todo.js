@@ -19,14 +19,14 @@ const todos = {
 
     initHandler: function () {
         this.handler = {
-            handleInputAddKeyup: this.handleInputAddKeyup.bind(this),
-            handleButtonAddClick: this.handleButtonAddClick.bind(this),
-            handleCompleteClick: this.handleCompleteClick.bind(this),
-            handleContentDbclick: this.handleContentDbclick.bind(this),
-            handleUpdateContentKeyup: this.handleUpdateContentKeyup.bind(this),
-            handleUpdateContentFocusout: this.handleUpdateContentFocusout.bind(this),
-            handleRemoveClick: this.handleRemoveClick.bind(this)
-        }
+            handleInputAddKeyup: this.handleInputAddKeyup,
+            handleButtonAddClick: this.handleButtonAddClick,
+            handleCompleteClick: this.handleCompleteClick,
+            handleContentDbclick: this.handleContentDbclick,
+            handleUpdateContentKeyup: this.handleUpdateContentKeyup,
+            handleUpdateContentFocusout: this.handleUpdateContentFocusout,
+            handleRemoveClick: this.handleRemoveClick
+        };
     },
 
     // TODO HANDLER
@@ -51,24 +51,22 @@ const todos = {
         input.value = "";
     },
 
-    handleCompleteClick: function (e) {
-        const { target } = e;
-        const id = utilitylib.getId(e.target);
-        const checked = target.checked;
+    handleCompleteClick: function (item, e) {
+        const { id } = item;
 
-        todoData.complete(id, checked);
-        todoView.viewComplete(id, checked);
+        const isComplete = todoData.complete(id);
+        todoView.viewComplete(id, isComplete);
     },
 
-    handleContentDbclick: function (e) {
-        const id = utilitylib.getId(e.target);
+    handleContentDbclick: function (item, e) {
+        const { id } = item;
         todoView.viewModify(id);
     },
 
-    handleUpdateContentKeyup: function (e) {
+    handleUpdateContentKeyup: function (item, e) {
         if (e.key === "Enter") {
             const { target } = e;
-            const id = utilitylib.getId(e.target);
+            const { id } = item;
             const value = target.value;
 
             if (utilitylib.emptyValueCheck(value, "내용을 입력해주세요.")) return;
@@ -78,9 +76,9 @@ const todos = {
         }
     },
 
-    handleUpdateContentFocusout: function (e) {
+    handleUpdateContentFocusout: function (item, e) {
         const { target } = e;
-        const id = utilitylib.getId(e.target);
+        const { id } = item;
         const value = target.value;
 
         if (utilitylib.emptyValueCheck(value, "내용을 입력해주세요.")) return;
@@ -89,8 +87,8 @@ const todos = {
         todoView.viewUpdate(target, value);
     },
 
-    handleRemoveClick: function (e) {
-        const id = utilitylib.getId(e.target);
+    handleRemoveClick: function (item, e) {
+        const { id } = item;
 
         todoData.remove(id);
         todoView.viewRemove(id);

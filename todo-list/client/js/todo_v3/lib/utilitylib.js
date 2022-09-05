@@ -1,16 +1,5 @@
 // TODO Utility 객체
 const utilitylib = {
-    getId: function (target) {
-        const element = target.closest("li");
-        const id = element.getAttribute("id");
-
-        if (id) {
-            return id;
-        }
-
-        return null;
-    },
-
     getDate: function () {
         const dateInstance = new Date();
         let year = dateInstance.getFullYear().toString();

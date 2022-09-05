@@ -143,19 +143,19 @@ const todoView = {
             children: [
                 {
                     tagName: "input",
-                    events: [{ type: "click", handler: this.handler.handleCompleteClick }],
+                    events: [{ type: "click", handler: this.handler.handleCompleteClick.bind(this, viewData) }],
                     attrs: { className: "todo-checkbox", type: "checkbox", checked: complete }
                 },
                 {
                     tagName: "div",
-                    events: [{ type: "dblclick", handler: this.handler.handleContentDbclick }],
+                    events: [{ type: "dblclick", handler: this.handler.handleContentDbclick.bind(this, viewData) }],
                     attrs: { className: "todo-content", textContent: content },
                     children: [
                         {
                             tagName: "input",
                             events: [
-                                { type: "keyup", handler: this.handler.handleUpdateContentKeyup },
-                                { type: "focusout", handler: this.handler.handleUpdateContentFocusout }
+                                { type: "keyup", handler: this.handler.handleUpdateContentKeyup.bind(this, viewData) },
+                                { type: "focusout", handler: this.handler.handleUpdateContentFocusout.bind(this, viewData) }
                             ],
                             attrs: { type: "text", className: "hide" }
                         }
@@ -163,7 +163,7 @@ const todoView = {
                 },
                 {
                     tagName: "span",
-                    events: [{ type: "click", handler: this.handler.handleRemoveClick }],
+                    events: [{ type: "click", handler: this.handler.handleRemoveClick.bind(this, viewData) }],
                     attrs: { className: "todo-remove", textContent: "X" }
                 }
             ]
