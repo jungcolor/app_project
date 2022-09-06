@@ -127,13 +127,6 @@ const todoView = {
         elementlib.setElementAttribute(date, { textContent: currentDate.date + "일" });
     },
 
-    // renderViewElementList: function () {
-    //     elementList?.forEach(element => {
-    //         const viewElement = this.viewCreate(element);
-    //         this._viewElementList.appendChild(viewElement);
-    //     });
-    // },
-
     // TODO DOM조작
     viewCreate: function (viewData) {
         const { id, content, complete} = viewData;
@@ -154,7 +147,7 @@ const todoView = {
                         {
                             tagName: "input",
                             events: [
-                                { type: "keyup", handler: this.handler.handleUpdateContentKeyup.bind(this, viewData) },
+                                // { type: "keyup", handler: this.handler.handleUpdateContentKeyup.bind(this, viewData) },
                                 { type: "focusout", handler: this.handler.handleUpdateContentFocusout.bind(this, viewData) }
                             ],
                             attrs: { type: "text", className: "hide" }
@@ -171,7 +164,6 @@ const todoView = {
 
         return elementlib.elementCreate(viewElementData);
     },
-
 
     viewAdd: function (viewElementData) {
         const viewElement = this.viewCreate(viewElementData);
