@@ -49,7 +49,7 @@ server.api("post", "/api/todo/add", (req, res) => {
     });
 });
 
-server.api("put", "/api/todo/update/:id", (req, res) => {
+server.api("put", "/api/todo/update/complete/:id", (req, res) => {
     const { id } = req.params;
     const selectSql = `SELECT complete FROM todotable WHERE id="${id}"`;
 

@@ -14,7 +14,6 @@ const todoView = {
     init: function (handler) {
         this.handler = handler;
         this.initViewCreate();
-        this.render();
     },
 
     initViewCreate: function () {
@@ -97,7 +96,6 @@ const todoView = {
     render: function () {
         this.renderView();
         this.renderViewSetting();
-        // this.renderViewElementList();
     },
 
     renderView: function () {
@@ -128,7 +126,7 @@ const todoView = {
     },
 
     // TODO DOM조작
-    viewCreate: function (viewData) {
+    viewCreateItem: function (viewData) {
         const { id, content, complete} = viewData;
         const viewElementData = {
             tagName: "li",
@@ -165,8 +163,14 @@ const todoView = {
         return elementlib.elementCreate(viewElementData);
     },
 
-    viewAdd: function (viewElementData) {
-        const viewElement = this.viewCreate(viewElementData);
+    viewLoadItem: function (items) {
+        items.forEach(item => {
+            this.viewAddItem(item);
+        });
+    },
+
+    viewAddItem: function (viewItem) {
+        const viewElement = this.viewCreateItem(viewItem);
         const viewCompleteElement = elementlib.getElement('.disabled');
 
         if (viewCompleteElement) {
@@ -210,7 +214,7 @@ const todoView = {
         }
     },
 
-    viewUpdate: function (target, value) {
+    viewUpdateItem: function (target, value) {
         const viewElementParent = target.parentElement; // elementlib로 빼야하나?
         const updateTextNode = elementlib.createText(value);
 
@@ -219,7 +223,7 @@ const todoView = {
         viewElementParent.appendChild(updateTextNode);
     },
 
-    viewRemove: function (id) {
+    viewRemoveItem: function (id) {
         const viewRemoveElement = elementlib.getElement("#" + id);
         this._viewElementList.removeChild(viewRemoveElement);
     },

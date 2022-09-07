@@ -12,9 +12,27 @@ const todos = {
 
     // TODO 초기화
     init: function () {
+        console.log("[Call Stack] >>>>> start");
         this.initHandler();
         todoData.init();
         todoView.init(this.handler);
+
+        this.render();
+        console.log("[Call Stack] >>>>> end");
+    },
+
+    render: function () {
+        todoView.render();
+
+        setTimeout(() => {
+            this.loadComplate();
+        }, 100);
+    },
+        
+    loadComplate: function () {
+        console.log("[Macro Task Queue] >>>>> Start");
+        todoView.viewLoadItem(todoData.getItemList());
+        console.log("[Macro Task Queue] >>>>> End");
     },
 
     initHandler: function () {
@@ -36,7 +54,7 @@ const todos = {
             if (utilitylib.emptyValueCheck(target.value, "내용을 입력해 주세요")) return;
             const viewData = todoData.addItem(target.value);
 
-            todoView.viewAdd(viewData);
+            todoView.viewAddItem(viewData);
             target.value = "";
         }
     },
@@ -45,18 +63,18 @@ const todos = {
         const { target } = e;
         const input = target.previousElementSibling;
         if (utilitylib.emptyValueCheck(input.value, "내용을 입력해 주세요")) return;
-        const viewData = await todoData.add(input.value);
+        const viewData = await todoData.addItem(input.value);
 
         if (viewData === null) return;
 
-        todoView.viewAdd(viewData);
+        todoView.viewAddItem(viewData);
         input.value = "";
     },
 
-    handleCompleteClick: function (item, e) {
+    handleCompleteClick: async function (item, e) {
         const { id } = item;
 
-        const isComplete = todoData.complete(id);
+        const isComplete = await new Promise(resolve => resolve(todoData.complete(id)));
         todoView.viewComplete(id, isComplete);
     },
 
@@ -65,18 +83,18 @@ const todos = {
         todoView.viewModify(id);
     },
 
-    // handleUpdateContentKeyup: function (item, e) {
-    //     if (e.key === "Enter") {
-    //         const { target } = e;
-    //         const { id } = item;
-    //         const value = target.value;
+    handleUpdateContentKeyup: function (item, e) {
+        if (e.key === "Enter") {
+            const { target } = e;
+            const { id } = item;
+            const value = target.value;
 
-    //         if (utilitylib.emptyValueCheck(value, "내용을 입력해주세요.")) return;
+            if (utilitylib.emptyValueCheck(value, "내용을 입력해주세요.")) return;
 
-    //         todoData.updateItem(id, value);
-    //         todoView.viewUpdate(target, value);
-    //     }
-    // },
+            todoData.updateItem(id, value);
+            todoView.viewUpdate(target, value);
+        }
+    },
 
     handleUpdateContentFocusout: function (item, e) {
         const { target } = e;
@@ -86,14 +104,14 @@ const todos = {
         if (utilitylib.emptyValueCheck(value, "내용을 입력해주세요.")) return;
 
         todoData.updateItem(id, value);
-        todoView.viewUpdate(target, value);
+        todoView.viewUpdateItem(target, value);
     },
 
     handleRemoveClick: function (item, e) {
         const { id } = item;
 
         todoData.removeItem(id);
-        todoView.viewRemove(id);
+        todoView.viewRemoveItem(id);
     }
 }
 
