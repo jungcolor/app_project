@@ -55,22 +55,29 @@ const todoData = {
         return null;
     },
 
-    updateItem: function (id, content) {
-        this._itemList.forEach(item => {
-            if (item.id === id) {
-                item.content = content;
-                return false; // forEach break
-            }
+    updateItem: async function (id, content) {
+        const updateItem = this.getItem(id);
+        const datas = await this.callApi(`/api/todo/update/content/${id}`, {
+            method: "put",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id, content })
         });
+
+        if (datas.success) {
+            updateItem[0].content = content;
+            return updateItem[0].content;
+        }
     },
 
     complete: async function (id) {
-        const updateItem = this.getItem(id);
+        const completeItem = this.getItem(id);
         const datas = await this.callApi(`/api/todo/update/complete/${id}`, { method: "put" });
 
         if (datas.success) {
-            updateItem[0].complete = !updateItem[0].complete;
-            return updateItem[0].complete;
+            completeItem[0].complete = !completeItem[0].complete;
+            return completeItem[0].complete;
         }
     },
 

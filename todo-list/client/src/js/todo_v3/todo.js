@@ -83,28 +83,27 @@ const todos = {
         todoView.viewModify(id);
     },
 
-    handleUpdateContentKeyup: function (item, e) {
-        if (e.key === "Enter") {
-            const { target } = e;
-            const { id } = item;
-            const value = target.value;
+    // handleUpdateContentKeyup: function (item, e) {
+    //     if (e.key === "Enter") {
+    //         const { target } = e;
+    //         const { id } = item;
+    //         const value = target.value;
 
-            if (utilitylib.emptyValueCheck(value, "내용을 입력해주세요.")) return;
+    //         if (utilitylib.emptyValueCheck(value, "내용을 입력해주세요.")) return;
 
-            todoData.updateItem(id, value);
-            todoView.viewUpdate(target, value);
-        }
-    },
+    //         todoData.updateItem(id, value);
+    //         todoView.viewUpdate(target, value);
+    //     }
+    // },
 
-    handleUpdateContentFocusout: function (item, e) {
+    handleUpdateContentFocusout: async function (item, e) {
         const { target } = e;
         const { id } = item;
-        const value = target.value;
 
-        if (utilitylib.emptyValueCheck(value, "내용을 입력해주세요.")) return;
+        if (utilitylib.emptyValueCheck(target.value, "내용을 입력해주세요.")) return;
 
-        todoData.updateItem(id, value);
-        todoView.viewUpdateItem(target, value);
+        const updateContent = await new Promise(resolve => resolve(todoData.updateItem(id, target.value)));
+        todoView.viewUpdateItem(target, updateContent);
     },
 
     handleRemoveClick: function (item, e) {

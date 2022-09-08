@@ -49,6 +49,24 @@ server.api("post", "/api/todo/add", (req, res) => {
     });
 });
 
+server.api("put", "/api/todo/update/content/:id", (req, res) => {
+    const { id, content } = req.body;
+    const selectSql = `SELECT content FROM todotable WHERE id="${id}"`;
+
+    db.query(selectSql, payload => {
+        const { success, datas } = payload;
+        
+        if (success) {
+            const updateSql = `UPDATE todotable SET content="${content}" WHERE id="${id}"`;
+            
+            db.query(updateSql, payload => {
+                console.log(payload);
+                payload.success && res.send(payload);
+            });
+        }
+    });
+});
+
 server.api("put", "/api/todo/update/complete/:id", (req, res) => {
     const { id } = req.params;
     const selectSql = `SELECT complete FROM todotable WHERE id="${id}"`;
