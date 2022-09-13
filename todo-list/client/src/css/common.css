@@ -112,6 +112,12 @@ body {
     cursor: pointer;
 }
 
+.todo-contents ul li.dragging {
+    border-color: red;
+    border-style: dashed;
+    border-width: 1px;
+}
+
 .todo-contents ul li input[type="checkbox"] {
     margin: 0;
 }

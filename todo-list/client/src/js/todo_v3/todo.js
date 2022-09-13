@@ -43,16 +43,22 @@ const todos = {
             handleContentDbclick: this.handleContentDbclick,
             // handleUpdateContentKeyup: this.handleUpdateContentKeyup,
             handleUpdateContentFocusout: this.handleUpdateContentFocusout,
-            handleRemoveClick: this.handleRemoveClick
+            handleRemoveClick: this.handleRemoveClick,
+            // drag event
+            handleDragStartMousedown: this.handleDragStartMousedown,
+            handleDraggingMousemove: this.handleDraggingMousemove,
+            handleDragEndMouseup: this.handleDragEndMouseup
         };
     },
 
     // TODO HANDLER
-    handleInputAddKeyup: function (e) {
+    handleInputAddKeyup: async function (e) {
         if (e.key === "Enter") {
             const { target } = e;
             if (utilitylib.emptyValueCheck(target.value, "내용을 입력해 주세요")) return;
-            const viewData = todoData.addItem(target.value);
+            const viewData = await todoData.addItem(target.value);
+
+            if (viewData === null) return;
 
             todoView.viewAddItem(viewData);
             target.value = "";
@@ -111,7 +117,21 @@ const todos = {
 
         todoData.removeItem(id);
         todoView.viewRemoveItem(id);
-    }
+    },
+
+    // TODO DRAG HANDLER
+    handleDragStartMousedown: function (e) {
+        console.log(`Drag 이벤트 시작!!!`);
+    },
+
+    handleDraggingMousemove: function (e) {
+        // console.log(`Drag 이벤트 중!!!`);
+    },
+
+    handleDragEndMouseup: function (e) {
+        console.log(`Drag 이벤트 끝!!!`);
+        console.log(e.target);
+    },    
 }
 
 todos.init();

@@ -131,6 +131,11 @@ const todoView = {
         const viewElementData = {
             tagName: "li",
             attrs: { id, className: (complete) ? "disabled" : "" },
+            events: [
+                { type: "mousedown", handler: this.handler.handleDragStartMousedown.bind(this) },
+                { type: "mousemove", handler: this.handler.handleDraggingMousemove.bind(this) },
+                { type: "mouseup", handler: this.handler.handleDragEndMouseup.bind(this) }
+            ],
             children: [
                 {
                     tagName: "input",
