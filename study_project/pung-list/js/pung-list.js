@@ -1,6 +1,8 @@
 const pungList = {
     pungLists: [],
 
+    timerLists: {},
+
     pungListsElement: null,
 
     // INITIALIZE ===================================================================================================================
@@ -11,57 +13,117 @@ const pungList = {
     initElement: function () {
         const pungContent = document.querySelector(".pungContent");
         const pungAdds = document.querySelectorAll(".pungAdd > button");
+        const pungReset = document.querySelector(".pungReset");
+        const pungDouble = document.querySelector(".pungDouble");
+        const pungSecondPlusAll = document.querySelector(".pungSecondPlusAll");
+        const pungStopAll = document.querySelector(".pungStopAll");
+        const pungStartAll = document.querySelector(".pungStartAll");
+
+        this.pungListsElement = document.querySelector(".pungList");
 
         pungAdds.forEach(pungAdd => {
             pungAdd.addEventListener("click", this.handleClickTimer.bind(this, pungContent));
         });
-
-        this.pungListsElement = document.querySelector(".pungList");
+        pungReset.addEventListener("click", this.handleClickRemoveAll.bind(this));
+        pungDouble.addEventListener("click", this.handleClickListDoubleCopy.bind(this));        
+        pungSecondPlusAll.addEventListener("click", this.handleClickSecondPlusAll.bind(this));
+        pungStopAll.addEventListener("click", this.handleClickStopAll.bind(this));
+        pungStartAll.addEventListener("click", this.handleClickStartAll.bind(this));
     },
 
 
     // DATA ===================================================================================================================
-    add: function (content) {
-        const newList = { id: `pung-list-${crypto.randomUUID()}`, content, toggle: false };
-        
+    add: function (options) {
+        const { content, timer, isToggle, timerID } = options;
+        const newList = { id: `pung-list-${crypto.randomUUID()}`, isToggle, content, timer, timerID };
+
         this.pungLists = this.pungLists.concat(newList);
+        this.pungLists.sort((a, b) => {
+            return a.timer - b.timer;
+        });
         this.addView(newList);
     },
 
     remove: function (id) {
-        const removeListIdx = this.pungLists.findIndex(pungList => pungList.id === id);
+        const removeList = this.getTarget(id);
+        const removeListIdx = this.getTargetIdx(id);
 
         this.pungLists.splice(removeListIdx, 1);
+        this.setTimerClear(removeList.timerID);
+        this.setPungListAverge(removeList.timer);
+        this.setPungListCounter();
         this.removeView(id);
     },
 
-    update: function (id) { },
+    update: function (id) {
+        const updateList = this.getTarget(id);
+
+        updateList.timer += 5;
+        this.setTimerClear(updateList.timerID); // update후 timerID가 변경되기때문에 변경 된 timerID로 clear시켜준다
+        this.updateView(id, updateList.timer);
+    },
 
     toggle: function (id) {
-        const toggleList = this.pungLists.filter(pungList => pungList.id === id);
+        const toggleList = this.getTarget(id);
         
-        toggleList[0].toggle = !toggleList[0].toggle;
-        this.toggleView(id, toggleList[0].toggle);
+        toggleList.isToggle = !toggleList.isToggle;
+
+        if (toggleList.isToggle) {
+            this.setTimerClear(toggleList.timerID);
+        }
+        else {
+            this.setTimer(id, toggleList.timer);
+        }
+
+        this.toggleView(id, toggleList.isToggle);
+    },
+
+    stop: function (id) {
+        const stopList = this.getTarget(id);
+
+        stopList.isToggle = true;
+        this.setTimerClear(stopList.timerID);
+        this.stopView(id);
+    },
+
+    start: function (id) {
+        const startList = this.getTarget(id);
+
+        startList.isToggle = false;
+        this.setTimer(id, startList.timer);
+        this.startView(id);
     },
 
 
     // VIEW ===================================================================================================================
     addView: function (viewData) {
-        const { id, content, toggle } = viewData;
+        const { id, content, isToggle, timer } = viewData;
+        const liElement = document.createElement("li");
+        liElement.setAttribute("id", id);
         const template = `
-            <li id=${id}>
-                <div class="pungListContent">${content}</div>
-                <div class="pungListTimer">4초</div>
-                <div class="pungListEtc">
-                    <button type="button" class="pungListTimerPlus">+5초</button>
-                    <button type="button" class="pungListToggle">${toggle ? '시작' : '중지'}</button>
-                    <button type="button" class="pungListRemove">삭제</button>
-                </div>
-            </li>
+            <div class="pungListContent">${content}</div>
+            <div class="pungListTimer">${timer}초</div>
+            <div class="pungListEtc">
+                <button type="button" class="pungListTimerPlus">+5초</button>
+                <button type="button" class="pungListToggle">${isToggle ? '시작' : '중지'}</button>
+                <button type="button" class="pungListRemove">삭제</button>
+            </div>
         `;
 
-        this.pungListsElement.insertAdjacentHTML("beforeend", template);
+        liElement.innerHTML = template;
 
+        const afterNodeIdx = this.pungLists.findIndex(x => x.id === id) + 1;
+        const afterNodeID = this.pungLists[afterNodeIdx] && this.pungLists[afterNodeIdx].id;
+
+        if (afterNodeID) {
+            const afterNode = document.querySelector(`#${afterNodeID}`);
+            this.pungListsElement.insertBefore(liElement, afterNode);
+        }
+        else {
+            this.pungListsElement.appendChild(liElement);
+        }
+
+        this.setTimer(id, timer);
         this.bindEventNewList(id);
     },
 
@@ -71,11 +133,96 @@ const pungList = {
         this.pungListsElement.removeChild(removeElement);
     },
 
-    updateView: function () { },
+    updateView: function (id, timerCount) {
+        const updateElement = document.querySelector(`#${id} .pungListTimer`);
+        updateElement.textContent = `${timerCount}초`;
+
+        this.setTimer(id, timerCount);
+    },
 
     toggleView: function (id, isToggle) {
         const toggleElement = document.querySelector(`#${id} .pungListEtc .pungListToggle`);
-        toggleElement.textContent = isToggle ? "시작" : "중지";
+
+        if (isToggle) {
+            toggleElement.textContent = "시작";
+        }
+        else {
+            toggleElement.textContent = "중지";
+        }
+    },
+
+    stopView: function (id) {
+        const stopElement = document.querySelector(`#${id} .pungListEtc .pungListToggle`);
+        stopElement.textContent = "시작";
+    },
+
+    startView: function (id) {
+        const startElement = document.querySelector(`#${id} .pungListEtc .pungListToggle`);
+        startElement.textContent = "중지";
+    },
+
+    setTimer: function (id, timer) {
+        const targetList = this.getTarget(id);
+
+        this.setPungListCounter();
+        this.setPungListAverge(timer);
+
+        const timerID = setInterval(() => {
+            const listTimer = document.querySelector(`#${id} .pungListTimer`);
+
+            if (timer < 2) {
+                this.remove(id);
+                this.setPungListAverge(timer);
+                this.setPungListCounter();
+                return;
+            }
+
+            timer--;
+            listTimer.textContent = `${timer}초`;
+            targetList.timer = timer;
+            this.setPungListAverge(timer);
+            this.setPungListCounter();
+        }, 1000);
+
+        targetList.timerID = timerID;
+        targetList.timer = timer;
+    },
+
+    setTimerClear: function (timerID) {
+        clearInterval(timerID);
+        timerID = null;
+    },
+
+    setPungListCounter: function () {
+        const countElement = document.querySelector("#pungCount");
+
+        countElement.textContent = this.pungLists.length;
+    },
+
+    setPungListAverge: function () {
+        const avergeElement = document.querySelector("#pungAverge");
+        let averge;
+        let avergeSum = 0;
+
+        this.pungLists.forEach(pungList => {
+            avergeSum += pungList.timer;
+        });
+
+        averge = avergeSum / this.pungLists.length;
+
+        if(!averge) {
+            averge = 0;        
+        }
+
+        avergeElement.textContent = averge.toFixed(1);
+    },
+
+    getTarget: function (id) {
+        return this.pungLists.filter(pungList => pungList.id === id)[0];
+    },
+
+    getTargetIdx: function (id) {
+        return this.pungLists.findIndex(pungList => pungList.id === id);
     },
 
     bindEventNewList: function (id) {
@@ -100,30 +247,61 @@ const pungList = {
             return;
         }
 
-        this.add(value);
+        this.add({ content: value, timer: Number(second), timerID: null, isToggle: false });
         contentTarget.value = "";
         contentTarget.focus();
     },
 
-    handleClickTimerPlus: function (id, oEvent) {
-        console.log("추가", id);
+    handleClickTimerPlus: function (id) {
+        this.update(id);
     },
 
-    handleClickTimerToggle: function (id, oEvent) {
+    handleClickTimerToggle: function (id) {
         this.toggle(id);
     },
     
-    handleClickTimerRemove: function (id, oEvent) {
+    handleClickTimerRemove: function (id) {
         this.remove(id);
     },
 
+    handleClickListDoubleCopy: function () {
+        let copyLists = [];
+        copyLists = copyLists.concat(this.pungLists);
 
-    // HANDLER ALL ===================================================================================================================
-    // handleClickTimerPlusALl: function (timer) {},
+        copyLists.forEach(copyList => {
+            this.add({ content: copyList.content, timer: copyList.timer, timerID: null, isToggle: false });
+        });
+    },
 
-    // handleClickTimerRemoveAll: function () {},
+    handleClickSecondPlusAll: function () {
+        this.pungLists.forEach(pungList => {
+            this.update(pungList.id);
+        });
+    },
 
-    // handleClickTimerToggleAll: function () {},
+    handleClickStopAll: function () {
+        this.pungLists.forEach(pungList => {
+            this.stop(pungList.id);
+        });
+    },
+
+    handleClickStartAll: function () {
+        this.pungLists.forEach(pungList => {
+            this.start(pungList.id);
+        });
+    },
+
+    handleClickRemoveAll: function () {
+        for (let i = 0, len = this.pungLists.length - 1; i < len; i++) {
+            const pungList = this.pungLists[i];
+
+            this.setTimerClear(pungList.id);
+            this.removeView(pungList.id);
+        }
+
+        // this.pungLists.forEach(pungList => {
+        // });
+    },
 }
 
 pungList.init();
