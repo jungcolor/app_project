@@ -292,15 +292,18 @@ const pungList = {
     },
 
     handleClickRemoveAll: function () {
-        for (let i = 0, len = this.pungLists.length - 1; i < len; i++) {
-            const pungList = this.pungLists[i];
+        const pungCount = document.querySelector("#pungCount");
+        const pungAverge = document.querySelector("#pungAverge");
 
-            this.setTimerClear(pungList.id);
-            this.removeView(pungList.id);
-        }
+        this.pungLists.forEach((pungList) => {
+            this.setTimerClear(pungList.timerID);
+        });
 
-        // this.pungLists.forEach(pungList => {
-        // });
+        this.pungLists = [];
+        this.pungListsElement.remove();
+
+        pungCount.textContent = "0";
+        pungAverge.textContent = "0.0";
     },
 }
 
