@@ -59,12 +59,18 @@ const pungList = {
         const updateList = this.getTarget(id);
 
         updateList.timer += 5;
-        this.setTimerClear(updateList.timerID); // update후 timerID가 변경되기때문에 변경 된 timerID로 clear시켜준다
+        this.setTimerClear(updateList.timerID);
         this.updateView(id, updateList.timer);
+
+        if (!updateList.isToggle) {
+            this.setTimer(id, updateList.timer);
+        }
     },
 
     toggle: function (id) {
         const toggleList = this.getTarget(id);
+        const { timer, timerID } = toggleList;
+        let { isToggle } = toggleList;
         
         toggleList.isToggle = !toggleList.isToggle;
 
@@ -133,11 +139,11 @@ const pungList = {
         this.pungListsElement.removeChild(removeElement);
     },
 
-    updateView: function (id, timerCount) {
+    updateView: function (id, timer) {
         const updateElement = document.querySelector(`#${id} .pungListTimer`);
-        updateElement.textContent = `${timerCount}초`;
+        updateElement.textContent = `${timer}초`;
 
-        this.setTimer(id, timerCount);
+        this.setPungListAverge(timer);
     },
 
     toggleView: function (id, isToggle) {
@@ -211,7 +217,7 @@ const pungList = {
         averge = avergeSum / this.pungLists.length;
 
         if(!averge) {
-            averge = 0;        
+            averge = 0;
         }
 
         avergeElement.textContent = averge.toFixed(1);
@@ -292,18 +298,15 @@ const pungList = {
     },
 
     handleClickRemoveAll: function () {
-        const pungCount = document.querySelector("#pungCount");
-        const pungAverge = document.querySelector("#pungAverge");
-
-        this.pungLists.forEach((pungList) => {
+        this.pungLists.forEach(pungList => {
             this.setTimerClear(pungList.timerID);
         });
 
-        this.pungLists = [];
-        this.pungListsElement.remove();
+        this.pungLists = []; // 초기화
+        this.pungListsElement.innerHTML = "";
 
-        pungCount.textContent = "0";
-        pungAverge.textContent = "0.0";
+        this.setPungListCounter();
+        this.setPungListAverge();
     },
 }
 
