@@ -1,7 +1,6 @@
-// import Order from './order.js';
-import { initFood } from './food.js';
+import { createOrder } from './order.js';
+import { foods } from './food.js';
 import { initManager } from './manager.js';
-// import Chef from './chef.js';
 
 const app = {
     init: function () {
@@ -13,12 +12,12 @@ const app = {
         const orderSoup = document.querySelector(".orderSoup");
         const orderDrink = document.querySelector(".orderDrink");
 
-        orderSoup.addEventListener("click", this.handleClickOrder.bind(this, initFood("스프")));
-        orderDrink.addEventListener("click", this.handleClickOrder.bind(this, initFood("음료수")));
+        orderSoup.addEventListener("click", this.handleClickOrder.bind(this, foods.soup));
+        orderDrink.addEventListener("click", this.handleClickOrder.bind(this, foods.drink));
     },
 
-    handleClickOrder: function (menuInstance) {
-        
+    handleClickOrder: function (name) {
+        createOrder(name);
     }
 }
 
