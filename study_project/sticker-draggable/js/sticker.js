@@ -26,9 +26,10 @@ export default class Sticker {
         this.setStyle(sticker);
 
         // DRAG 이벤트 바인딩
-        // sticker.addEventListener("mousedown", this.dragStart.bind(this));
-        // sticker.addEventListener("mouseup", this.dragEnd.bind(this));
+        sticker.addEventListener("mousedown", this.dragStart.bind(this));
+        sticker.addEventListener("mouseup", this.dragEnd.bind(this));
 
+        // customEvent
         sticker.addEventListener("removeList", this.handleClickRemoveList.bind(this));
 
         this.el = sticker;
@@ -121,15 +122,27 @@ export default class Sticker {
     // DRAG
     dragStart(e) {
         const { target } = e;
+        const that = this;
         if (target.tagName === "BUTTON") return false;
         e.preventDefault(); // select range 막기
-
-        console.log("start");
-
         this.isDrag = true;
 
+        const shiftX = (this.el.getBoundingClientRect().x - this.parentClientRect.x);
+        const shiftY = (this.el.getBoundingClientRect().y - this.parentClientRect.y);
 
-        document.addEventListener("mousemove", this.dragMove.bind(this, e));
+        moveAt(e.pageX, e.pageY);
+
+        // 공을 pageX, pageY 좌표 중앙에 위치하게 합니다.
+        function moveAt(pageX, pageY) {
+            that.el.style.left = pageX - shiftX + 'px';
+            that.el.style.top = pageY - shiftY + 'px';
+        }
+
+        function onMouseMove(event) {
+            moveAt(event.pageX, event.pageY);
+        }
+
+        document.addEventListener("mousemove", onMouseMove);
     }
 
     dragMove(e) {
@@ -140,12 +153,12 @@ export default class Sticker {
         const pointY = e.pageY - (this.el.getBoundingClientRect().y - this.parentClientRect.y);
 
 
-        // console.log(`X 위치 >>>>>>>>>>>> ${pointX}`);
-        // console.log(`Y 위치 >>>>>>>>>>>> ${pointY}`);
+        console.log(`X 위치 >>>>>>>>>>>> ${pointX}`);
+        console.log(`Y 위치 >>>>>>>>>>>> ${pointY}`);
 
         // this.el.style.left = `${pointX}px`;
         // this.el.style.top = `${pointY}px`;
-        console.log("move");
+        // console.log("move");
     }
 
     dragEnd(e) {
