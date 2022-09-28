@@ -4,12 +4,20 @@ export default class Sticker {
     constructor(options) {
         this.el = null;
         this.itemList = [];
-        this.listCount = 1;
+        this.listCount = 0;
+        this.isDraggable = false;
+        this.titleColor = "#fff";
+        this.position = {
+            currentX: 0,
+            currentY: 0,
+            shiftX: 0,
+            shiftY: 0
+        };
 
         Object.assign(this, options);
 
         this.initElement();
-        this.render(options.parentEl);
+        this.initBindEvent();
     }
 
     initElement() {
@@ -25,22 +33,27 @@ export default class Sticker {
 
         this.setStyle(sticker);
 
-        // DRAG 이벤트 바인딩
-        sticker.addEventListener("mousedown", this.dragStart.bind(this));
-        sticker.addEventListener("mouseup", this.dragEnd.bind(this));
-
         // customEvent
         sticker.addEventListener("removeList", this.handleClickRemoveList.bind(this));
 
         this.el = sticker;
     }
 
+    initBindEvent() {
+        const header = this.el.querySelector(".sticker-header");
+
+        // DRAG 이벤트 바인딩
+        header.addEventListener("mousedown", this.dragStart.bind(this));
+        header.addEventListener("mouseup", this.dragEnd.bind(this));
+    }
+
     createHeader() {
         const header = document.createElement("div");
-        header.classList.add("sticker-header");
+        header.classList.add("sticker-header", "cursor-move");
 
         const headingTitle = document.createElement("h3");
         headingTitle.textContent = `STICKER ${this.stickerCount}`;
+        headingTitle.style.color = this.titleColor;
 
         const btnSettings = document.createElement("div");
         btnSettings.classList.add("sticker-setting");
@@ -48,12 +61,14 @@ export default class Sticker {
         const addListBtn = document.createElement("button");
         addListBtn.classList.add("btn");
         addListBtn.id = "sticker-list-add";
+        addListBtn.type = "button";
         addListBtn.textContent = "항목추가";
         addListBtn.addEventListener("click", this.handleClickAdddList.bind(this));
 
         const removeSticker = document.createElement("button");
         removeSticker.classList.add("btn");
         removeSticker.id = "sticker-remove";
+        removeSticker.type = "button";
         removeSticker.textContent = "스티커삭제";
         removeSticker.addEventListener("click", this.handleClickRemoveSticker.bind(this, this.id));
 
@@ -82,35 +97,19 @@ export default class Sticker {
         parent.append(this.el);
     }
 
-    setStyle(target) {
-        const bgColor = this.getBgColor();
-        const { initX, initY } = this.initPosition;
 
-        target.style.top = `${initY}px`;
-        target.style.left = `${initX}px`;
-        target.style.backgroundColor = `rgba(${bgColor}, 0.8)`;
-    }
-
-    getBgColor() {
-        const result = [];
-
-        for (let i = 0; i < 3; i++) {
-            result.push(Math.floor(Math.random() * 255));
-        }
-
-        return result.join();
-    }
-
+    // CRUD
     addList() {
+        const listEl = this.el.querySelector(".sticker-list");
         const data = {
             id: `sticker_${crypto.randomUUID()}`,
             stickerCount: this.stickerCount,
-            listCount: this.listCount++,
-            parentEl: this.el.querySelector(".sticker-list"),
-            _self: this
+            listCount: ++this.listCount,
+            parentEl: listEl,
         }
 
         const list = new StickerList(data);
+        list.render(listEl);
 
         this.itemList.push(list);
     }
@@ -119,56 +118,88 @@ export default class Sticker {
         this.itemList = this.itemList.filter(item => item.id !== id);
     }
 
+
     // DRAG
     dragStart(e) {
-        const { target } = e;
-        const that = this;
-        if (target.tagName === "BUTTON") return false;
-        e.preventDefault(); // select range 막기
-        this.isDrag = true;
+        if (e.target.tagName === "BUTTON" || e.target.tagName === "LI") return false;
+        e.preventDefault();
 
-        const shiftX = (this.el.getBoundingClientRect().x - this.parentClientRect.x);
-        const shiftY = (this.el.getBoundingClientRect().y - this.parentClientRect.y);
+        const pageX = e.pageX;
+        const pageY = e.pageY;
+        const clientX = e.clientX;
+        const clientY = e.clientY;
+        const currentElX = this.el.getBoundingClientRect().x;
+        const currentElY = this.el.getBoundingClientRect().y;
+        const parentX = this.parentClientRect.x;
+        const parentY = this.parentClientRect.y;
 
-        moveAt(e.pageX, e.pageY);
+        this.isDraggable = true;
 
-        // 공을 pageX, pageY 좌표 중앙에 위치하게 합니다.
-        function moveAt(pageX, pageY) {
-            that.el.style.left = pageX - shiftX + 'px';
-            that.el.style.top = pageY - shiftY + 'px';
-        }
+        this.position.shiftX = clientX - (currentElX - parentX);
+        this.position.shiftY = clientY - (currentElY - parentY);
 
-        function onMouseMove(event) {
-            moveAt(event.pageX, event.pageY);
-        }
+        this.setPosition(pageX, pageY);
 
-        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mousemove", this.dragMove.bind(this));
     }
 
     dragMove(e) {
-        // 현재 마우스 포인터 위치
-        // X : 현재 위치 x - (엘리먼트의 x - 부모엘리먼트의 x)
-        // Y : 현재 위치 y - (엘리먼트의 y - 부모엘리먼트의 y)
-        const pointX = e.pageX - (this.el.getBoundingClientRect().x - this.parentClientRect.x);
-        const pointY = e.pageY - (this.el.getBoundingClientRect().y - this.parentClientRect.y);
-
-
-        console.log(`X 위치 >>>>>>>>>>>> ${pointX}`);
-        console.log(`Y 위치 >>>>>>>>>>>> ${pointY}`);
-
-        // this.el.style.left = `${pointX}px`;
-        // this.el.style.top = `${pointY}px`;
-        // console.log("move");
+        if (this.isDraggable) {
+            this.setPosition(e.pageX, e.pageY);
+        }
     }
 
     dragEnd(e) {
-        console.log("end");
-        document.removeEventListener("mousemove", this.dragMove);
+        this.isDraggable = false;
+        document.removeEventListener("mousemove", this.dragMove); // 되는건가?
     }
+
+
+    // SET, GET
+    setPosition(pageX, pageY) {
+        const currentX = pageX - this.position.shiftX;
+        const currentY = pageY - this.position.shiftY;
+
+        this.el.style.left = `${currentX}px`;
+        this.el.style.top = `${currentY}px`;
+
+        this.position.currentX = currentX;
+        this.position.currentY = currentY;
+    }
+
+    setStyle(target) {
+        const bgColor = this.makeBgColor();
+        const { initX, initY } = this.initPosition;
+
+        target.style.top = `${initY}px`;
+        target.style.left = `${initX}px`;
+        target.style.backgroundColor = `rgba(${bgColor}, 0.8)`;
+    }
+
+    makeBgColor() {
+        const result = [];
+        let sum = 0;
+
+        for (let i = 0; i < 3; i++) {
+            const num = Math.floor(Math.random() * 255);
+            sum += num;
+            result.push(num);
+        }
+
+        this.titleColor = (sum > 550) ? "#333" : "#fff";
+        return result.join();
+    }
+
 
     // HANDLER
     handleClickAdddList(e) {
         this.addList();
+    }
+
+    handleClickRemoveList(e) {
+        const { id } = e.detail;
+
+        this.removeList(id);
     }
 
     handleClickRemoveSticker(id) {
@@ -176,11 +207,6 @@ export default class Sticker {
 
         this.parentEl.dispatchEvent(event);
         this.el.remove();
-    }
-
-    handleClickRemoveList(e) {
-        const { id } = e.detail;
-
-        this.removeList(id);
+        this.el = null;
     }
 }

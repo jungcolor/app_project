@@ -23,6 +23,11 @@ html, body {
     box-shadow: inset 0 1px 2px #999;
 }
 
+.cursor-move {
+    cursor: all-scroll;
+}
+
+
 .sticker-wrapper {
     position: relative;
     height: 100%;
@@ -31,9 +36,7 @@ html, body {
 .sticker-wrapper .sticker {
     position: absolute;
     min-width: 150px;
-    min-height: 100px;
     background-color: #bcf5e0;
-    cursor: pointer;
 }
 
 .sticker-wrapper .sticker .sticker-header {
@@ -61,11 +64,14 @@ html, body {
     list-style: none;
 }
 
+.helper,
 .sticker-wrapper .sticker .sticker-contents .sticker-list li {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
+    justify-content: space-between;
     padding: 5px;
+    border: 1px solid #cecece;
     background-color: #fff;
 }
 
@@ -73,6 +79,18 @@ html, body {
     margin-top: 5px;
 }
 
+.helper > div,
 .sticker-wrapper .sticker .sticker-contents .sticker-list li > div {
     flex: auto;
+    min-width: 95px;
+}
+
+.sticker-wrapper .sticker .sticker-contents .sticker-list li.transper {
+    border-color: transparent;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.sticker-wrapper .sticker .sticker-contents .sticker-list li.transper > div,
+.sticker-wrapper .sticker .sticker-contents .sticker-list li.transper > .btn {
+    visibility: hidden;
 }
