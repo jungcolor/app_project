@@ -21,6 +21,7 @@ export default class Sticker {
     }
 
     initElement() {
+        const bgColor = this.makeBgColor();
         const sticker = document.createElement("div");
         sticker.classList.add("sticker");
         sticker.id = this.id;
@@ -31,6 +32,7 @@ export default class Sticker {
         sticker.appendChild(header);
         sticker.appendChild(contents);
 
+        this.setBgColor(bgColor);
         this.setStyle(sticker);
 
         // customEvent
