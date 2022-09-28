@@ -6,7 +6,7 @@ export default class Sticker {
         this.itemList = [];
         this.listCount = 0;
         this.isDraggable = false;
-        this.titleColor = "#fff";
+        this.titleColor = "";
         this.position = {
             currentX: 0,
             currentY: 0,
@@ -21,19 +21,17 @@ export default class Sticker {
     }
 
     initElement() {
-        const bgColor = this.makeBgColor();
         const sticker = document.createElement("div");
         sticker.classList.add("sticker");
         sticker.id = this.id;
+
+        this.setStyle(sticker);
 
         const header = this.createHeader();
         const contents = this.createContents();
 
         sticker.appendChild(header);
         sticker.appendChild(contents);
-
-        this.setBgColor(bgColor);
-        this.setStyle(sticker);
 
         // customEvent
         sticker.addEventListener("removeList", this.handleClickRemoveList.bind(this));
@@ -188,7 +186,7 @@ export default class Sticker {
             result.push(num);
         }
 
-        this.titleColor = (sum > 550) ? "#333" : "#fff";
+        this.titleColor = (sum > 500) ? "#333" : "#fff";
         return result.join();
     }
 
