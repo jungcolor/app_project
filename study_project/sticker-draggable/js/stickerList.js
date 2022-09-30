@@ -68,19 +68,24 @@ export default class StickerList {
     dragMove(e) {
         if (this.isDraggable) {
             this.helper.style.display = "none"; // 마우스에 있는 녀석 잠깐 숨겼다가
-            const targetElement = document.elementFromPoint(e.clientX, e.clientY).closest("li"); // 마우스 아래 있는 요녀석만 찾아내고
+            // const targetElement = document.elementFromPoint(e.clientX, e.clientY).closest("li"); // 마우스 아래 있는 요녀석만 찾아내고
+            const cursorElement = document.elementFromPoint(e.clientX, e.clientY);
+            const listElement = cursorElement.closest("ul");
+            const listItemElement = cursorElement.closest("li");
             this.helper.style.display = "flex"; // 마우스에 있는 녀석 다시 보여준다
 
-            if (targetElement) {
-                const y = targetElement.getBoundingClientRect().y + (targetElement.getBoundingClientRect().height / 2);
-                const parentElement = targetElement.closest("ul");
-    
+            if (listItemElement) { // li
+                const y = listItemElement.getBoundingClientRect().y + (listItemElement.getBoundingClientRect().height / 2);
+
                 if (e.pageY < y) {
-                    parentElement.insertBefore(this.el, targetElement);
+                    listItemElement.before(this.el);
                 }
                 else {
-                    parentElement.insertBefore(this.el, targetElement.nextSibling);
+                    listItemElement.after(this.el);
                 }
+            }
+            else if (listElement) { // ul
+                listElement.appendChild(this.el);
             }
 
             this.setPosition(e.pageX, e.pageY);
@@ -119,7 +124,7 @@ export default class StickerList {
     handleClickRemove(id) {
         const event = new CustomEvent("removeList", { bubbles: true, detail: { id: id } });
 
-        this.parentEl.dispatchEvent(event);
+        this.el.dispatchEvent(event);
         this.el.remove();
         this.el = null;
     }

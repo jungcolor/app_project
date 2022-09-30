@@ -40,7 +40,7 @@ html, body {
 }
 
 .sticker-wrapper .sticker .sticker-header {
-    padding: 5px;
+    padding: 5px 5px 0;
 }
 
 .sticker-wrapper .sticker .sticker-header h3 {
@@ -61,6 +61,7 @@ html, body {
 }
 
 .sticker-wrapper .sticker .sticker-contents .sticker-list {
+    padding: 5px 0 0;
     list-style: none;
 }
 

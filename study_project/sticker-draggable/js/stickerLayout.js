@@ -4,6 +4,7 @@ export default class StickerLayout {
     constructor() {
         this.el = null;
         this.count = 0;
+        this.zIdx = 0;
         this.stickerList = [];
         this.initialPositionX = 5;
         this.initialPositionY = 5;
@@ -16,6 +17,7 @@ export default class StickerLayout {
 
         element.classList.add("sticker-wrapper");
         element.addEventListener("removeSticker", this.handleClickRemoveSticker.bind(this));
+        element.addEventListener("changeZindex", this.handleMousedownChangeZindex.bind(this));
 
         this.el = element;
     }
@@ -28,6 +30,7 @@ export default class StickerLayout {
         const data = {
             id: `sticker_${crypto.randomUUID()}`,
             stickerCount: ++this.count,
+            zIdx: ++this.zIdx,
             initPosition: {
                 initX: this.initialPositionX,
                 initY: this.initialPositionY
@@ -60,9 +63,22 @@ export default class StickerLayout {
         });
     }
 
+    updateStatus(id, type) {
+        const updateSticker = this.stickerList.filter(sticker => sticker.id === id);
+
+        updateSticker[0][type] = ++this.zIdx;
+    }
+
+    // dispatch Event
     handleClickRemoveSticker(e) {
         const { id } = e.detail;
 
         this.removeSticker(id);
+    }
+
+    handleMousedownChangeZindex(e) {
+        const { id } = e.detail;
+
+        this.updateStatus(id, "zindex");
     }
 }

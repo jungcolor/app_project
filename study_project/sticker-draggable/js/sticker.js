@@ -3,6 +3,7 @@ import StickerList from "./stickerList.js";
 export default class Sticker {
     constructor(options) {
         this.el = null;
+        this.listEl = null;
         this.itemList = [];
         this.listCount = 0;
         this.isDraggable = false;
@@ -33,9 +34,6 @@ export default class Sticker {
         sticker.appendChild(header);
         sticker.appendChild(contents);
 
-        // customEvent
-        sticker.addEventListener("removeList", this.handleClickRemoveList.bind(this));
-
         this.el = sticker;
     }
 
@@ -45,6 +43,9 @@ export default class Sticker {
         // DRAG 이벤트 바인딩
         header.addEventListener("mousedown", this.dragStart.bind(this));
         header.addEventListener("mouseup", this.dragEnd.bind(this));
+
+        // customEvent
+        this.el.addEventListener("removeList", this.handleClickRemoveList.bind(this));
     }
 
     createHeader() {
@@ -86,9 +87,11 @@ export default class Sticker {
         contents.classList.add("sticker-contents");
 
         const list = document.createElement("ul");
-        list.classList.add("sticker-list");
+        list.classList.add("sticker-list", "empty");
 
         contents.appendChild(list);
+
+        this.listEl = list;
 
         return contents;
     }
@@ -133,6 +136,10 @@ export default class Sticker {
         const parentX = this.parentClientRect.x;
         const parentY = this.parentClientRect.y;
 
+        // 현재 선택 된 스티커가 가장 상단에 올 수 있도록 zindex값을 변경한다
+        // const event = new CustomEvent("changeZindex", { bubbles: true, detail: { id: this.id } });
+        // this.el.dispatchEvent(event);
+
         this.isDraggable = true;
 
         this.position.shiftX = clientX - (currentElX - parentX);
@@ -173,6 +180,7 @@ export default class Sticker {
 
         target.style.top = `${initY}px`;
         target.style.left = `${initX}px`;
+        target.style.zIndex = this.zIdx;
         target.style.backgroundColor = `rgba(${bgColor}, 0.8)`;
     }
 
@@ -205,7 +213,7 @@ export default class Sticker {
     handleClickRemoveSticker(id) {
         const event = new CustomEvent("removeSticker", { bubbles: true, detail: { id } });
 
-        this.parentEl.dispatchEvent(event);
+        this.el.dispatchEvent(event);
         this.el.remove();
         this.el = null;
     }
