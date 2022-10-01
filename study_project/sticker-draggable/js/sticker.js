@@ -46,6 +46,7 @@ export default class Sticker {
 
         // customEvent
         this.el.addEventListener("removeList", this.handleClickRemoveList.bind(this));
+        this.el.addEventListener("chageList", this.handleClickUpdate.bind(this));
     }
 
     createHeader() {
@@ -87,7 +88,7 @@ export default class Sticker {
         contents.classList.add("sticker-contents");
 
         const list = document.createElement("ul");
-        list.classList.add("sticker-list", "empty");
+        list.classList.add("sticker-list");
 
         contents.appendChild(list);
 
@@ -105,7 +106,7 @@ export default class Sticker {
     addList() {
         const listEl = this.el.querySelector(".sticker-list");
         const data = {
-            id: `sticker_${crypto.randomUUID()}`,
+            id: `list_${crypto.randomUUID()}`,
             stickerCount: this.stickerCount,
             listCount: ++this.listCount,
             parentEl: listEl,
@@ -118,9 +119,14 @@ export default class Sticker {
     }
 
     removeList(id) {
-        this.itemList = this.itemList.filter(item => item.id !== id);
+        const removeListIdx = this.itemList.findIndex(item => item.id === id);
+
+        return this.itemList.splice(removeListIdx, 1);
     }
 
+    updateList(list) {
+        this.itemList.push(list);
+    }
 
     // DRAG
     dragStart(e) {
@@ -137,8 +143,9 @@ export default class Sticker {
         const parentY = this.parentClientRect.y;
 
         // 현재 선택 된 스티커가 가장 상단에 올 수 있도록 zindex값을 변경한다
-        // const event = new CustomEvent("changeZindex", { bubbles: true, detail: { id: this.id } });
-        // this.el.dispatchEvent(event);
+        const event = new CustomEvent("changeZindex", { bubbles: true, detail: { id: this.id } });
+        this.el.dispatchEvent(event);
+        this.el.style.zIndex = this.zIdx;
 
         this.isDraggable = true;
 
@@ -216,5 +223,14 @@ export default class Sticker {
         this.el.dispatchEvent(event);
         this.el.remove();
         this.el = null;
+    }
+
+    handleClickUpdate(e) {
+        const event = new CustomEvent("changeSticker", {
+            bubbles: true,
+            detail: e.detail,
+        });
+
+        this.el.dispatchEvent(event);
     }
 }

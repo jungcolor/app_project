@@ -3,6 +3,8 @@ export default class StickerList {
         this.el = null;
         this.helper = null;
         this.isDraggable = false;
+        this.startParentID = null;
+        this.endParentID = null;
         this.position = {};
 
         Object.assign(this, options);
@@ -54,6 +56,7 @@ export default class StickerList {
         const currentElY = this.el.getBoundingClientRect().y;
 
         this.isDraggable = true;
+        this.startParentID = this.el.closest(".sticker").id;
 
         this.position.shiftX = clientX - currentElX;
         this.position.shiftY = clientY - currentElY;
@@ -84,7 +87,7 @@ export default class StickerList {
                     listItemElement.after(this.el);
                 }
             }
-            else if (listElement) { // ul
+            else if (listElement && listElement.children.length < 1) { // ul
                 listElement.appendChild(this.el);
             }
 
@@ -95,7 +98,11 @@ export default class StickerList {
     dragEnd(e) {
         this.isDraggable = false;
         this.helper.remove();
+        this.helper = null;
         this.el.classList.remove("transper");
+        this.endParentID = this.el.closest(".sticker").id;
+        this.checkOfChangeParent();
+
         document.removeEventListener("mousemove", this.dragMove);
     }
 
@@ -120,7 +127,22 @@ export default class StickerList {
     }
 
 
-    // HANDLER
+    checkOfChangeParent() {
+        if (this.startParentID !== this.endParentID) {
+            const eventOptions = {
+                bubbles: true,
+                detail: {
+                    id: this.id,
+                    startParentID: this.startParentID,
+                    endParentID: this.endParentID,
+                }
+            };
+            const event = new CustomEvent("chageList", eventOptions);
+            this.el.dispatchEvent(event);
+        }
+    }
+
+    // HANDLER 
     handleClickRemove(id) {
         const event = new CustomEvent("removeList", { bubbles: true, detail: { id: id } });
 

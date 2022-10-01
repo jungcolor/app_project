@@ -18,6 +18,7 @@ export default class StickerLayout {
         element.classList.add("sticker-wrapper");
         element.addEventListener("removeSticker", this.handleClickRemoveSticker.bind(this));
         element.addEventListener("changeZindex", this.handleMousedownChangeZindex.bind(this));
+        element.addEventListener("changeSticker", this.handleClickUpdate.bind(this));
 
         this.el = element;
     }
@@ -63,13 +64,18 @@ export default class StickerLayout {
         });
     }
 
-    updateStatus(id, type) {
+    updateZindex(id) {
         const updateSticker = this.stickerList.filter(sticker => sticker.id === id);
 
-        updateSticker[0][type] = ++this.zIdx;
+        if (updateSticker[0].zIdx !== this.zIdx) {
+            updateSticker[0].zIdx = ++this.zIdx;
+        }
     }
 
-    // dispatch Event
+    getSticker(id) {
+        return this.stickerList.filter(sticker => sticker.id === id);
+    }
+
     handleClickRemoveSticker(e) {
         const { id } = e.detail;
 
@@ -79,6 +85,15 @@ export default class StickerLayout {
     handleMousedownChangeZindex(e) {
         const { id } = e.detail;
 
-        this.updateStatus(id, "zindex");
+        this.updateZindex(id);
+    }
+
+    handleClickUpdate(e) {
+        const { id, startParentID, endParentID } = e.detail;
+        const startSticker = this.getSticker(startParentID)[0];
+        const endSticker = this.getSticker(endParentID)[0];
+
+        const removeList = startSticker.removeList(id);
+        endSticker.updateList(removeList[0]);
     }
 }
