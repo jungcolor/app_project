@@ -9,6 +9,8 @@ export default class StickerList {
 
         Object.assign(this, options);
 
+        this.content = options.content || `목록${this.stickerCount}-${this.listCount}`;
+
         this.initElement();
         this.initBindEvent();
     }
@@ -19,7 +21,7 @@ export default class StickerList {
         li.id = this.id;
 
         const div = document.createElement("div");
-        div.textContent = `목록${this.stickerCount}-${this.listCount}`;
+        div.textContent = this.content;
 
         const remove = document.createElement("button");
         remove.classList.add("btn");
@@ -128,18 +130,16 @@ export default class StickerList {
 
 
     checkOfChangeParent() {
-        if (this.startParentID !== this.endParentID) {
-            const eventOptions = {
-                bubbles: true,
-                detail: {
-                    id: this.id,
-                    startParentID: this.startParentID,
-                    endParentID: this.endParentID,
-                }
-            };
-            const event = new CustomEvent("chageList", eventOptions);
-            this.el.dispatchEvent(event);
-        }
+        const eventOptions = {
+            bubbles: true,
+            detail: {
+                id: this.id,
+                startParentID: this.startParentID,
+                endParentID: this.endParentID,
+            }
+        };
+        const event = new CustomEvent("chageList", eventOptions);
+        this.el.dispatchEvent(event);
     }
 
     // HANDLER 

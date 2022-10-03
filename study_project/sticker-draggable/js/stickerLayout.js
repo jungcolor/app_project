@@ -9,6 +9,7 @@ export default class StickerLayout {
         this.initialPositionX = 5;
         this.initialPositionY = 5;
 
+        this.fetchDatas();
         this.initElement();
     }
 
@@ -16,33 +17,62 @@ export default class StickerLayout {
         const element = document.createElement("div");
 
         element.classList.add("sticker-wrapper");
+
+        // 다 없어져야 할 로직
         element.addEventListener("removeSticker", this.handleClickRemoveSticker.bind(this));
         element.addEventListener("changeZindex", this.handleMousedownChangeZindex.bind(this));
         element.addEventListener("changeSticker", this.handleClickUpdate.bind(this));
+        element.addEventListener("updateSticker", this.setStorage.bind(this));
 
         this.el = element;
     }
 
+    fetchDatas() {
+        const storage = localStorage;
+        const datas = JSON.parse(storage.getItem("stickers"));
+
+        if (datas) {
+            this.stickerList = datas;
+        }
+    }
+
+    setStorage() {
+        const storage = localStorage;
+        storage.setItem("stickers", JSON.stringify(this.stickerList));
+    }
+
     render(parent) {
+        this.renderSticker();
         parent.appendChild(this.el);
     }
 
-    addSticker() {
+    renderSticker() {
+        this.stickerList = this.stickerList?.map(data => {
+            const sticker = new Sticker(data);
+
+            sticker.render(this.el);
+            return sticker;
+        });
+    }
+
+    createSticker() {
         const data = {
             id: `sticker_${crypto.randomUUID()}`,
             stickerCount: ++this.count,
             zIdx: ++this.zIdx,
-            initPosition: {
-                initX: this.initialPositionX,
-                initY: this.initialPositionY
+            position: {
+                currentX: this.initialPositionX,
+                currentY: this.initialPositionY
             },
-            parentEl: this.el,
             parentClientRect: this.el.getBoundingClientRect(),
         };
         const sticker = new Sticker(data);
 
+        // 필요한 데이터만 저장한다
         this.stickerList.push(sticker);
         sticker.render(this.el);
+
+        this.setStorage();
 
         // 아이템 추가 후 초기값에 10을 더해준다
         this.initialPositionX = this.initialPositionX + 10;
@@ -62,10 +92,12 @@ export default class StickerLayout {
             this.removeSticker(sticker.id);
             sticker.el.remove();
         });
+
+        this.setStorage();
     }
 
     updateZindex(id) {
-        const updateSticker = this.stickerList.filter(sticker => sticker.id === id);
+        const updateSticker = this.getSticker(id);
 
         if (updateSticker[0].zIdx !== this.zIdx) {
             updateSticker[0].zIdx = ++this.zIdx;
@@ -80,12 +112,14 @@ export default class StickerLayout {
         const { id } = e.detail;
 
         this.removeSticker(id);
+        this.setStorage();
     }
 
     handleMousedownChangeZindex(e) {
         const { id } = e.detail;
 
         this.updateZindex(id);
+        this.setStorage();
     }
 
     handleClickUpdate(e) {
@@ -95,5 +129,6 @@ export default class StickerLayout {
 
         const removeList = startSticker.removeList(id);
         endSticker.updateList(removeList[0]);
+        this.setStorage();
     }
 }

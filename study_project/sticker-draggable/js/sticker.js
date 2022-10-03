@@ -7,15 +7,13 @@ export default class Sticker {
         this.itemList = [];
         this.listCount = 0;
         this.isDraggable = false;
-        this.titleColor = "";
-        this.position = {
-            currentX: 0,
-            currentY: 0,
-            shiftX: 0,
-            shiftY: 0
-        };
 
         Object.assign(this, options);
+
+        this.titleColor = options.titleColor || "";
+        this.bgColor = options.bgColor || this.makeBgColor();
+        this.position.shiftX = 0;
+        this.position.shiftY = 0;
 
         this.initElement();
         this.initBindEvent();
@@ -98,30 +96,42 @@ export default class Sticker {
     }
 
     render(parent) {
+        this.renderList();
         parent.append(this.el);
+    }
+
+    renderList() {
+        this.itemList = this.itemList?.map(data => {
+            const list = new StickerList(data);
+
+            list.render(this.listEl);
+            return list;
+        });
     }
 
 
     // CRUD
-    addList() {
-        const listEl = this.el.querySelector(".sticker-list");
+    createList() {
         const data = {
             id: `list_${crypto.randomUUID()}`,
             stickerCount: this.stickerCount,
             listCount: ++this.listCount,
-            parentEl: listEl,
+            parentEl: this.listEl,
         }
 
         const list = new StickerList(data);
-        list.render(listEl);
+        list.render(this.listEl);
 
         this.itemList.push(list);
     }
 
     removeList(id) {
         const removeListIdx = this.itemList.findIndex(item => item.id === id);
+        const removeList = this.itemList.splice(removeListIdx, 1);
 
-        return this.itemList.splice(removeListIdx, 1);
+        this.updateSticker();
+
+        return removeList;
     }
 
     updateList(list) {
@@ -164,8 +174,9 @@ export default class Sticker {
     }
 
     dragEnd(e) {
+        this.updateSticker();
         this.isDraggable = false;
-        document.removeEventListener("mousemove", this.dragMove); // 되는건가?
+        document.removeEventListener("mousemove", this.dragMove);
     }
 
 
@@ -182,13 +193,12 @@ export default class Sticker {
     }
 
     setStyle(target) {
-        const bgColor = this.makeBgColor();
-        const { initX, initY } = this.initPosition;
+        const { currentX, currentY } = this.position;
 
-        target.style.top = `${initY}px`;
-        target.style.left = `${initX}px`;
+        target.style.top = `${currentY}px`;
+        target.style.left = `${currentX}px`;
         target.style.zIndex = this.zIdx;
-        target.style.backgroundColor = `rgba(${bgColor}, 0.8)`;
+        target.style.backgroundColor = `rgba(${this.bgColor}, 0.8)`;
     }
 
     makeBgColor() {
@@ -205,10 +215,15 @@ export default class Sticker {
         return result.join();
     }
 
+    updateSticker() {
+        const event = new CustomEvent("updateSticker", { bubbles: true, detail: { id: this.id } });
+        this.el.dispatchEvent(event);
+    }
+
 
     // HANDLER
     handleClickAdddList(e) {
-        this.addList();
+        this.createList();
     }
 
     handleClickRemoveList(e) {
@@ -226,10 +241,7 @@ export default class Sticker {
     }
 
     handleClickUpdate(e) {
-        const event = new CustomEvent("changeSticker", {
-            bubbles: true,
-            detail: e.detail,
-        });
+        const event = new CustomEvent("changeSticker", { bubbles: true, detail: e.detail });
 
         this.el.dispatchEvent(event);
     }

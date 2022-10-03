@@ -8,7 +8,7 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
     // 스티커 추가
     stickerAdd.addEventListener("click", e => {
-        stickerLayout.addSticker();
+        stickerLayout.createSticker();
     });
 
     // 스티커 전부 삭제
