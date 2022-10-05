@@ -50,7 +50,7 @@ const pungList = {
 
         this.pungLists.splice(removeListIdx, 1);
         this.setTimerClear(removeList.timerID);
-        this.setPungListAverge(removeList.timer);
+        this.setPungListAverge();
         this.setPungListCounter();
         this.removeView(id);
     },
@@ -143,7 +143,7 @@ const pungList = {
         const updateElement = document.querySelector(`#${id} .pungListTimer`);
         updateElement.textContent = `${timer}초`;
 
-        this.setPungListAverge(timer);
+        this.setPungListAverge();
     },
 
     toggleView: function (id, isToggle) {
@@ -171,14 +171,14 @@ const pungList = {
         const targetList = this.getTarget(id);
 
         this.setPungListCounter();
-        this.setPungListAverge(timer);
+        this.setPungListAverge();
 
         const timerID = setInterval(() => {
             const listTimer = document.querySelector(`#${id} .pungListTimer`);
 
             if (timer < 2) {
                 this.remove(id);
-                this.setPungListAverge(timer);
+                this.setPungListAverge();
                 this.setPungListCounter();
                 return;
             }
@@ -186,7 +186,7 @@ const pungList = {
             timer--;
             listTimer.textContent = `${timer}초`;
             targetList.timer = timer;
-            this.setPungListAverge(timer);
+            this.setPungListAverge();
             this.setPungListCounter();
         }, 1000);
 
@@ -196,7 +196,6 @@ const pungList = {
 
     setTimerClear: function (timerID) {
         clearInterval(timerID);
-        timerID = null;
     },
 
     setPungListCounter: function () {
