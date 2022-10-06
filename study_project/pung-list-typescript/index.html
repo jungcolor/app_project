@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PUNG</title>
-    <style>
-        .pungList {
-            padding-left: 0;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PUNG</title>
+        <style>
+            .pungList {
+                padding-left: 0;
+            }
 
-        .pungList > li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .pungList > li > div {
-            margin: 0 10px;
-        }
-    </style>
-</head>
-<body>
-    <h1>pung list</h1>
-    <div class="pungAdd">
-        <input type="text" class="pungContent" />
-        <button type="button" data-second="5">5초</button>
-        <button type="button" data-second="10">10초</button>
-        <button type="button" data-second="20">20초</button>
-    </div>
-    <div>
-        <p>총: <span id="pungCount">0</span> 건 평균 남은시간: <span id="pungAverge">0.0</span> 초</p>
-        <button class="pungReset">초기화</button>
-        <button class="pungDouble">x2</button>
-        <button class="pungSecondPlusAll" data-second="5">전체+5</button>
-        <button class="pungStopAll">전체 중지</button>
-        <button class="pungStartAll">전체 시작</button>
-    </div>
-    <ul class="pungList"></ul>
-    <script src="./js/pung-list.js"></script>
-</body>
+            .pungList>li {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+
+            .pungList>li>div {
+                margin: 0 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>pung list</h1>
+        <div class="pungAdd">
+            <input type="text" class="pungContent" />
+            <button type="button" data-second="5">5초</button>
+            <button type="button" data-second="10">10초</button>
+            <button type="button" data-second="20">20초</button>
+        </div>
+        <div>
+            <p>총: <span id="pungCount">0</span> 건 평균 남은시간: <span id="pungAverge">0.0</span> 초</p>
+            <button class="pungReset">초기화</button>
+            <button class="pungDouble">x2</button>
+            <button class="pungSecondPlusAll" data-second="5">전체+5</button>
+            <button class="pungStopAll">전체 중지</button>
+            <button class="pungStartAll">전체 시작</button>
+        </div>
+        <ul class="pungList"></ul>
+        <script src="./js/pung-list.js"></script>
+    </body>
 </html>
