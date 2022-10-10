@@ -1,27 +1,22 @@
-export default class StickerContainer {
-    setup() {
-        // this.state = [
-        //     {
-        //         id: crypto.randomUUID(),
-        //         title: "STICKER 1",
-        //         style: {
-        //             bgColor: "",
-        //             position: { x: 0, y: 0 }
-        //         },
-        //         lists: []
-        //     },
-        // ]
-    }
+import Component from "./component.js";
 
-    render() {
-        console.log(this.target);
+export default class StickerContainer extends Component {
+    setup() {
+        this.state = [];
     }
 
     template() {
-
+        return `<div class="sticker-wrapper"></div>`;
     }
 
-    setEvent() {
+    mounted() {}
 
+    setEvent() {}
+
+    makeSticker() {
+        // 데이터 추가해서
+        // setState하면 render가 실행된다
+        const datas = { id: `sticker-${crypto.randomUUID()}`, title: "STICKER 1" };
+        this.setState(datas);
     }
 }

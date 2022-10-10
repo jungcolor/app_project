@@ -7,8 +7,8 @@ export default class Component {
         this.target = target;
         this.props = props;
         this.setup();
-        this.setEvent();
         this.render();
+        this.setEvent();
     }
 
     setup() { }
@@ -33,7 +33,7 @@ export default class Component {
         const children = [...this.target.querySelectorAll(selector)];
         const isTarget = (target) => children.includes(target) || target.closest(selector);
 
-        this.target.addEventListener(eventType, (event) => {
+        this.target.addEventListener(eventType, event => {
             if (!isTarget(event.target)) return false;
 
             callback(event);
