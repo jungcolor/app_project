@@ -4,7 +4,7 @@ export default class Component {
     props;
 
     constructor(target, props) {
-        this.target = target;
+        this.target = target; // parent
         this.props = props;
         this.setup();
         this.render();
