@@ -1,6 +1,6 @@
 import Sticker from "./sticker.js";
 
-export default class StickerLayout {
+export default class StickerContainer {
     constructor() {
         this.el = null;
         this.count = 0;
