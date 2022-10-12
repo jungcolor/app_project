@@ -1,29 +1,18 @@
-import Component from "./component.js";
 import StickerContainer from "./stickerContainer.js";
 
-export default class App extends Component {
-    template() {
-        return `
-            <button class="btn" id="addSticker">스티커 추가</button>
-            <button class="btn" id="removeStickerAll">스티커 모두 삭제</button>
-            <div class="sticker-wrapper"></div>
-        `;
-    }
+window.addEventListener("DOMContentLoaded", (e) => {
+    const stickerAdd = document.querySelector("#sticker-add");
+    const stickerRemoveAll = document.querySelector("#sticker-remove-all");
+    const stickerContainer = new StickerContainer();
+    stickerContainer.render(document.body);
 
-    mounted() {
-        const stickerContainer = this.target.querySelector(".sticker-wrapper");
+    // 스티커 추가
+    stickerAdd.addEventListener("click", e => {
+        stickerContainer.createSticker();
+    });
 
-        this.stickerContainer = new StickerContainer(stickerContainer);
-    }
-
-    setEvent() {
-        this.addEvent("click", "#addSticker", (event) => {
-            this.stickerContainer.makeSticker();
-        });
-
-        this.addEvent("click", "#removeStickerAll", (event) => {
-            // 스티커 삭제 로직
-            console.log("스티커 삭제");
-        });
-    }
-}
+    // 스티커 전부 삭제
+    stickerRemoveAll.addEventListener("click", e => {
+        stickerContainer.removeStickerAll();
+    });
+});
