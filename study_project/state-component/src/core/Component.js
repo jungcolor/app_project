@@ -6,10 +6,12 @@
 export default class Component {
     $target;
     $state;
+    $props; // 부모 컴포넌트에서 자식 컴포넌트에게 상태 또는 메소드를 전달하기 위해 추가
 
     // this 초기화
-    constructor($target) {
+    constructor($target, $props) {
         this.$target = $target;
+        this.$props = $props;
         this.setup();
         this.setEvent();
         this.render();
@@ -18,14 +20,17 @@ export default class Component {
     // state 초기화
     setup() { }
 
-    template() { return ''; }
+    // event 바인딩
+    setEvent() { }
 
     render() {
         this.$target.innerHTML = this.template();
+        this.mounted(); // render이후 mounted 실행
     }
+    
+    template() { return ''; }
 
-    // event 바인딩
-    setEvent() { }
+    mounted() {} // render이후 추가적인 기능을 수행하기 위해
 
     // event 추가 - 이벤트 버블링 추상화
     addEvent(eventType, selector, callback) {
