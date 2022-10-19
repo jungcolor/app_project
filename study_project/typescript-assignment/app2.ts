@@ -13,35 +13,43 @@ const objArr = [
 uniq<object[]>(objArr, (a, b) => a.key === b.key);
 
 // 2
-// const tuttle = {
-//     name: "거북이",
-//     speed: 1,
-//     walk() {
-//         console.log("엉금엉금");
-//     },
+interface IAnimal {
+    name: string;
+    speed: number;
+    walk: () => void;
+    shellThickness?: number;
+    earLength?: number;
+}
 
-//     shellThickness: 10,
-// };
+const tuttle: IAnimal = {
+    name: "거북이",
+    speed: 1,
+    walk() {
+        console.log("엉금엉금");
+    },
 
-// const rabbit = {
-//     name: "토끼",
-//     speed: 10,
-//     walk() {
-//         console.log("깡총깡총");
-//     },
+    shellThickness: 10,
+};
 
-//     earLength: 20,
-// };
+const rabbit: IAnimal = {
+    name: "토끼",
+    speed: 10,
+    walk() {
+        console.log("깡총깡총");
+    },
 
-// function getProperty(animal) {
-//     if (/* 거북이이면 */) {
-//         return animal.shellThickness;
-//     }
-//     if (/* 토끼이면 */) {
-//         return animal.earLength;
-//     }
-//     return animal.name;
-// }
+    earLength: 20,
+};
 
-// getProperty(tuttle);
-// getProperty(rabbit);
+function getProperty(animal: IAnimal) {
+    if (animal.shellThickness) {
+        return animal.shellThickness;
+    }
+    if (animal.earLength) {
+        return animal.earLength;
+    }
+    return animal.name;
+}
+
+getProperty(tuttle);
+getProperty(rabbit);

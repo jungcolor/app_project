@@ -36,4 +36,4 @@ console.log(addLength(5, 10, getLength, "length"));
 console.log(addLength("Hello", "World", getLength));
 
 // 다음과 같이 숫자와 문자열을 함께 넘기면 타입 에러가 발생해야 합니다
-console.log(addLength(100, "World", getLength));
+// console.log(addLength(100, "World", getLength)); 에러
