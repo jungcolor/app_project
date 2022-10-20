@@ -129,6 +129,6 @@ export default class StickerContainer {
 
         const removeList = startSticker.removeList(id);
         endSticker.updateList(removeList[0]);
-        this.setStorage();
+        this.setStorage(); 
     }
 }
