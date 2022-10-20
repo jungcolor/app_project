@@ -1,16 +1,29 @@
 // 1
+interface IData {
+    key: number;
+    name: string;
+}
+
 // compare가 없는 경우 === 연산자로 비교합니다
-function uniq<T>(arr: T, compare?: (a: { key: number }, b: { key: number }) => boolean) {}
+function uniq<T>(arr: T[], compare?: Function) {
+    if (!compare) {
+        return arr.filter((item, idx, identicArr) => identicArr.indexOf(item) === idx);
+    } else {
+        return arr.filter((item1, idx) => {
+            return arr.findIndex((item2) => compare(item1, item2)) === idx;
+        });
+    }
+}
 
-uniq<number[]>([2, 1, 2]);
-uniq<string[]>(["사과", "귤", "사과"]);
+console.log(uniq<number>([2, 1, 2]));
+console.log(uniq<string>(["사과", "귤", "사과"]));
 
-const objArr = [
+const objArr: IData[] = [
     { key: 1, name: "길동" },
     { key: 2, name: "민수" },
     { key: 1, name: "민지" },
 ];
-uniq<object[]>(objArr, (a, b) => a.key === b.key);
+console.log(uniq<object>(objArr, (a: { key: number }, b: { key: number }) => a.key === b.key));
 
 // 2
 interface IAnimal {
@@ -45,11 +58,13 @@ function getProperty(animal: IAnimal) {
     if (animal.shellThickness) {
         return animal.shellThickness;
     }
+
     if (animal.earLength) {
         return animal.earLength;
     }
+
     return animal.name;
 }
 
-getProperty(tuttle);
-getProperty(rabbit);
+console.log(getProperty(tuttle));
+console.log(getProperty(rabbit));
