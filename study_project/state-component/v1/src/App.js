@@ -28,7 +28,7 @@ export default class App extends Component {
         };
     }
 
-    template () {
+    template() {
         return `
             <header data-component="item-appender"></header>
             <main data-component="items"></main>

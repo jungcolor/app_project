@@ -27,10 +27,10 @@ export default class Component {
         this.$target.innerHTML = this.template();
         this.mounted(); // render이후 mounted 실행
     }
-    
+
     template() { return ''; }
 
-    mounted() {} // render이후 추가적인 기능을 수행하기 위해
+    mounted() { } // render이후 추가적인 기능을 수행하기 위해
 
     // event 추가 - 이벤트 버블링 추상화
     addEvent(eventType, selector, callback) {
