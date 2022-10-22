@@ -1,4 +1,4 @@
-import StickerList from "./stickerList.js";
+import StickerList from "./StickerList.js";
 
 export default class Sticker {
     constructor(options) {

@@ -1,4 +1,9 @@
+import Component from "./core/Component.js";
 import StickerContainer from "./stickerContainer.js";
+
+export default class App extends Component {
+    
+}
 
 window.addEventListener("DOMContentLoaded", (e) => {
     const stickerAdd = document.querySelector("#sticker-add");

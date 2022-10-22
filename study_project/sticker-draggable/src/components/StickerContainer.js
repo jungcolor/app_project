@@ -1,4 +1,4 @@
-import Sticker from "./sticker.js";
+import Sticker from "./components/sticker.js";
 
 export default class StickerContainer {
     constructor() {
