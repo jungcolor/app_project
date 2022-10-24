@@ -17,42 +17,76 @@ export default class App extends Component {
 
     // 하위 컴포넌트 생성
     mounted() {
-        const { $target, stickers, removeSticker } = this;
+        const { $target, getItems, removeItems, dragStart, dragMove, dragEnd } = this;
         const $stickerWrapper = $target.querySelector(".sticker-wrapper");
+        const stickerProps = {
+            getItems: getItems.bind(this),
+            removeItems: removeItems.bind(this),
+            dragStart: dragStart.bind(this),
+            dragMove: dragMove.bind(this),
+            dragEnd: dragEnd.bind(this)
+        };
 
-        new Sticker($stickerWrapper, { stickers, removeSticker: removeSticker.bind(this) });
+        new Sticker($stickerWrapper, stickerProps);
     }
 
     setEvent() {
         this.addEvent("click", "#sticker-add", ({ target }) => {
-            this.addSticker();
+            this.addItems();
         });
 
         this.addEvent("click", "#sticker-remove-all", ({ target }) => {
-            console.log("스티커 삭제");
+            this.removeItemsAll();
         });
     }
 
-    get stickers() {
+    getItems(id) {
+        if (id) {
+            return this.state.items.filter(item => item.id === id);
+        }
+
         return this.state.items;
     }
 
-    addSticker() {
-        const result = [{
+    addItems() {
+        const items = {
             id: crypto.randomUUID(),
+            el: null,
+            draggable: false,
             style: {
                 position: { top: 10, left: 10 },
                 bgColor: "#fff",
             },
-            children: []
-        }];
-        this.setState(result);
+            children: [],
+        };
+
+        this.setState({
+            items: [...this.state.items, items]
+        });
     }
 
-    removeSticker(id) {
-        const stickers = [...this.state];
-        stickers.splice(stickers.filter(sticker => sticker.id === id), 1);
-        this.setState(stickers);
+    removeItems(id) {
+        const items = [...this.state.items];
+        items.splice(items.filter(sticker => sticker.id === id), 1);
+        this.setState({ items });
+    }
+
+    removeItemsAll() {
+        this.setState({ items: [] });
+    }
+
+    dragStart() {
+        console.log("드래그 시작!!");
+
+        document.addEventListener("mousedown", () => { console.log("시작") });
+    }
+
+    dragMove() {
+        console.log("드래그 중!!");
+    }
+
+    dragEnd() {
+        console.log("드래그 끝!!");
     }
 }
 

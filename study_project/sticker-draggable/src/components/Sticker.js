@@ -1,42 +1,61 @@
 import Component from "../core/Component.js";
-import StickerItems from "./StickerItems.js";
 
 export default class Sticker extends Component {
     template() {
-        const { stickers } = this.props;
+        const { getItems } = this.props;
 
         return `
-            ${stickers?.map(({ id, style, children }, idx) => {
-            const { position } = style;
+            ${getItems()?.map(({ id, style, children }, idx) => {
+                const { position } = style;
 
-            return `
-                <div class="sticker" id="${id}" style="top: ${position.top}px; left: ${position.left}px">
-                    <div class="sticker-header">
-                        <h3>STICKER ${idx}</h3>
-                        <div class="sticker-setting">
-                            <button type="button" class="btn" id="sticker-item-add">항목추가</button>
-                            <button type="button" class="btn" id="sticker-remove">스티커삭제</button>
+                return `
+                    <div class="sticker" id="${id}" style="top: ${position.top}px; left: ${position.left}px">
+                        <div class="sticker-header">
+                            <h3>STICKER ${idx}</h3>
+                            <div class="sticker-setting">
+                                <button type="button" class="btn" id="sticker-item-add">항목추가</button>
+                                <button type="button" class="btn" id="sticker-remove">스티커삭제</button>
+                            </div>
+                        </div>
+                        <div class="sticker-contents">
+                            <ul class="sticker-list"></ul>
                         </div>
                     </div>
-                    <div class="sticker-contents">
-                        <ul class="sticker-list"></ul>
-                    </div>
-                </div>
-            `}).join("")}
+                `
+            }).join("")}
         `;
     }
 
+    mounted() {
+        console.log("asdsadsadsad");
+    }
+
     setEvent() {
-        const { removeSticker } = this.props;
+        const { removeItems, dragStart, dragMove, dragEnd } = this.props;
 
         this.addEvent("click", "#sticker-item-add", (event) => {
             console.log("리스트 아이템 추가");
         });
 
         this.addEvent("click", "#sticker-remove", ({ target }) => {
-            const id = Number(target.closest(".sticker").id);
+            removeItems(target.closest(".sticker").id);
+        });
 
-            removeSticker(id);
+        this.addEvent("mousedown", ".sticker", (event) => {
+            if (event.target.tagName === "BUTTON" || event.target.tagName === "LI") return false;
+            event.preventDefault(); // 텍스트 range현상 방지
+
+            const id = event.target.closest(".sticker").id;
+            console.log(id);
+            console.log("마우스 다운");
+        });
+
+        this.addEvent("mouseup", ".sticker", ({ target }) => {
+            console.log("마우스 업");
+
+            document.removeEventListener("mousemove", () => {
+                console.log("마우스 무브 종료");
+            });
         });
     }
 }
