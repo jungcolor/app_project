@@ -1,5 +1,4 @@
 import Component from "./core/Component.js";
-// import StickerContainer from "./components/StickerContainer.js";
 import Sticker from "./components/Sticker.js";
 
 export default class App extends Component {
@@ -17,14 +16,15 @@ export default class App extends Component {
 
     // 하위 컴포넌트 생성
     mounted() {
-        const { $target, getItems, removeItems, dragStart, dragMove, dragEnd } = this;
+        const { $target, getItems, removeItems, dragStart, dragMove, dragEnd, setPosition } = this;
         const $stickerWrapper = $target.querySelector(".sticker-wrapper");
         const stickerProps = {
             getItems: getItems.bind(this),
             removeItems: removeItems.bind(this),
             dragStart: dragStart.bind(this),
             dragMove: dragMove.bind(this),
-            dragEnd: dragEnd.bind(this)
+            dragEnd: dragEnd.bind(this),
+            setPosition: setPosition.bind(this)
         };
 
         new Sticker($stickerWrapper, stickerProps);
@@ -52,7 +52,7 @@ export default class App extends Component {
         const items = {
             id: crypto.randomUUID(),
             el: null,
-            draggable: false,
+            isDraggable: false,
             style: {
                 position: { top: 10, left: 10 },
                 bgColor: "#fff",
@@ -75,35 +75,14 @@ export default class App extends Component {
         this.setState({ items: [] });
     }
 
-    dragStart() {
-        console.log("드래그 시작!!");
+    dragStart() { }
 
-        document.addEventListener("mousedown", () => { console.log("시작") });
-    }
+    dragMove() { }
 
-    dragMove() {
-        console.log("드래그 중!!");
-    }
+    dragEnd() { }
 
-    dragEnd() {
-        console.log("드래그 끝!!");
+    setPosition(el, currentX, currentY) {
+        el.style.left = `${currentX}px`;
+        el.style.top = `${currentY}px`;
     }
 }
-
-
-// window.addEventListener("DOMContentLoaded", (e) => {
-//     const stickerAdd = document.querySelector("#sticker-add");
-//     const stickerRemoveAll = document.querySelector("#sticker-remove-all");
-//     const stickerContainer = new StickerContainer();
-//     stickerContainer.render(document.body);
-
-//     // 스티커 추가
-//     stickerAdd.addEventListener("click", e => {
-//         stickerContainer.createSticker();
-//     });
-
-//     // 스티커 전부 삭제
-//     stickerRemoveAll.addEventListener("click", e => {
-//         stickerContainer.removeStickerAll();
-//     });
-// });

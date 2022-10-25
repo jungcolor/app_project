@@ -1,14 +1,18 @@
 import Component from "../core/Component.js";
 
 export default class Sticker extends Component {
+    setup() {
+        this.isDraggable = false;
+    }
+
     template() {
         const { getItems } = this.props;
 
         return `
             ${getItems()?.map(({ id, style, children }, idx) => {
-                const { position } = style;
+            const { position } = style;
 
-                return `
+            return `
                     <div class="sticker" id="${id}" style="top: ${position.top}px; left: ${position.left}px">
                         <div class="sticker-header">
                             <h3>STICKER ${idx}</h3>
@@ -22,16 +26,12 @@ export default class Sticker extends Component {
                         </div>
                     </div>
                 `
-            }).join("")}
+        }).join("")}
         `;
     }
 
-    mounted() {
-        console.log("asdsadsadsad");
-    }
-
     setEvent() {
-        const { removeItems, dragStart, dragMove, dragEnd } = this.props;
+        const { removeItems, dragStart, dragEnd, setPosition } = this.props;
 
         this.addEvent("click", "#sticker-item-add", (event) => {
             console.log("리스트 아이템 추가");
@@ -42,23 +42,96 @@ export default class Sticker extends Component {
         });
 
         this.addEvent("mousedown", ".sticker", (event) => {
-            if (event.target.tagName === "BUTTON" || event.target.tagName === "LI") return false;
+            if (event.target.tagName === "BUTTON" || event.target.tagName === "LI") return;
             event.preventDefault(); // 텍스트 range현상 방지
 
-            const id = event.target.closest(".sticker").id;
-            console.log(id);
-            console.log("마우스 다운");
+            const el = event.target.closest(".sticker");
+            const elID = el.id;
+
+            if (!el && !elID) return;
+
+            const { pageX, pageY, clientX, clientY } = event;
+            const elX = el.getBoundingClientRect().x;
+            const elY = el.getBoundingClientRect().y;
+            const parentX = this.$target.getBoundingClientRect().x;
+            const parentY = this.$target.getBoundingClientRect().y;
+
+            const shiftX = clientX - (elX - parentX);
+            const shiftY = clientY - (elY - parentY);
+
+            const currentX = pageX - shiftX;
+            const currentY = pageY - shiftY;
+
+            setPosition(el, currentX, currentY);
+            // dragStart();
+
+            this.isDraggable = true;
+
+            document.addEventListener("mousemove", (event) => {
+                if (this.isDraggable) {
+                    setPosition(el, event.pageX - shiftX, event.pageY - shiftY);
+                }
+            });
         });
 
-        this.addEvent("mouseup", ".sticker", ({ target }) => {
-            console.log("마우스 업");
-
-            document.removeEventListener("mousemove", () => {
-                console.log("마우스 무브 종료");
-            });
+        this.addEvent("mouseup", ".sticker", (event) => {
+            this.isDraggable = false;
         });
     }
 }
+
+//     // DRAG
+//     dragStart(e) {
+//         if (e.target.tagName === "BUTTON" || e.target.tagName === "LI") return false;
+//         e.preventDefault();
+
+//         const pageX = e.pageX;
+//         const pageY = e.pageY;
+//         const clientX = e.clientX;
+//         const clientY = e.clientY;
+//         const currentElX = this.el.getBoundingClientRect().x;
+//         const currentElY = this.el.getBoundingClientRect().y;
+//         const parentX = this.parentClientRect.x;
+//         const parentY = this.parentClientRect.y;
+
+//         // 현재 선택 된 스티커가 가장 상단에 올 수 있도록 zindex값을 변경한다
+//         this.props.updateZindex(this.id);
+//         this.el.style.zIndex = this.zIdx;
+
+//         this.isDraggable = true;
+
+//         this.position.shiftX = clientX - (currentElX - parentX);
+//         this.position.shiftY = clientY - (currentElY - parentY);
+
+//         this.setPosition(pageX, pageY);
+
+//         document.addEventListener("mousemove", this.dragMove.bind(this));
+//     }
+
+//     dragMove(e) {
+//         if (this.isDraggable) {
+//             this.setPosition(e.pageX, e.pageY);
+//         }
+//     }
+
+//     dragEnd(e) {
+//         this.isDraggable = false;
+//         this.props.updateStorage();
+//         document.removeEventListener("mousemove", this.dragMove);
+//     }
+
+
+//     // SET, GET
+//     setPosition(pageX, pageY) { // documentX, documentY
+//         const currentX = pageX - this.position.shiftX;
+//         const currentY = pageY - this.position.shiftY;
+
+//         this.el.style.left = `${currentX}px`;
+//         this.el.style.top = `${currentY}px`;
+
+//         this.position.currentX = currentX;
+//         this.position.currentY = currentY;
+//     }
 
 // export default class Sticker {
 //     constructor(options, props) {
