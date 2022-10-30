@@ -1,4 +1,4 @@
-let foodList = [];
+let foodList: Food[] = [];
 
 export const foods = {
     soup: "스프",
@@ -6,12 +6,19 @@ export const foods = {
 }
 
 class Food {
-    constructor(menu, timer) {
+    name: string;
+    timer: number;
+    timerID: any;
+    count: number;
+    el?: HTMLDivElement;
+    parent: HTMLDivElement;
+
+    constructor(menu: string, timer: number) {
         this.name = menu;
         this.timer = timer;
         this.timerID = null;
         this.count = this.timer / 1000;
-        this.parent = document.querySelector(`#foodContainer`);
+        this.parent = document.querySelector(`#foodContainer`)!;
 
         foodList.push(this);
     }
@@ -32,21 +39,23 @@ class Food {
     }
 
     removeFood() {
-        this.el.remove();
+        this.el?.remove();
         foodList.filter(food => food !== this);
     }
 
     setTimer() {
-        this.timerID = setInterval(() => {
-            const el = this.el.querySelector(".timer");
+        this.timerID = setInterval((): any => {
+            const el = this.el?.querySelector(".timer");
 
             if (this.count < 1) {
                 this.clearTimer();
                 this.removeFood();
-                return;
+                return null;
             }
 
-            el.textContent = this.count;
+            if (el) {
+                el.textContent = this.count.toString();
+            }
             this.count--;
         }, 1000);
     }
@@ -57,10 +66,10 @@ class Food {
     }
 }
 
-export function initFood(menu, timer) {
+export function initFood(menu: string, timer: number) {
     return new Food(menu, timer);
 }
 
-export function getFood(name) {
+export function getFood(name: string) {
     return foodList.filter(food => food.name === name)[0];
 }

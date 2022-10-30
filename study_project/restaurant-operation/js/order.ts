@@ -1,18 +1,24 @@
-const orderList = [];
+const orderList: Order[] = [];
 
 let orderNumber = 0;
 
-function wait(second) {
+function wait(second: number) {
     return new Promise(resolve => {
         setTimeout(resolve, second);
     });
 }
 class Order {
-    constructor(menu) {
+    menu: string;
+    status: string;
+    orderCount: string;
+    el?: HTMLDivElement;
+    parent: HTMLDivElement;
+
+    constructor(menu: string) {
         this.menu = menu;
         this.status = "대기중";
         this.orderCount = `주문${++orderNumber}`;
-        this.parent = document.querySelector("#orderContainer");
+        this.parent = document.querySelector("#orderContainer")!;
         this.createElement();
     }
 
@@ -26,26 +32,32 @@ class Order {
 
         div.insertAdjacentHTML("beforeend", template);
 
-        this.el = div;
-        this.parent.append(div);
+        if (div) {
+            this.el = div;
+        }
+
+        this.parent?.append(div);
 
         orderList.push(this);
     }
 
-    setStatus(status) {
-        const el = this.el.querySelector(".orderStatus");
+    setStatus(status: string) {
+        const el = this.el?.querySelector(".orderStatus");
 
         this.status = status;
-        el.textContent = this.status;
+
+        if (el) {
+            el.textContent = this.status;
+        }
     }
 
     removeOrder() {
-        this.el.remove();
+        this.el?.remove();
     }
 }
 
 
-export function createOrder(menu) {
+export function createOrder(menu: string) {
     new Order(menu);
 }
 

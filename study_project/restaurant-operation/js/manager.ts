@@ -1,19 +1,24 @@
-import { getOrder } from "./order.js";
-import { initChef, getChef } from "./chef.js";
+import { getOrder } from "./order";
+import { initChef, getChef } from "./chef";
 
 const checkOrderList = [];
 
-function wait(second) {
+function wait(second: number) {
     return new Promise(resolve => {
         setTimeout(resolve, second);
     });
 }
 
 class Manager {
-    constructor(name) {
+    name: string;
+    status: string;
+    parent: HTMLDivElement;
+    el?: HTMLDivElement;
+
+    constructor(name: string) {
         this.name = name;
         this.status = "대기중";
-        this.parent = document.querySelector("#managerContainer");
+        this.parent = document.querySelector("#managerContainer")!;
         this.createElement();
         // this.orderWatchStart();
         this.checkOrder();
@@ -28,12 +33,15 @@ class Manager {
 
         div.insertAdjacentHTML("beforeend", template);
 
-        this.el = div;
+        if (div) {
+            this.el = div;
+        }
+
         this.parent.append(div);
     }
 
     async checkOrder() {
-        while(true) {
+        while (true) {
             this.setStatus("대기중");
             await wait(3000);
             console.log("주문 확인중!!!!!");
@@ -57,23 +65,24 @@ class Manager {
                     orderIns.removeOrder();
                 }
                 chefIns.restoreChef();
-            }
-            else {
+            } else {
                 orderIns.setStatus("대기중");
                 this.setStatus("요리사 확인중..");
             }
         }
 
-        chefIns.restoreChef();
+        chefIns?.restoreChef();
     }
 
-    setStatus(status) {
-        const el = this.el.querySelector(".managerStatus");
+    setStatus(status: string) {
+        const el = this.el?.querySelector(".managerStatus")!;
 
         this.status = status;
-        el.textContent = status;
-    }
 
+        if (el) {
+            el.textContent = status;
+        }
+    }
 }
 
 export function initManager() {

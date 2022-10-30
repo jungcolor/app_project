@@ -1,6 +1,6 @@
-import { createOrder } from './order.js';
-import { foods } from './food.js';
-import { initManager } from './manager.js';
+import { createOrder } from './order';
+import { foods } from './food';
+import { initManager } from './manager';
 
 const app = {
     init: function () {
@@ -9,14 +9,14 @@ const app = {
     },
 
     initElement: function () {
-        const orderSoup = document.querySelector(".orderSoup");
-        const orderDrink = document.querySelector(".orderDrink");
+        const orderSoup = document.querySelector(".orderSoup")!;
+        const orderDrink = document.querySelector(".orderDrink")!;
 
         orderSoup.addEventListener("click", this.handleClickOrder.bind(this, foods.soup));
         orderDrink.addEventListener("click", this.handleClickOrder.bind(this, foods.drink));
     },
 
-    handleClickOrder: function (name) {
+    handleClickOrder: function (name: string) {
         createOrder(name);
     }
 }
