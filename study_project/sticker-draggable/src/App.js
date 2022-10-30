@@ -50,7 +50,7 @@ export default class App extends Component {
 
     addItems() {
         const items = {
-            id: crypto.randomUUID(),
+            id: `sticker_${crypto.randomUUID()}`,
             el: null,
             isDraggable: false,
             style: {

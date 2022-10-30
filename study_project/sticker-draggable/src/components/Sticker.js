@@ -47,12 +47,13 @@ export default class Sticker extends Component {
 
             const el = event.target.closest(".sticker");
             const elID = el.id;
+            const target = this.$target.querySelector(`#${elID}`);
 
-            if (!el && !elID) return;
+            if (!el && !elID && !target) return;
 
             const { pageX, pageY, clientX, clientY } = event;
-            const elX = el.getBoundingClientRect().x;
-            const elY = el.getBoundingClientRect().y;
+            const elX = target.getBoundingClientRect().x;
+            const elY = target.getBoundingClientRect().y;
             const parentX = this.$target.getBoundingClientRect().x;
             const parentY = this.$target.getBoundingClientRect().y;
 
@@ -62,14 +63,14 @@ export default class Sticker extends Component {
             const currentX = pageX - shiftX;
             const currentY = pageY - shiftY;
 
-            setPosition(el, currentX, currentY);
+            setPosition(target, currentX, currentY);
             // dragStart();
 
             this.isDraggable = true;
 
             document.addEventListener("mousemove", (event) => {
                 if (this.isDraggable) {
-                    setPosition(el, event.pageX - shiftX, event.pageY - shiftY);
+                    setPosition(target, event.pageX - shiftX, event.pageY - shiftY);
                 }
             });
         });
