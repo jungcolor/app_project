@@ -14,5 +14,9 @@ module.exports = {
             template: "./index.html",
             chunks: ["main"]
         })
-    ]
+    ],
+    devServer: {
+        static: "./dist",
+        port: 3030
+    }
 }
