@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "static": "nodemon ./client/app.js",
+        "static": "nodemon ./client_old/app.js",
         "api": "nodemon ./server/app.js",
         "dev": "concurrently --kill-others-on-fail \"npm run static\" \"npm run api\""
     },
