@@ -8,3 +8,6 @@
 - front : tailwindcss, webpack
 - server : express, mysql
 - 공통 : typescript
+
+## 2022.11.06
+- 오늘까지만 쉬는걸로... 내일부터 구조잡고 진행
