@@ -5,10 +5,12 @@ module.exports = {
     mode: "development",
     entry: {
         index: "./src/index.ts",
+        postList: "./src/posts/postList/postList.ts",
+        postWrite: "./src/posts/postWrite/postWrite.ts"
     },
     output: {
-        filename: "[name].[hash].[chunkhash].bundle.js",
         path: path.resolve(__dirname, '../dist'),
+        filename: "[name].[hash].bundle.js",
         clean: true
     },
     resolve: {
@@ -28,6 +30,16 @@ module.exports = {
             filename: "index.html",
             template: "./src/index.html",
             chunks: ["index"]
+        }),
+        new HtmlWebpackPlugin({
+            filename: "postList.html",
+            template: "./src/posts/postList/postList.html",
+            chunks: ["postList"]
+        }),
+        new HtmlWebpackPlugin({
+            filename: "postWrite.html",
+            template: "./src/posts/postWrite/postWrite.html",
+            chunks: ["postWrite"]
         })
     ],
     devServer: {
