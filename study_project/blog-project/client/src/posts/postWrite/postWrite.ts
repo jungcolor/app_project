@@ -1,3 +1,0 @@
-class postWrite {
-    constructor() {}
-}

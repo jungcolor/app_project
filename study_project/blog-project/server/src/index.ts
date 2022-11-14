@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const app = express();
-const port = 5000;
+const port = 4030;
 
 mongoose
     .connect(dbKey())
