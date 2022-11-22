@@ -5,6 +5,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const app = express();
 const port = 4030;
 
@@ -18,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // apllication/json
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(cors());
 
 
 // BOARD ==============================================================================================================================
