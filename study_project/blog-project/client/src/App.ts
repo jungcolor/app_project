@@ -12,3 +12,21 @@ window.addEventListener("DOMContentLoaded", e => {
 
     fetchData();
 });
+
+const posts = {
+    posts: [],
+
+    init: function (options?: object) {
+        this.initElement();
+        this.render();
+        this.eventBind();
+    },
+
+    initElement: function () {},
+
+    eventBind: function () {},
+
+    render: function () {},
+};
+
+posts.init();
