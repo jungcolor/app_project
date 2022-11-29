@@ -1,11 +1,20 @@
-import React, { useState } from 'react';
-import Title from '../component/Title';
-import Button from '../component/Button';
+import React from "react";
+import Title from "../component/Title";
+import DensityMediumIcon from "@mui/icons-material/DensityMedium";
 
-function Header() {    
+interface IHeader {
+    toggle?: boolean;
+    clickHandlerOpen: () => void;
+}
+
+function Header(props: IHeader) {
+    const onClickHandler = () => {
+        props.clickHandlerOpen();
+    };
+
     return (
-        <div className="header open">
-            <Button className="open" text="open" />
+        <div className={props.toggle ? "header open" : "header"}>
+            {!props.toggle && <DensityMediumIcon fontSize="small" className="toggleIcon toggleOpen" htmlColor="white" onClick={onClickHandler} />}
             <Title title="TITLE" />
         </div>
     );

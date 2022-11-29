@@ -4,7 +4,7 @@ export interface IListItem {
     text?: string;
 }
 
-function ListItem(props: any) {
+function ListItem(props: IListItem) {
     return (
         <li>
             <div className="icon"></div>
