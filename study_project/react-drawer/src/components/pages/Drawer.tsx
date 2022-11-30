@@ -5,17 +5,14 @@ import LocalNavigation from "../layout/LocalNavigation";
 
 function Drawer() {
     const [toggle, setToggle] = useState(false);
-    const onClickHandlerOpen = () => {
-        setToggle(true);
-    };
-    const onClickHandlerClose = () => {
-        setToggle(false);
+    const onClickHandlerToggle = () => {
+        setToggle(!toggle);
     };
 
     return (
         <>
-            <Header toggle={toggle} clickHandlerOpen={onClickHandlerOpen} />
-            <LocalNavigation toggle={toggle} clickHandlerClose={onClickHandlerClose} />
+            <Header toggle={toggle} clickHandlerOpen={onClickHandlerToggle} />
+            <LocalNavigation toggle={toggle} clickHandlerClose={onClickHandlerToggle} />
             <Contents toggle={toggle} />
         </>
     );
