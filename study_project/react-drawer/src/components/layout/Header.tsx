@@ -13,7 +13,7 @@ function Header(props: IHeader) {
     };
 
     return (
-        <div className={props.toggle ? "header open" : "header"}>
+        <div className={"header" + props.toggle ? "open" : ""}>
             {!props.toggle && <DensityMediumIcon fontSize="small" className="toggleIcon toggleOpen" htmlColor="white" onClick={onClickHandler} />}
             <Title title="TITLE" />
         </div>

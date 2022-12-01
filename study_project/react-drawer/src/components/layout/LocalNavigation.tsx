@@ -17,7 +17,7 @@ function LocalNavigation(props: ILocalNavigation) {
     };
 
     return (
-        <div className={props.toggle ? "lnb open" : "lnb"}>
+        <div className={"lnb" + props.toggle ? "open" : ""}>
             <div>
                 <ArrowBackIosNewIcon className="toggleIcon toggleClose" onClick={onClickHandler} fontSize="small" />
             </div>
