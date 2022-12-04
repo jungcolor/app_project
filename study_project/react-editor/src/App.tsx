@@ -1,10 +1,57 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
+import PostList from "./components/PostList";
+import PostView from "./components/PostView";
+import PostWrite, { IData } from "./components/PostWrite";
 
-function App() {
+const App = () => {
+    const { pathname } = window.location;
+    const [path, setPath] = useState(pathname);
+    const [post, setPost] = useState([]);
+    const onClickHandler = () => {
+        onPathChange("/");
+    };
+    const onPathChange = (href: string) => {
+        setPath(href);
+    };
+    const onPostSave = (data: IData[]) => {
+        const posts = post.concat(data as []);
+        const result = JSON.stringify(posts);
+        localStorage.setItem("posts", result);
+        setPost(posts);
+        onPathChange("/");
+    };
+    const renderPage = () => {
+        let page = <PostList items={post} handlePathChange={onPathChange} />;
+
+        if (path === "/post-write") {
+            page = <PostWrite handleSave={onPostSave} />;
+        }
+        else if (path.indexOf("/post-view") > -1) {
+            const postKey = path.split("/post-view/").join("");
+            const viewData = post.filter((x: IData) => x.title === postKey);
+
+            page = <PostView viewData={viewData[0]} />;
+        }
+
+        return page;
+    }
+
+    useEffect(() => {
+        const response = localStorage.getItem("posts");
+        if (response) {
+            setPost(JSON.parse(response));
+        }
+    }, []);
+
     return (
-        <div className="App">
-            
+        <div>
+            <nav>
+                <a href="#" onClick={onClickHandler}>
+                    HOME
+                </a>
+            </nav>
+            <div className="contents">{renderPage()}</div>
         </div>
     );
 }
