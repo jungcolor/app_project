@@ -33,7 +33,7 @@ const PostWrite = ({ handleSave }: IPostWrite) => {
             el: editorRef.current,
             height: "500px",
             previewStyle: "vertical",
-            initialValue: "## Hello Toast UI Editor",
+            initialValue: " ",
         });
 
         setEditor(editorObj);

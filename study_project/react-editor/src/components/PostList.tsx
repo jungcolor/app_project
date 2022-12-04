@@ -7,6 +7,10 @@ interface IPostList {
     items: IData[];
 }
 
+const getCount = () => {
+    return Math.max(10, Math.floor(Math.random() * 30));
+};
+
 const PostList = ({ handlePathChange, items }: IPostList) => {
     const onClickHandler = () => {
         handlePathChange("/post-write");
@@ -17,7 +21,7 @@ const PostList = ({ handlePathChange, items }: IPostList) => {
             <h2>목록 보기</h2>
             <ul>
                 {items.map((item, idx) => (
-                    <PostItem key={idx} item={item} handlePathChange={handlePathChange} />
+                    <PostItem key={idx} item={item} randomCount={getCount()} handlePathChange={handlePathChange} />
                 ))}
             </ul>
             <a href="#" onClick={onClickHandler}>

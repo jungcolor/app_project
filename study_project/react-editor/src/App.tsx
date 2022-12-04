@@ -21,6 +21,9 @@ const App = () => {
         setPost(posts);
         onPathChange("/");
     };
+    const onPostDelete = (id: string) => {
+        
+    }
     const renderPage = () => {
         let page = <PostList items={post} handlePathChange={onPathChange} />;
 
