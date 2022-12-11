@@ -1,23 +1,23 @@
 import React from 'react';
+import ITodo from './Todo.interface';
+import TodoItem from './TodoItem';
 
-const TodoList = () => {
+interface ITodoList {
+    children: ITodo[];
+    removeTodos: (id: string) => void;
+}
+
+const TodoList = ({ children, removeTodos }: ITodoList) => {
     return (
-        <ul>
-            <li id="todo-i2jisda">
-                <div>
-                    <input type="checkbox" />
-                    <div>리액트의 기초 알아보기</div>
-                    <span>삭제</span>
-                </div>
-            </li>
-            <li id="todo-i2jisda">
-                <div>
-                    <input type="checkbox" />
-                    <div>리액트의 기초 알아보기</div>
-                    <span>삭제</span>
-                </div>
-            </li>
-        </ul>
+        <div className="todo-list">
+            <ul>
+                {children?.map((item: ITodo) => {
+                    const { id, contents, checked, complete } = item;
+
+                    return <TodoItem key={id} id={id} contents={contents} checked={checked} complete={complete} removeTodos={removeTodos} />;
+                })}
+            </ul>
+        </div>
     );
 };
 

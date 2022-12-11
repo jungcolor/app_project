@@ -1,5 +1,6 @@
 import React from "react";
 import TodoMain from "./todos/TodoMain";
+import "./App.scss";
 
 function App() {
     return (

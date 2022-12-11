@@ -1,0 +1,93 @@
+// 타이틀
+// 배경 #29b0c4
+
+// 인풋
+// 배경 #4b5258
+// 컬러 #fff
+
+// 버튼
+// 배경 #848a96
+// 컬러 #fff
+
+// 목록
+// 홀수칸 #fff
+// 짝수칸 #f6f6f6
+
+// 삭제버튼
+// 컬러 #e96b6f
+
+// 텍스트
+// 컬러 #0e0e0e
+// 완료시 컬러 #959ca3
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body, #root, .App {
+    height: 100%;
+}
+
+.App {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    background-color: #dfe6ec;
+
+    .wrapper-todo {
+        display: flex;
+        flex-direction: column;
+        width: 450px;
+        background-color: #fff;
+        margin-bottom: auto;
+        margin-top: 50px;
+
+
+
+        .todo-contents {
+
+
+            .todo-list {
+                overflow-y: auto;
+                min-height: 50px;
+                max-height: 500px;
+
+                ul {
+                    list-style: none;
+
+                    li {
+                        display: flex;
+                        justify-items: center;
+                        align-items: center;
+                        flex-direction: row;
+                        padding: 15px;
+
+
+                        label {
+                            margin-left: 10px;
+                        }
+
+                        span {
+                            margin-left: auto;
+                            cursor: pointer;
+                        }
+
+                        .complete {
+                            background-color: red;
+                        }
+                    }
+
+                    li + li {
+                        border-top: 1px solid #dfdfdf;
+                    }
+
+                    li:nth-child(even) {
+                        background-color: #f6f6f6
+                    }
+                }
+            }
+        }
+    }
+}
