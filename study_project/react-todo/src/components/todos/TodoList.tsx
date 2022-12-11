@@ -5,16 +5,17 @@ import TodoItem from './TodoItem';
 interface ITodoList {
     children: ITodo[];
     removeTodos: (id: string) => void;
+    completeTodos: (id: string, value: boolean) => void;
 }
 
-const TodoList = ({ children, removeTodos }: ITodoList) => {
+const TodoList = ({ children, removeTodos, completeTodos }: ITodoList) => {
     return (
         <div className="todo-list">
             <ul>
                 {children?.map((item: ITodo) => {
-                    const { id, contents, checked, complete } = item;
+                    const { id, contents, complete } = item;
 
-                    return <TodoItem key={id} id={id} contents={contents} checked={checked} complete={complete} removeTodos={removeTodos} />;
+                    return <TodoItem key={id} id={id} contents={contents} complete={complete} removeTodos={removeTodos} completeTodos={completeTodos} />;
                 })}
             </ul>
         </div>

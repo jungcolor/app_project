@@ -5,26 +5,36 @@ import TodoList from './TodoList';
 
 const TodoContents = () => {
     const [todos, setTodos] = useState<any>([]);
-    const getTodo = (id: string): ITodo[] => {
-        return todos.filter((todo: ITodo) => todo.id !== id);
-    }
-
     const addTodos = (value: string): void => {
-        const result = { id: `todo-${crypto.randomUUID()}`, contents: value, checked: false, complete: false };
-
+        const result = { id: `todo-${crypto.randomUUID()}`, contents: value, complete: false };
         setTodos(todos.concat(result));
-    }
-
+    };
     const removeTodos = (id: string): void => {
-        const result = getTodo(id);
+        const newTodos = todos.filter((todo: ITodo) => todo.id !== id);
+        setTodos(newTodos);
+    };
+    const completeTodos = (id: string, value: boolean) => {
+        const newTodos = todos.filter((todo: ITodo) => todo.id !== id);
+        const updateTodo = todos.filter((todo: ITodo) => todo.id === id);
 
-        setTodos(result);
+        if (updateTodo.length > 0) {
+            updateTodo[0].complete = value;
+    
+            if (value) {
+                setTodos([...newTodos, ...updateTodo]);
+            }
+            else {
+                setTodos([...updateTodo, ...newTodos]);
+            }
+        }
     };
 
     return (
         <div className="todo-contents">
             <TodoAppend addTodos={addTodos}></TodoAppend>
-            <TodoList removeTodos={removeTodos}>{todos}</TodoList>
+            <TodoList removeTodos={removeTodos} completeTodos={completeTodos}>
+                {todos}
+            </TodoList>
         </div>
     );
 };
