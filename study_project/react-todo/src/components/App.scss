@@ -74,6 +74,7 @@ html, body, #root, .App {
             .todo-list {
                 ul {
                     list-style: none;
+                    min-height: 50px;
 
                     li {
                         display: flex;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from "react";
 import ITodo from './Todo.interface';
 import { AiOutlineMinusCircle } from "react-icons/ai";
 
@@ -20,7 +20,7 @@ const TodoItem = ({ id, contents, complete, removeTodos, completeTodos }: ITodoI
     const changeValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { checked } = e.target;
         completeTodos(id, checked);
-    }
+    };
 
     return (
         <li id={id} className={complete ? "complete" : ""}>

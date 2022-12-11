@@ -25,7 +25,6 @@ const TodoAppend = ({ addTodos }: IProps) => {
     const reset = (): void => {
         setValue("");
 
-        // focus 이동
         if (inputRef.current) {
             inputRef.current.focus();
         }
