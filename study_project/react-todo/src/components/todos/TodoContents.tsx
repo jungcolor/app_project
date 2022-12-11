@@ -10,12 +10,12 @@ const TodoContents = () => {
         if (response) {
             const initTodos = JSON.parse(response);
             setTodos(initTodos);
-        };
+        }
     };
     const addTodos = (value: string): void => {
         const newTodos = { id: `todo-${crypto.randomUUID()}`, contents: value, complete: false };
-        const resultTodos = todos.concat(newTodos);
-        setLocalStorage(resultTodos);        
+        const resultTodos = [newTodos, ...todos];
+        setLocalStorage(resultTodos);
         setTodos(resultTodos);
     };
     const removeTodos = (id: string): void => {

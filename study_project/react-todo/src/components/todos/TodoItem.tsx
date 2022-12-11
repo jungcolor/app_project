@@ -8,7 +8,7 @@ interface ITodoItem extends ITodo {
 }
 
 const getConvertStr = (id: string) => {
-    const strArr = id.split("-");    
+    const strArr = id.split("-");
     return strArr[strArr.length - 1];
 }
 
@@ -24,9 +24,11 @@ const TodoItem = ({ id, contents, complete, removeTodos, completeTodos }: ITodoI
 
     return (
         <li id={id} className={complete ? "complete" : ""}>
-            <input type="checkbox" name={convertStr} id={convertStr} defaultChecked={complete ? complete : false} onChange={changeValueHandler} />
-            <label htmlFor={convertStr}>{contents}</label>
-            <span onClick={clickRemoveHandler}>
+            <label htmlFor={convertStr}>
+                <input type="checkbox" name={convertStr} id={convertStr} defaultChecked={complete ? complete : false} onChange={changeValueHandler} style={{ display: "none" }} />
+                <span>{contents}</span>
+            </label>
+            <span className="icon-remove" onClick={clickRemoveHandler}>
                 <AiOutlineMinusCircle />
             </span>
         </li>

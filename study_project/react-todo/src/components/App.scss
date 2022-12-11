@@ -1,25 +1,3 @@
-// 타이틀
-// 배경 #29b0c4
-
-// 인풋
-// 배경 #4b5258
-// 컬러 #fff
-
-// 버튼
-// 배경 #848a96
-// 컬러 #fff
-
-// 목록
-// 홀수칸 #fff
-// 짝수칸 #f6f6f6
-
-// 삭제버튼
-// 컬러 #e96b6f
-
-// 텍스트
-// 컬러 #0e0e0e
-// 완료시 컬러 #959ca3
-
 * {
     margin: 0;
     padding: 0;
@@ -35,6 +13,7 @@ html, body, #root, .App {
     align-items: center;
     justify-content: center;
     background-color: #dfe6ec;
+    overflow-y: auto;
 
     .wrapper-todo {
         display: flex;
@@ -48,7 +27,7 @@ html, body, #root, .App {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 50px;
+            height: 60px;
             background-color: #29b0c4;
 
             h3 {
@@ -57,12 +36,42 @@ html, body, #root, .App {
         }
 
         .todo-contents {
+            .todo-append {
+                display: flex;
+                flex-direction: row;
+                align-items: stretch;
+
+                input {
+                    width: 100%;
+                    height: 20px;
+                    padding: 10px;
+                    border: none;
+                    color: #fff;
+                    background-color: #4b5258;
+
+                    &:focus {
+                        border: none;
+                        outline: none;
+                    }
+                    &::placeholder {
+                        color: #fff;
+                    }
+                }
+
+                span {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 50px;
+                    text-align: center;
+                    cursor: pointer;
+                    color: #fff;
+                    
+                    background-color: #848a96;
+                }
+            }
 
             .todo-list {
-                overflow-y: auto;
-                min-height: 50px;
-                max-height: 500px;
-
                 ul {
                     list-style: none;
 
@@ -74,14 +83,23 @@ html, body, #root, .App {
                         padding: 15px;
 
                         label {
-                            margin-left: 10px;
+                            display: flex;
+                            justify-content: stretch;
+                            align-items: center;
+                            position: relative;
                             font-weight: bold;
                             color: #0e0e0e;
+
+                            span {
+                                margin-left: 10px;
+                            }
                         }
 
-                        span {
+                        .icon-remove {
                             margin-left: auto;
                             cursor: pointer;
+                            font-size: 18px;
+                            color: #ef5a5e;
                         }
 
                         & + li {
@@ -92,7 +110,31 @@ html, body, #root, .App {
                             background-color: #f6f6f6
                         }
 
-                        &.complete label {
+                        & label::before {
+                            content: "";
+                            display: inline-block;
+                            width: 1.0rem;
+                            height: 1.0rem;
+                            border: 1.0px solid #333;
+                            border-radius: 0.15rem;
+                            position: relative;
+                        }
+
+                        &.complete label::before {
+                            border-color: #29b0c4;
+                            background-color: #29b0c4;
+                        }
+
+                        &.complete label::after {
+                            content: '✔';
+                            position: absolute;
+                            left: 3px;
+                            top: 0;
+                            font-size: 14px;
+                            color: #fff;
+                        }
+
+                        &.complete label span {
                             text-decoration: line-through;
                             color: #959ca3;
                         }

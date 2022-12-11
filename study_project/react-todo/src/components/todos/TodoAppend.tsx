@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { AiOutlinePlus } from "react-icons/ai";
 
 interface IProps {
     addTodos: (value: string) => void;
@@ -12,18 +13,10 @@ const TodoAppend = ({ addTodos }: IProps) => {
         setValue(value);
     };
     const clickAddHandler = (e: React.MouseEvent<HTMLButtonElement>): void => {
-        if (value === "") {
-            alert("내용을 입력하세요!!");
-            return;
-        }
         addTodos(value);
         reset();
     };
     const keyupEnterHandler = (e: React.KeyboardEvent<HTMLInputElement>): void => {
-        if (value === "") {
-            alert("내용을 입력하세요!!");
-            return;
-        }
         if (e.key === "Enter") {
             addTodos(value);
             reset();
@@ -40,8 +33,8 @@ const TodoAppend = ({ addTodos }: IProps) => {
 
     return (
         <div className="todo-append">
-            <input type="text" value={value} onChange={changeValueHandler} onKeyUp={keyupEnterHandler} ref={inputRef} />
-            <button type="button" onClick={clickAddHandler}>+</button>
+            <input type="text" value={value} onChange={changeValueHandler} onKeyUp={keyupEnterHandler} ref={inputRef} placeholder="할 일을 입력하세요" />
+            <span onClick={clickAddHandler}><AiOutlinePlus /></span>
         </div>
     );
 };
