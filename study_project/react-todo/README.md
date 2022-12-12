@@ -1,46 +1,11 @@
-# Getting Started with Create React App
+## React를 이용하여 TODO LIST 만들기
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+-   아이콘은 `react-icons` 를 사용
+-   가급적 함수형 컴포넌트를 사용
+-   스타일링은 앞에서 배운 방식 중에 자유롭게 선택하여 적용
+-   스타일링보다 기능을 먼저 구현
+-   책을 따라하지 말고 직접 구현
+-   리액트 개발자 도구를 사용하면 브라우저에서 컴포넌트를 심층 분석할 수 있습니다.
+    크롬 웹 스토어에서 `React Developer Tools` 로 검색하여 설치할 수 있습니다. 컴포넌트의 props, state 등의 정보를 확인할 수 있습니다
+-   todo 데이터는 state 로 관리(추가적으로 localStorage 등 다른 곳에 저장해도 됩니다)
+-   일단 기능을 구현한 후에 최적화를 고민
