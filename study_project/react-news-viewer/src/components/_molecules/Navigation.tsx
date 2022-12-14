@@ -1,30 +1,44 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Navigation = () => {
     return (
         <nav>
             <ul className="flex items-center">
                 <li className="mr-3">
-                    <Link to="/">전체보기</Link>
+                    <NavLink to="/" aria-activedescendant="active">
+                        전체보기
+                    </NavLink>
                 </li>
                 <li className="mr-3">
-                    <Link to="/business">비즈니스</Link>
+                    <NavLink to="/business" aria-activedescendant="active">
+                        비즈니스
+                    </NavLink>
                 </li>
                 <li className="mr-3">
-                    <Link to="/entertainment">엔터테인먼트</Link>
+                    <NavLink to="/entertainment" aria-activedescendant="active">
+                        엔터테인먼트
+                    </NavLink>
                 </li>
                 <li className="mr-3">
-                    <Link to="/health">건강</Link>
+                    <NavLink to="/health" aria-activedescendant="active">
+                        건강
+                    </NavLink>
                 </li>
                 <li className="mr-3">
-                    <Link to="/science">과학</Link>
+                    <NavLink to="/science" aria-activedescendant="active">
+                        과학
+                    </NavLink>
                 </li>
                 <li className="mr-3">
-                    <Link to="/sports">스포츠</Link>
+                    <NavLink to="/sports" aria-activedescendant="active">
+                        스포츠
+                    </NavLink>
                 </li>
                 <li>
-                    <Link to="/technology">기술</Link>
+                    <NavLink to="/technology" aria-activedescendant="active">
+                        기술
+                    </NavLink>
                 </li>
             </ul>
         </nav>

@@ -1,15 +1,7 @@
 import React from "react";
-import Header from "../../_templates/Header";
-import Contents from "../../_templates/Contents";
-import ArticleSection from "../../_organism/ArticleSection";
 
 const NewsMain = () => {
-    return (
-        <>
-            <Header />
-            <Contents subpage={<ArticleSection />} />
-        </>
-    );
+    return <div>메인 & 전체보기</div>;
 };
 
 export default NewsMain;

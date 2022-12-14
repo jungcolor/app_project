@@ -3,7 +3,7 @@ import React from "react";
 const ArticleItem = () => {
     return (
         <li>
-            <a href="#">
+            <a href="#1">
                 <figure>이미지</figure>
                 <dl>
                     <dt>타이틀</dt>

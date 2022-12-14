@@ -1,12 +1,11 @@
 import React from "react";
+import Router from "../../router/Router";
 
-interface IContents {
-    subpage: JSX.Element;
-}
-
-const Contents = ({ subpage }: IContents) => {
+const Contents = () => {
     return (
-        <div className="contents">{subpage}</div>
+        <div className="contents">
+            <Router />
+        </div>
     );
 };
 

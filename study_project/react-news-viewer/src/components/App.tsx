@@ -1,17 +1,17 @@
 import React from "react";
-import NewsMain from "./pages/news/NewsMain";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Wrapper from "./_templates/Wrapper";
 
 function App() {
     return (
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path="*" element={<NewsMain />}></Route>
+                    <Route path="*" element={<Wrapper />}></Route>
                 </Routes>
             </BrowserRouter>
         </div>
-    )
+    );
 }
 
 export default App;
