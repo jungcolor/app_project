@@ -10,7 +10,7 @@ const Navigation = ({ naviDatas }: INaviDatas) => {
                     const { path, menuName } = naviData;
 
                     return (
-                        <li key={idx} className="mr-3">
+                        <li key={idx}>
                             <NavigationItem path={path} menuName={menuName} />
                         </li>
                     )

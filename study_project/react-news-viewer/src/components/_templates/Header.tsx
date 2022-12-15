@@ -13,7 +13,7 @@ const Header = () => {
     ];
 
     return (
-        <header>
+        <header className="flex justify-center items-center h-24 bg-gray-800">
             <Navigation naviDatas={naviList} />
         </header>
     );
