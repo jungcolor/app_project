@@ -1,16 +1,17 @@
 import React from "react";
+import { IData } from "../../interface/News.interface";
 
-const ArticleItem = () => {
+const ArticleItem = ({ title, description, url, urlToImage }: IData) => {
     return (
-        <li>
-            <a href="#1">
-                <figure>이미지</figure>
-                <dl>
-                    <dt>타이틀</dt>
-                    <dd>내용</dd>
-                </dl>
-            </a>
-        </li>
+        <a href={url} target="_blank" rel="noreferrer noopener">
+            <figure>
+                <img src={urlToImage} alt={description} />
+            </figure>
+            <dl>
+                <dt>{title}</dt>
+                <dd>{description}</dd>
+            </dl>
+        </a>
     );
 };
 

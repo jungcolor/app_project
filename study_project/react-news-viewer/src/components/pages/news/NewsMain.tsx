@@ -1,23 +1,25 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { createNoSubstitutionTemplateLiteral } from "typescript";
-import { apiKey } from "../../../api/types";
+import { getApi } from "../../../api/actions";
+import ArticleList from "../../_molecules/ArticleList";
+import { IData } from "../../../interface/News.interface";
 
 const NewsMain = () => {
-    const [data, setData] = useState([]);
+    const [datas, setDatas] = useState<IData[]>([]);
     const fetchData = async () => {
-        const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=kr&apiKey=${apiKey}`);
-        setData(response.data.articles);
+        const response = await getApi("");
+
+        setDatas(response);
     };
 
     useEffect(() => {
         fetchData();
     }, []);
 
-    console.log(data);
-
-
-    return <div>메인 & 전체보기</div>;
+    return (
+        <>
+            <ArticleList datas={datas} />
+        </>
+    );
 };
 
 export default NewsMain;

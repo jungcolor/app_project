@@ -3,7 +3,7 @@ import Router from "../../router/Router";
 
 const Contents = () => {
     return (
-        <div className="contents">
+        <div className="w-3/4 min-h-screen m-auto">
             <Router />
         </div>
     );
