@@ -5,7 +5,7 @@ const ArticleItem = ({ title, description, url, urlToImage }: IData) => {
     return (
         <a href={url} target="_blank" rel="noreferrer noopener" className="item block overflow-hidden">
             {urlToImage &&
-                <div className="w-52 float-left overflow-hidden mr-3">
+                <div className="w-52 h-36 float-left overflow-hidden mr-3">
                     <img src={urlToImage} alt={description} />
                 </div>
             }

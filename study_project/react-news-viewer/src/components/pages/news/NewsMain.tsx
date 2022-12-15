@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { getApi } from "../../../api/actions";
-import ArticleList from "../../_molecules/ArticleList";
 import { IData } from "../../../interface/News.interface";
+import ArticleList from "../../_molecules/ArticleList";
 
 const NewsMain = () => {
     const [datas, setDatas] = useState<IData[]>([]);
+    const { pathname } = useLocation();
+    const category = pathname.split("/").join("");
     const fetchData = async () => {
-        const response = await getApi("");
-
+        const response = await getApi(category);
         setDatas(response);
     };
 

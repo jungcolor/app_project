@@ -10,7 +10,7 @@ const ArticleList = ({ datas }: IDatas) => {
                     const { title, description, url, urlToImage } = data;
 
                     return (
-                        <li key={idx} className="overflow-hidden mb-7 pb-7 border-b-2 border-b-slate-400">
+                        <li key={idx} className="overflow-hidden mb-7 pb-7 border-b border-b-slate-400">
                             <ArticleItem title={title} description={description} url={url} urlToImage={urlToImage} />
                         </li>
                     )
