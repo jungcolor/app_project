@@ -1,4 +1,3 @@
-import React from "react";
 import Navigation from "../_molecules/Navigation";
 
 const Header = () => {

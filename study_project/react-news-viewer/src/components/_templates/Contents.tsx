@@ -1,10 +1,9 @@
-import React from "react";
-import Router from "../../router/Router";
+import { Outlet } from "react-router-dom";
 
 const Contents = () => {
     return (
         <div className="min-h-screen m-auto">
-            <Router />
+            <Outlet />
         </div>
     );
 };

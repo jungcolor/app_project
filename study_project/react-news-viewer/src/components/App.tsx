@@ -1,15 +1,18 @@
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Wrapper from "./_templates/Wrapper";
+import { Route, Routes, useLocation } from "react-router-dom";
+import NewsMain from "./pages/news/NewsMain";
+import Layout from "./_templates/Layout";
 
 function App() {
+    const location = useLocation();
+
     return (
         <div className="App">
-            <BrowserRouter>
-                <Routes>
-                    <Route path="*" element={<Wrapper />}></Route>
-                </Routes>
-            </BrowserRouter>
+            <Routes>
+                <Route path="/*" element={<Layout />}>
+                    <Route index element={<NewsMain />} />
+                    <Route path=":category" element={<NewsMain key={location.key} />} />
+                </Route>
+            </Routes>
         </div>
     );
 }

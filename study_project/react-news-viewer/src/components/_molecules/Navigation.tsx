@@ -1,4 +1,3 @@
-import React from "react";
 import { INaviData, INaviDatas } from "../../interface/Navi.interface";
 import NavigationItem from "../_atoms/NavigationItem";
 

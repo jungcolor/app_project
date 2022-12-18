@@ -1,8 +1,7 @@
-import React from "react";
 import Contents from "./Contents";
 import Header from "./Header";
 
-const Wrapper = () => {
+const Layout = () => {
     return (
         <div className="wrapper">
             <Header />
@@ -11,4 +10,4 @@ const Wrapper = () => {
     );
 };
 
-export default Wrapper;
+export default Layout;
