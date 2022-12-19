@@ -1,47 +1,28 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import PostList from "./components/PostList";
 import PostView from "./components/PostView";
 import PostWrite from "./components/PostWrite";
 import { IData } from "./interface/Post.interface";
 
 const App = () => {
-    const { pathname } = window.location;
-    const [path, setPath] = useState(pathname);
     const [post, setPost] = useState([]);
-    const onClickHandler = () => {
-        onPathChange("/");
-    };
-    const onPathChange = (href: string) => {
-        setPath(href);
-    };
+    const navigate = useNavigate();
+
     const onPostSave = (data: IData[]) => {
         const posts = post.concat(data as []);
         const result = JSON.stringify(posts);
         localStorage.setItem("posts", result);
         setPost(posts);
-        onPathChange("/");
+        navigate("/");
     };
+
     const onPostDelete = (title: string) => {
-        const posts = post.filter((x: IData) => x.title === title);
+        const posts = post.filter((x: IData) => x.title !== title);
         const result = JSON.stringify(posts);
         localStorage.setItem("posts", result);
         setPost(posts);
-    }
-    const renderPage = () => {
-        let page = <PostList items={post} handlePathChange={onPathChange} handlePostDelete={onPostDelete} />;
-
-        if (path === "/post-write") {
-            page = <PostWrite handleSave={onPostSave} />;
-        }
-        else if (path.indexOf("/post-view") > -1) {
-            const postKey = path.split("/post-view/").join("");
-            const viewData = post.filter((x: IData) => x.title === postKey);
-
-            page = <PostView viewData={viewData[0]} />;
-        }
-
-        return page;
     }
 
     useEffect(() => {
@@ -54,11 +35,15 @@ const App = () => {
     return (
         <div>
             <nav>
-                <a href="#" onClick={onClickHandler}>
-                    HOME
-                </a>
+                <Link to="/">HOME</Link>
             </nav>
-            <div className="contents">{renderPage()}</div>
+            <main className="contents">
+                <Routes>
+                    <Route path="/" element={<PostList items={post} handlePostDelete={onPostDelete} />}></Route>
+                    <Route path="/postWrite" element={<PostWrite handleSave={onPostSave} />}></Route>
+                    <Route path="/postView/:title" element={<PostView viewDatas={post} />}></Route>
+                </Routes>
+            </main>
         </div>
     );
 }
