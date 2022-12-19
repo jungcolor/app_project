@@ -1,15 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Editor from '@toast-ui/editor';
 import "@toast-ui/editor/dist/toastui-editor.css";
+import { IPostWrite } from '../interface/Post.interface';
 
-export interface IData {
-    title: string;
-    contents: string;
-}
 
-interface IPostWrite {
-    handleSave: (data: IData[]) => void;
-}
 
 const PostWrite = ({ handleSave }: IPostWrite) => {
     const [title, setTitle] = useState("");

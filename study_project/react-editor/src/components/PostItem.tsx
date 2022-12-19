@@ -1,17 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IData } from './PostWrite';
+import { IData } from "../interface/Post.interface";
+
 
 interface IPostItem {
     item: IData;
     randomCount: number;
     handlePathChange: (href: string) => void;
+    handlePostDelete: (id: string) => void;
 }
 
 
-const PostItem = ({ item, randomCount, handlePathChange }: IPostItem) => {
+const PostItem = ({ item, randomCount, handlePathChange, handlePostDelete }: IPostItem) => {
     const [count, setCount] = useState(randomCount);
     const timer = useRef(randomCount);
     const timerId = useRef<any>(null);
+    const { title } = item;
     const onClickHandler = (e: React.MouseEvent<HTMLAnchorElement>) => {
         const eTextKey = (e.target as HTMLAnchorElement).textContent;
 
@@ -30,13 +33,14 @@ const PostItem = ({ item, randomCount, handlePathChange }: IPostItem) => {
     useEffect(() => {
         if (timer.current <= 0) {
             clearInterval(timerId.current);
+            handlePostDelete(title);
         }
     }, [count]);
 
     return (
         <li style={{ display: "flex", alignItems: "center" }}>
             <a href="#" style={{ marginRight: "10px" }} onClick={onClickHandler}>
-                {item.title}
+                {title}
             </a>
             <span>{count}</span>
         </li>

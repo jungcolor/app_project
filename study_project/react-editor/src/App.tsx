@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import PostList from "./components/PostList";
 import PostView from "./components/PostView";
-import PostWrite, { IData } from "./components/PostWrite";
+import PostWrite from "./components/PostWrite";
+import { IData } from "./interface/Post.interface";
 
 const App = () => {
     const { pathname } = window.location;
@@ -21,11 +22,14 @@ const App = () => {
         setPost(posts);
         onPathChange("/");
     };
-    const onPostDelete = (id: string) => {
-        
+    const onPostDelete = (title: string) => {
+        const posts = post.filter((x: IData) => x.title === title);
+        const result = JSON.stringify(posts);
+        localStorage.setItem("posts", result);
+        setPost(posts);
     }
     const renderPage = () => {
-        let page = <PostList items={post} handlePathChange={onPathChange} />;
+        let page = <PostList items={post} handlePathChange={onPathChange} handlePostDelete={onPostDelete} />;
 
         if (path === "/post-write") {
             page = <PostWrite handleSave={onPostSave} />;
