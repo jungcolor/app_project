@@ -22,7 +22,7 @@ const App = () => {
         localStorage.setItem("posts", result);
         setPost(posts);
         navigate("/");
-    }, []);
+    }, [post]);
 
     const onPostDelete = useCallback((title: string) => {
         const posts = post.filter((x: IData) => x.title !== title);

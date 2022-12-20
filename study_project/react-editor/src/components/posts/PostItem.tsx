@@ -30,8 +30,8 @@ const PostItem = ({ item, randomCount, handlePostDelete }: IPostItem) => {
     }, [count]);
 
     return (
-        <li style={{ display: "flex", alignItems: "center" }}>
-            <Link to={`/postView/${item.title}`} style={{ marginRight: "10px" }}>{item.title}</Link>
+        <li>
+            <Link to={`/postView/${item.title}`}>{item.title}</Link>
             <span>{count}</span>
         </li>
     );
