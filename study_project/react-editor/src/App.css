@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    padding: 0 30px;
+    background-color: rgb(109, 180, 50);
+}
+
+header nav a + a {
+    margin-left: 20px;
+}

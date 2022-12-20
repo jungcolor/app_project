@@ -1,29 +1,35 @@
-import React, { useState, useEffect } from "react";
-import "./App.css";
+// lib
+import React, { useState, useEffect, useCallback } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
-import PostList from "./components/PostList";
-import PostView from "./components/PostView";
-import PostWrite from "./components/PostWrite";
+
+// components
+import PostList from "./components/posts/PostList";
+import PostView from "./components/posts/PostView";
+import PostWrite from "./components/posts/PostWrite";
 import { IData } from "./interface/Post.interface";
+
+// css
+import "./App.css";
+import Header from "./components/layout/Header";
 
 const App = () => {
     const [post, setPost] = useState([]);
     const navigate = useNavigate();
 
-    const onPostSave = (data: IData[]) => {
+    const onPostSave = useCallback((data: IData[]) => {
         const posts = post.concat(data as []);
         const result = JSON.stringify(posts);
         localStorage.setItem("posts", result);
         setPost(posts);
         navigate("/");
-    };
+    }, []);
 
-    const onPostDelete = (title: string) => {
+    const onPostDelete = useCallback((title: string) => {
         const posts = post.filter((x: IData) => x.title !== title);
         const result = JSON.stringify(posts);
         localStorage.setItem("posts", result);
         setPost(posts);
-    }
+    }, []);
 
     useEffect(() => {
         const response = localStorage.getItem("posts");
@@ -34,9 +40,7 @@ const App = () => {
 
     return (
         <div>
-            <nav>
-                <Link to="/">HOME</Link>
-            </nav>
+            <Header />
             <main className="contents">
                 <Routes>
                     <Route path="/" element={<PostList items={post} handlePostDelete={onPostDelete} />}></Route>

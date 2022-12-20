@@ -1,5 +1,5 @@
 import React from 'react';
-import { IData } from '../interface/Post.interface';
+import { IData } from '../../interface/Post.interface';
 import { useParams } from "react-router-dom";
 
 interface IPostView {

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { IData } from "../interface/Post.interface";
+import { IData } from "../../interface/Post.interface";
 import { Link } from "react-router-dom";
 
 interface IPostItem {
@@ -13,21 +13,21 @@ const PostItem = ({ item, randomCount, handlePostDelete }: IPostItem) => {
     const timer = useRef(randomCount);
     const timerId = useRef<any>(null);
 
-    // useEffect(() => {
-    //     timerId.current = setInterval(() => {
-    //         timer.current -= 1;
-    //         setCount(timer.current);
-    //     }, 1000);
+    useEffect(() => {
+        timerId.current = setInterval(() => {
+            timer.current -= 1;
+            setCount(timer.current);
+        }, 1000);
 
-    //     return () => clearInterval(timerId.current);
-    // }, []);
+        return () => clearInterval(timerId.current);
+    }, []);
 
-    // useEffect(() => {
-    //     if (timer.current <= 0) {
-    //         clearInterval(timerId.current);
-    //         handlePostDelete(title);
-    //     }
-    // }, [count]);
+    useEffect(() => {
+        if (timer.current <= 0) {
+            clearInterval(timerId.current);
+            handlePostDelete(item.title);
+        }
+    }, [count]);
 
     return (
         <li style={{ display: "flex", alignItems: "center" }}>
