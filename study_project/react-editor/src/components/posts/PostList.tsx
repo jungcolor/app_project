@@ -13,7 +13,6 @@ const getCount = () => {
 };
 
 const PostList = ({ handlePostDelete, items }: IPostList) => {
-    console.log(items);
     return (
         <>
             <h2>목록 보기</h2>
