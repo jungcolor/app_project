@@ -1,7 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import postReducer from "../../features/post/postSlice";
 
 export const store = configureStore({
-    reducer: {},
+    reducer: {
+        post: postReducer,
+    },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

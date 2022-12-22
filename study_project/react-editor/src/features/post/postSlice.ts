@@ -1,24 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IData } from "../../interface/Post.interface";
 
-export interface PostState {
-    post: IData[];
-}
-
-const initialState: PostState = {
-    post: [],
-};
+export type PostState = IData[];
+const initialState: PostState = [];
 
 export const postSlice = createSlice({
-    name: "post",
+    name: "posts",
     initialState,
     reducers: {
-        test: (state, action: PayloadAction<IData>) => {
-            console.log(action);
-            console.log(action.payload);
+        addPost: (state, action: PayloadAction<IData>) => {
+            state.push({ ...action.payload });
         },
     },
 });
 
-export const { test } = postSlice.actions;
+export const { addPost } = postSlice.actions;
 export default postSlice.reducer;

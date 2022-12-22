@@ -1,26 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
 import Editor from "@toast-ui/editor";
 import "@toast-ui/editor/dist/toastui-editor.css";
-import { IData } from "../../interface/Post.interface";
-export interface IPostWrite {
-    handleSave: (data: IData[]) => void;
-}
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { addPost } from "../../features/post/postSlice";
+import { useNavigate } from "react-router-dom";
 
-const PostWrite = ({ handleSave }: IPostWrite) => {
+const PostWrite = () => {
     const [title, setTitle] = useState("");
     const [editor, setEditor] = useState<any>();
     const editorRef = useRef<any>(null);
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
     };
     const onClickSave = (e: React.MouseEvent<HTMLButtonElement>) => {
-        const result = [];
-        result.push({
-            title,
-            contents: editor.getHTML(),
-        });
+        const result = { title, contents: editor.getHTML() };
 
-        handleSave(result);
+        dispatch(addPost(result));
+        navigate("/");
     };
 
     useEffect(() => {
@@ -36,8 +35,8 @@ const PostWrite = ({ handleSave }: IPostWrite) => {
 
     return (
         <>
-            <h2>글작성</h2>
-            <div>
+            <h2>목록 작성</h2>
+            <div style={{ display: "flex", margin: "15px 0" }}>
                 <h3>제목</h3>
                 <input type="text" value={title} onChange={onChangeHandler} />
             </div>
