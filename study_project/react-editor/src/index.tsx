@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 
 // lib
 import { BrowserRouter } from "react-router-dom";
-import { store } from "./components/app/sotre";
+import { store } from "./app/store";
 
 // css
 import App from "./App";
