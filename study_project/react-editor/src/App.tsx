@@ -1,5 +1,5 @@
 // lib
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
 // components
@@ -11,27 +11,9 @@ import { useAppSelector } from "./app/hooks";
 // css
 import "./App.css";
 import Header from "./components/layout/Header";
+import { IData } from "./interface/Post.interface";
 
 const App = () => {
-    // const [post, setPost] = useState<IData[]>([]);
-    // const onPostDelete = useCallback(
-    //     (title: string) => {
-    //         const posts = post.filter((x: IData) => x.title !== title);
-    //         const result = JSON.stringify(posts);
-    //         localStorage.setItem("posts", result);
-    //         setPost(posts);
-    //     },
-    //     [post]
-    // );
-
-    // useEffect(() => {
-    //     const response = localStorage.getItem("posts");
-    //     console.log(response);
-    //     if (response) {
-    //         setPost(JSON.parse(response))
-    //     }
-    // }, []);
-
     // 초기값 가져오는 함수
     const posts = useAppSelector((state) => state.post);
 

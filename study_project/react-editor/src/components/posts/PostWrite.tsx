@@ -15,7 +15,7 @@ const PostWrite = () => {
     const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setTitle(e.target.value);
     };
-    const onClickSave = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const onClickSave = () => {
         const result = { title, contents: editor.getHTML() };
 
         dispatch(addPost(result));

@@ -4,34 +4,12 @@ import { Link } from "react-router-dom";
 
 interface IPostItem {
     item: IData;
-    randomCount: number;
 }
 
-const PostItem = ({ item, randomCount }: IPostItem) => {
-    const [count, setCount] = useState(randomCount);
-    const timer = useRef(randomCount);
-    const timerId = useRef<any>(null);
-
-    // useEffect(() => {
-    //     timerId.current = setInterval(() => {
-    //         timer.current -= 1;
-    //         setCount(timer.current);
-    //     }, 1000);
-
-    //     return () => clearInterval(timerId.current);
-    // }, []);
-
-    // useEffect(() => {
-    //     if (timer.current <= 0) {
-    //         clearInterval(timerId.current);
-    //         handlePostDelete(item.title);
-    //     }
-    // }, [count]);
-
+const PostItem = ({ item }: IPostItem) => {
     return (
         <li>
             <Link to={`/postView/${item.title}`}>{item.title}</Link>
-            {/* <span>{count}</span> */}
         </li>
     );
 };
