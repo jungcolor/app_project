@@ -24,6 +24,6 @@
 -   메뉴 네비게이션 항상 고정으로 나오게
 -   redux를 사용해 목록 작성 관린 (redux-toolkit)
 
-### 추가로 해볼것
+### 추가로 해볼것 - 완료
 
--   redux에 storage 구현 -> redux-persist
+-   code splitting 적용
