@@ -13,7 +13,7 @@ const initialState: newsState = {
     datas: [],
 };
 
-// redux-toolkit thunk 비동기 함수
+// redux-toolkit thunk 비동기작업을 처리하는 action creator를 만듬
 const asyncNewsListFetch = createAsyncThunk("newsSlice/asyncNewsListFetch", getNewsList);
 
 const newsSlice = createSlice({
