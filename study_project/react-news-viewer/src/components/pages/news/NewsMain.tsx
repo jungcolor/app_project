@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getApi } from "../../../api/actions";
-import { IData } from "../../../interface/News.interface";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import ArticleList from "../../_molecules/ArticleList";
+import { asyncNewsListFetch } from "../../../features/news/newsSlice";
 
 const NewsMain = () => {
-    const [datas, setDatas] = useState<IData[]>([]);
     const params = useParams();
-    const { category } = params;
-    const fetchData = async () => {
-        const response = await getApi(category ? category : "");
-        setDatas(response);
-    };
+    let { category } = params;
+
+    const dispatch = useAppDispatch();
+    const newsList = useAppSelector((state) => state.news.datas);
+    const loading = useAppSelector((state) => state.news.loading);
 
     useEffect(() => {
-        fetchData();
+        category = !category ? "" : category;
+        dispatch(asyncNewsListFetch(category));
     }, []);
 
     return (
         <>
-            <ArticleList datas={datas} />
+            {loading === "Loading" ? "Loading..." : <ArticleList datas={newsList} />}
         </>
     );
 };

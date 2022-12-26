@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getApi = async (category: string) => {
+export const getNewsList = async (category: string) => {
     const apiBaseUrl = `https://newsapi.org/v2/top-headlines?country=kr&category=${category}`;
     const apiKey = `apiKey=eb64e88d73ab40eb92309a0851e34b59`;
 
