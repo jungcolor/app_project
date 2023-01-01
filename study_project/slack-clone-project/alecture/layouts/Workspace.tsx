@@ -10,7 +10,7 @@ const Workspace: FC = ({ children }) => {
     const onLogout = useCallback(() => {
         axios.post("http://localhost:3095/api/users/logout", null, { withCredentials: true })
             .then(() => {
-                mutate()
+                mutate(false);
             });
     }, []);
 

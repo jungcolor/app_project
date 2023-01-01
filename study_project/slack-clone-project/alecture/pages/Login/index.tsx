@@ -23,8 +23,8 @@ const LogIn = () => {
                     { email, password },
                     { withCredentials: true },
                 )
-                .then(() => {
-                    mutate();
+                .then((response) => {
+                    mutate(response.data);
                 })
                 .catch((error) => {
                     setLogInError(error.response?.data?.code === 401);
