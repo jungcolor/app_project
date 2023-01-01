@@ -2,7 +2,7 @@ import React from 'react';
 
 const App = () => {
     return (
-        <div>환경설정 기가막히네</div>
+        <div>환경설정 하이하이</div>
     )
 }
 
