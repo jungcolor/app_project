@@ -1,17 +1,28 @@
 import React, { useCallback, useState } from 'react';
-import { Header, Form, Label, Input, Button, LinkContainer } from './styles';
+import { Header, Form, Label, Input, Button, LinkContainer, Error } from './styles';
 
 const SignUp = () => {
-    const [email] = useState('');
-    const [nickname] = useState('');
-    const [password] = useState('');
-    const [passwordCheck] = useState('');
+    const [email, setEmail] = useState('');
+    const [nickname, setNickname] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordCheck, setPasswordCheck] = useState('');
 
-    const onSubmit = useCallback(() => { }, []);
-    const onChangeEmail = useCallback(() => { }, []);
-    const onChangeNickname = useCallback(() => { }, []);
-    const onChangePassword = useCallback(() => { }, []);
-    const onChangePasswordCheck = useCallback(() => { }, []);
+    const onChangeEmail = useCallback((e) => {
+        setEmail(e.target.value);
+    }, []);
+    const onChangeNickname = useCallback((e) => {
+        setNickname(e.target.value);
+    }, []);
+    const onChangePassword = useCallback((e) => {
+        setPassword(e.target.value);
+    }, []);
+    const onChangePasswordCheck = useCallback((e) => {
+        setPasswordCheck(e.target.value);
+    }, []);
+    const onSubmit = useCallback((e) => {
+        e.preventDefault();
+        console.log(email, nickname, password, passwordCheck);
+    }, [email, nickname, password, passwordCheck]);
 
 
     return (
