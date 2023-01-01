@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import useInput from '@hooks/useInput';
-import { Header, Form, Label, Input, Button, LinkContainer, Error } from './styles';
+import { Header, Form, Label, Input, Button, LinkContainer, Success, Error } from './styles';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const SignUp = () => {
     const [email, onChangeEmail] = useInput('');
@@ -8,21 +10,41 @@ const SignUp = () => {
     const [password, , setPassword] = useInput('');
     const [passwordCheck, , setPasswordCheck] = useInput('');
     const [mismatchError, setMismatchError] = useState(false);
+    const [signUpError, setSignUpError] = useState('');
+    const [signUpSuccess, setSignUpSuccess] = useState(false);
 
     const onChangePassword = useCallback((e) => {
         setPassword(e.target.value);
         setMismatchError(e.target.value !== passwordCheck);
     }, [passwordCheck]);
+
     const onChangePasswordCheck = useCallback((e) => {
         setPasswordCheck(e.target.value);
         setMismatchError(e.target.value !== password);
     }, [password]);
+
     const onSubmit = useCallback((e) => {
         e.preventDefault();
 
-        if (!mismatchError) {
-            // 회원가입 api ㄱㄱ
-            console.log("오류가 없음");
+        if (!mismatchError && nickname) {
+            console.log("벨리데이션 통과");
+            // 비동기 요청 전 비동기에서 사용하는 상태값 초기화
+            setSignUpError('');
+            setSignUpSuccess(false);
+
+            axios
+                .post('http://localhost:3095/api/users', {
+                    email, nickname, password
+                })
+                .then((response) => {
+                    console.log(response);
+                    setSignUpSuccess(true);
+                })
+                .catch((error) => {
+                    console.log(error.response);
+                    setSignUpError(error.response.data);
+                })
+                .finally(() => { });
         }
 
         console.log(email, nickname, password, passwordCheck);
@@ -62,15 +84,15 @@ const SignUp = () => {
                         />
                     </div>
                     {mismatchError && <Error>비밀번호가 일치하지 않습니다.</Error>}
-                    {/* {!nickname && <Error>닉네임을 입력해주세요.</Error>} */}
-                    {/* {signUpError && <Error>이미 가입된 이메일입니다.</Error>} */}
-                    {/* {signUpSuccess && <Success>회원가입되었습니다! 로그인해주세요.</Success>} */}
+                    {!nickname && <Error>닉네임을 입력해주세요.</Error>}
+                    {signUpError && <Error>{signUpError}</Error>}
+                    {signUpSuccess && <Success>회원가입되었습니다! 로그인해주세요.</Success>}
                 </Label>
                 <Button type="submit">회원가입</Button>
             </Form>
             <LinkContainer>
                 이미 회원이신가요?&nbsp;
-                <a href="/login">로그인 하러가기</a>
+                <Link to="/login">로그인 하러가기</Link>
             </LinkContainer>
         </div>
     );
