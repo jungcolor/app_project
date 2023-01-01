@@ -13,10 +13,10 @@ const config = require("../config/config")[env];
 const db = {};
 
 const sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
-  config
+    config.database,
+    config.username,
+    config.password,
+    config
 );
 
 db.Workspace = workspace;
@@ -28,13 +28,13 @@ db.Mention = mention;
 db.WorkspaceMember = workspaceMember;
 
 Object.keys(db).forEach((modelName) => {
-  db[modelName].init(sequelize);
+    db[modelName].init(sequelize);
 });
 
 Object.keys(db).forEach((modelName) => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+    if (db[modelName].associate) {
+        db[modelName].associate(db);
+    }
 });
 
 db.sequelize = sequelize;
