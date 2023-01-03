@@ -8,6 +8,7 @@ const Channel = loadable(() => import('@pages/Channel'));
 
 const App = () => {
     return (
+        // V6부터 Switch 대신 Routes로 변경
         <Switch>
             <Redirect exact path="/" to="/login" />
             <Route path="/login" component={LogIn} />
