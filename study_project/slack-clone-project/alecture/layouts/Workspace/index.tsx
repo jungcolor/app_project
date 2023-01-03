@@ -2,16 +2,18 @@ import useSWR from 'swr';
 import axios from 'axios';
 import gravatar from 'gravatar';
 import fetcher from '@utils/fetcher';
+import loadable from '@loadable/component';
 import React, { FC, useCallback } from 'react';
-import { Redirect } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router';
 import { Channels, Chats, Header, MenuScroll, ProfileImg, RightMenu, WorkspaceName, Workspaces, WorkspaceWrapper } from '@layouts/Workspace/styles';
+
+const Channel = loadable(() => import('@pages/Channel'));
+const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
 const Workspace: FC = ({ children }) => {
     const { data, error, mutate } = useSWR('http://localhost:3095/api/users', fetcher, {
         dedupingInterval: 2000, // 2초
     });
-
-    console.log(data);
 
     const onLogout = useCallback(() => {
         axios.post("http://localhost:3095/api/users/logout", null, {
@@ -42,7 +44,13 @@ const Workspace: FC = ({ children }) => {
                     <WorkspaceName>Select</WorkspaceName>
                     <MenuScroll>Menu Scroll</MenuScroll>
                 </Channels>
-                <Chats>Chats</Chats>
+                <Chats>
+                    <Switch>
+                        {/* 폴더가 계층구조일 때 중첩 라우팅으로 사용할 수 있다 */}
+                        <Route path="/workspace/channel" component={Channel} />
+                        <Route path="/workspace/dm" component={DirectMessage} />
+                    </Switch>
+                </Chats>
             </WorkspaceWrapper>
             {children}
         </div>
