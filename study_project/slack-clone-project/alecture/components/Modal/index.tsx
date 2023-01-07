@@ -1,6 +1,6 @@
 import { CloseModalButton } from '@components/Menu/styles';
 import React, { FC, useCallback } from 'react';
-import { CreateModal } from './styles';
+import { CreateModal } from '@components/Modal/styles';
 
 interface Props {
     show: boolean;
@@ -12,9 +12,7 @@ const Modal: FC<Props> = ({ show, children, onCloseModal }) => {
         e.stopPropagation();
     }, []);
 
-    if (!show) {
-        return null;
-    }
+    if (!show) return null;
 
     return (
         <CreateModal onClick={onCloseModal}>
