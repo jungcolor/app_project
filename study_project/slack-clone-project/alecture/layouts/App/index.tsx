@@ -13,7 +13,8 @@ const App = () => {
             <Redirect exact path="/" to="/login" />
             <Route path="/login" component={LogIn} />
             <Route path="/signup" component={SignUp} />
-            <Route path="/workspace" component={Workspace} />
+            {/* 라우트 파라미터 형태로 변경 ex) /:nn/ */}
+            <Route path="/workspace/:workspace" component={Workspace} />
         </Switch>
     );
 };
