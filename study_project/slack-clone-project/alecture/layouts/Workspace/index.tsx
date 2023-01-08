@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 import CreateChannelModal from '@components/CreateChannelModal';
 import InviteWorkspaceModal from '@components/InviteWorkspaceModal';
 import InviteChannelModal from '@components/InviteChannelModal';
+import DMList from '@components/DMList';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -31,11 +32,12 @@ const Workspace: VFC = () => {
     const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
     const { workspace } = useParams<{ workspace: string }>();
 
-    const { data: userData, error, mutate } = useSWR<IUser | false>(`http://localhost:3095/api/users`, fetcher, {
-        dedupingInterval: 2000, // 2초
-    });
-
+    // 유저정보
+    const { data: userData, error, mutate } = useSWR<IUser | false>(`http://localhost:3095/api/users`, fetcher, { dedupingInterval: 2000 });
+    // 채널정보
     const { data: channelData } = useSWR<IChannel[]>(userData ? `http://localhost:3095/api/workspaces/${workspace}/channels` : null, fetcher);
+    // 멤버정보
+    const { data: memberData, mutate: mutateMember } = useSWR<IUser[]>(userData ? `http://localhost:3095/api/workspaces/${workspace}/members` : null, fetcher);
 
     const onLogout = useCallback(() => {
         axios.post("http://localhost:3095/api/users/logout", null, {
@@ -145,9 +147,8 @@ const Workspace: VFC = () => {
                                 <button onClick={onLogout}>로그아웃</button>
                             </WorkspaceModal>
                         </Menu>
-                        {channelData?.map((v) => (
-                            <div>{v.name}</div>
-                        ))}
+                        {/* <ChannelList userData={userData} /> */}
+                        <DMList userData={userData} />
                     </MenuScroll>
                 </Channels>
                 <Chats>
