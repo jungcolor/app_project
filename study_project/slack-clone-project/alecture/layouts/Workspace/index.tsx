@@ -3,7 +3,7 @@ import axios from 'axios';
 import gravatar from 'gravatar';
 import fetcher from '@utils/fetcher';
 import loadable from '@loadable/component';
-import React, { VFC, useCallback, useState } from 'react';
+import React, { VFC, useCallback, useState, useEffect } from 'react';
 import { Redirect, Route, Switch, useParams } from 'react-router';
 import { AddButton, Channels, Chats, Header, LogOutButton, MenuScroll, ProfileImg, ProfileModal, RightMenu, WorkspaceButton, WorkspaceModal, WorkspaceName, Workspaces, WorkspaceWrapper } from '@layouts/Workspace/styles';
 import Menu from '@components/Menu';
@@ -18,6 +18,7 @@ import InviteWorkspaceModal from '@components/InviteWorkspaceModal';
 import InviteChannelModal from '@components/InviteChannelModal';
 import DMList from '@components/DMList';
 import ChannelList from '@components/ChannelList';
+import useSocket from '@hooks/useSocket';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -32,6 +33,19 @@ const Workspace: VFC = () => {
     const [newWorkspace, onChangeNewWorkspace, setNewWorkspace] = useInput('');
     const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
     const { workspace } = useParams<{ workspace: string }>();
+    // const [socket, disconnect] = useSocket(workspace);
+
+    // useEffect(() => {
+    //     if (channelData && userData && socket) {
+    //         socket.emit('login', { id: userData.id, channels: channelData.map((v) => v.id) });
+    //     }
+    // }, [socket]);
+
+    // useEffect(() => {
+    //     return () => {
+    //         disconnect();
+    //     }
+    // }, [workspace, disconnect]);
 
     // 유저정보
     const { data: userData, error, mutate } = useSWR<IUser | false>(`http://localhost:3095/api/users`, fetcher, { dedupingInterval: 2000 });
