@@ -5,9 +5,10 @@ import { Link, Redirect } from 'react-router-dom';
 import useInput from '@hooks/useInput';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
+import { BACK_URL } from '@components/global';
 
 const LogIn = () => {
-    const { data, error, mutate } = useSWR('http://localhost:3095/api/users', fetcher, {
+    const { data, error, mutate } = useSWR(`${BACK_URL}/api/users`, fetcher, {
         dedupingInterval: 10000
     });
     const [email, onChangeEmail] = useInput('');
@@ -19,7 +20,7 @@ const LogIn = () => {
             e.preventDefault();
             setLogInError(false);
             axios
-                .post('http://localhost:3095/api/users/login',
+                .post(`${BACK_URL}/api/users/login`,
                     { email, password },
                     { withCredentials: true },
                 )

@@ -6,12 +6,13 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import useSWR from 'swr';
+import { BACK_URL } from '@components/global';
 
 const DMList: FC = () => {
     const { workspace } = useParams<{ workspace?: string }>();
-    const { data: userData } = useSWR<IUser>('http://localhost:3095/api/users', fetcher, { dedupingInterval: 2000 });
+    const { data: userData } = useSWR<IUser>(`${BACK_URL}/api/users`, fetcher, { dedupingInterval: 2000 });
     const { data: memberData } = useSWR<IUserWithOnline[]>(
-        userData ? `/api/workspaces/${workspace}/members` : null,
+        userData ? `${BACK_URL}/api/workspaces/${workspace}/members` : null,
         fetcher,
     );
     const [socket] = useSocket(workspace);

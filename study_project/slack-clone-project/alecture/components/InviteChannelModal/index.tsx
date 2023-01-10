@@ -1,3 +1,4 @@
+import { BACK_URL } from '@components/global';
 import Modal from '@components/Modal';
 import useInput from '@hooks/useInput';
 import { Input, Label, Button } from '@pages/SignUp/styles';
@@ -18,17 +19,17 @@ interface Props {
 const InviteChannelModal: VFC<Props> = ({ show, onCloseModal, setShowInviteChannelModal }) => {
     const { workspace, channel } = useParams<{ workspace: string; channel: string }>();
     const [newMember, onChangeNewMember, setnewMember] = useInput('');
-    const { data: userData } = useSWR<IUser | false>(`http://localhost:3095/api/users`, fetcher, {
+    const { data: userData } = useSWR<IUser | false>(`${BACK_URL}/api/users`, fetcher, {
         dedupingInterval: 2000, // 2초
     });
-    const { mutate: mutateMember } = useSWR<IUser[]>(userData ? `http://localhost:3095/api/workspaces/${workspace}/channels/${channel}/members` : null, fetcher);
+    const { mutate: mutateMember } = useSWR<IUser[]>(userData ? `${BACK_URL}/api/workspaces/${workspace}/channels/${channel}/members` : null, fetcher);
 
     const onInviteMember = useCallback((e) => {
         e.preventDefault();
 
         if (!newMember || !newMember.trim()) return;
 
-        axios.post(`http://localhost:3095/api/workspaces/${workspace}/channels/${channel}/members`, {
+        axios.post(`${BACK_URL}/api/workspaces/${workspace}/channels/${channel}/members`, {
             email: newMember
         }, {
             withCredentials: true

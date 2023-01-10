@@ -7,6 +7,7 @@ import { Mention, SuggestionDataItem } from 'react-mentions';
 import { useParams } from 'react-router';
 import useSWR from 'swr';
 import gravatar from 'gravatar';
+import { BACK_URL } from '@components/global';
 
 interface Props {
     chat: string;
@@ -16,10 +17,10 @@ interface Props {
 }
 const ChatBox: VFC<Props> = ({ chat, onSubmitForm, onChangeChat, placeholder }) => {
     const { workspace } = useParams<{ workspace: string }>();
-    const { data: userData, error, mutate } = useSWR<IUser | false>('/api/users', fetcher, {
+    const { data: userData, error, mutate } = useSWR<IUser | false>(`${BACK_URL}/api/users`, fetcher, {
         dedupingInterval: 2000, // 2초
     });
-    const { data: memberData } = useSWR<IUser[]>(userData ? `/api/workspaces/${workspace}/members` : null, fetcher);
+    const { data: memberData } = useSWR<IUser[]>(userData ? `${BACK_URL}/api/workspaces/${workspace}/members` : null, fetcher);
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     useEffect(() => {

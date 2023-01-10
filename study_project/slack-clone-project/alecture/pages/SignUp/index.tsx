@@ -5,9 +5,10 @@ import axios from 'axios';
 import { Link, Redirect } from 'react-router-dom';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
+import { BACK_URL } from '@components/global';
 
 const SignUp = () => {
-    const { data, error, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
+    const { data, error, mutate } = useSWR(`${BACK_URL}/api/users`, fetcher);
     const [email, onChangeEmail] = useInput('');
     const [nickname, onChangeNickname] = useInput('');
     const [password, , setPassword] = useInput('');
@@ -36,7 +37,7 @@ const SignUp = () => {
             setSignUpSuccess(false);
 
             axios
-                .post('http://localhost:3095/api/users', {
+                .post(`${BACK_URL}/api/users`, {
                     email, nickname, password
                 })
                 .then((response) => {

@@ -1,5 +1,6 @@
 // import useSocket from '@hooks/useSocket';
 import { CollapseButton } from '@components/DMList/styles';
+import { BACK_URL } from '@components/global';
 import { IChannel, IUser } from '@typings/db';
 import fetcher from '@utils/fetcher';
 import React, { FC, useCallback, useState } from 'react';
@@ -9,10 +10,10 @@ import useSWR from 'swr';
 
 const ChannelList: FC = () => {
     const { workspace } = useParams<{ workspace?: string }>();
-    const { data: userData, error, mutate } = useSWR<IUser>('http://localhost:3095/api/users', fetcher, {
+    const { data: userData, error, mutate } = useSWR<IUser>(`${BACK_URL}/api/users`, fetcher, {
         dedupingInterval: 2000, // 2초
     });
-    const { data: channelData } = useSWR<IChannel[]>(userData ? `http://localhost:3095/api/workspaces/${workspace}/channels` : null, fetcher);
+    const { data: channelData } = useSWR<IChannel[]>(userData ? `${BACK_URL}/api/workspaces/${workspace}/channels` : null, fetcher);
     const [channelCollapse, setChannelCollapse] = useState(false);
 
     const toggleChannelCollapse = useCallback(() => {

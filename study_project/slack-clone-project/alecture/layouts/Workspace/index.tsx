@@ -19,6 +19,7 @@ import InviteChannelModal from '@components/InviteChannelModal';
 import DMList from '@components/DMList';
 import ChannelList from '@components/ChannelList';
 import useSocket from '@hooks/useSocket';
+import { BACK_URL } from '@components/global';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -48,14 +49,14 @@ const Workspace: VFC = () => {
     }, [workspace, disconnect]);
 
     // 유저정보
-    const { data: userData, error, mutate } = useSWR<IUser | false>(`http://localhost:3095/api/users`, fetcher, { dedupingInterval: 2000 });
+    const { data: userData, error, mutate } = useSWR<IUser | false>(`${BACK_URL}/api/users`, fetcher, { dedupingInterval: 2000 });
     // 채널정보
-    const { data: channelData } = useSWR<IChannel[]>(userData ? `http://localhost:3095/api/workspaces/${workspace}/channels` : null, fetcher);
+    const { data: channelData } = useSWR<IChannel[]>(userData ? `${BACK_URL}/api/workspaces/${workspace}/channels` : null, fetcher);
     // 멤버정보
-    const { data: memberData, mutate: mutateMember } = useSWR<IUser[]>(userData ? `http://localhost:3095/api/workspaces/${workspace}/members` : null, fetcher);
+    const { data: memberData, mutate: mutateMember } = useSWR<IUser[]>(userData ? `${BACK_URL}/api/workspaces/${workspace}/members` : null, fetcher);
 
     const onLogout = useCallback(() => {
-        axios.post("http://localhost:3095/api/users/logout", null, {
+        axios.post(`${BACK_URL}/api/users/logout`, null, {
             withCredentials: true
         })
             .then(() => {
@@ -85,7 +86,7 @@ const Workspace: VFC = () => {
         if (!newUrl || !newUrl.trim()) return;
         if (!newWorkspace) return;
 
-        axios.post("http://localhost:3095/api/workspaces", {
+        axios.post(`${BACK_URL}/api/workspaces`, {
             workspace: newWorkspace,
             url: newUrl
         }, {

@@ -9,21 +9,20 @@ import ChatBox from '@components/ChatBox';
 import ChatList from '@components/ChatList';
 import axios from 'axios';
 import { IDM } from '@typings/db';
-
-const backUrl = "http://localhost:3095";
+import { BACK_URL } from '@components/global';
 
 const DirectMessage = () => {
     const { workspace, id } = useParams<{ workspace: string, id: string }>();
-    const { data: userData } = useSWR(`${backUrl}/api/workspaces/${workspace}/users/${id}`, fetcher);
-    const { data: myData } = useSWR(`${backUrl}/api/users`, fetcher);
+    const { data: userData } = useSWR(`${BACK_URL}/api/workspaces/${workspace}/users/${id}`, fetcher);
+    const { data: myData } = useSWR(`${BACK_URL}/api/users`, fetcher);
     const [chat, onChangeChat, setChat] = useInput('');
-    const { data: chatData, mutate: chatMutate } = useSWR<IDM[]>(`${backUrl}/api/workspaces/${workspace}/dms/${id}/chats?perPage=20&page=1`, fetcher);
+    const { data: chatData, mutate: chatMutate } = useSWR<IDM[]>(`${BACK_URL}/api/workspaces/${workspace}/dms/${id}/chats?perPage=20&page=1`, fetcher);
 
     const onSubmitForm = useCallback((e) => {
         e.preventDefault();
 
         if (chat?.trim()) {
-            axios.post(`${backUrl}/api/workspace/${workspace}/dms/${id}/chats`, {
+            axios.post(`${BACK_URL}/api/workspaces/${workspace}/dms/${id}/chats`, {
                 content: chat,
             })
                 .then(() => {
