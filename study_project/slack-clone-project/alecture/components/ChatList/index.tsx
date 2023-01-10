@@ -10,9 +10,11 @@ interface Props {
 const ChatList: VFC<Props> = ({ chatData }) => {
     return (
         <ChatZone>
-            {chatData?.map((chat) => {
-                <Chat key={chat.id} data={chat} />
-            })}
+            <div>
+                {chatData?.map((chat) => {
+                    return <Chat key={chat.id} data={chat} />
+                })}
+            </div>
         </ChatZone>
     );
 };

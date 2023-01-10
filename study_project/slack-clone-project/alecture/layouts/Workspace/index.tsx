@@ -34,6 +34,12 @@ const Workspace: VFC = () => {
     const [newWorkspace, onChangeNewWorkspace, setNewWorkspace] = useInput('');
     const [newUrl, onChangeNewUrl, setNewUrl] = useInput('');
     const { workspace } = useParams<{ workspace: string }>();
+    // 유저정보
+    const { data: userData, mutate } = useSWR<IUser | false>(`${BACK_URL}/api/users`, fetcher, { dedupingInterval: 2000 });
+    // 채널정보
+    const { data: channelData } = useSWR<IChannel[]>(userData ? `${BACK_URL}/api/workspaces/${workspace}/channels` : null, fetcher);
+    // 멤버정보
+    const { data: memberData } = useSWR<IUser[]>(userData ? `${BACK_URL}/api/workspaces/${workspace}/members` : null, fetcher);
     const [socket, disconnect] = useSocket(workspace);
 
     useEffect(() => {
@@ -48,13 +54,6 @@ const Workspace: VFC = () => {
         }
     }, [workspace, disconnect]);
 
-    // 유저정보
-    const { data: userData, error, mutate } = useSWR<IUser | false>(`${BACK_URL}/api/users`, fetcher, { dedupingInterval: 2000 });
-    // 채널정보
-    const { data: channelData } = useSWR<IChannel[]>(userData ? `${BACK_URL}/api/workspaces/${workspace}/channels` : null, fetcher);
-    // 멤버정보
-    const { data: memberData, mutate: mutateMember } = useSWR<IUser[]>(userData ? `${BACK_URL}/api/workspaces/${workspace}/members` : null, fetcher);
-
     const onLogout = useCallback(() => {
         axios.post(`${BACK_URL}/api/users/logout`, null, {
             withCredentials: true
@@ -62,7 +61,7 @@ const Workspace: VFC = () => {
             .then(() => {
                 mutate(false, false);
             });
-    }, []);
+    }, [mutate]);
 
     const onClickUserProfile = useCallback((e) => {
         e.stopPropagation();

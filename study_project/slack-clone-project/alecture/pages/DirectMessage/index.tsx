@@ -21,9 +21,11 @@ const DirectMessage = () => {
     const onSubmitForm = useCallback((e) => {
         e.preventDefault();
 
+        console.log(chat);
+
         if (chat?.trim()) {
-            axios.post(`${BACK_URL}/api/workspaces/${workspace}/dms/${id}/chats`, {
-                content: chat,
+            axios.post(`${BACK_URL}/api/workspaces/${workspace}/dms/${id}/chats`, { content: chat }, {
+                withCredentials: true
             })
                 .then(() => {
                     chatMutate();
